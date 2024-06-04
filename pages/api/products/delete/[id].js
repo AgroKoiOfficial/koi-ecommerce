@@ -1,4 +1,4 @@
-import prisma from "@/prisma/prisma";
+import {prisma} from "@/prisma/prisma";
 import { getToken } from "next-auth/jwt";
 import fs from "fs";
 
@@ -13,7 +13,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const productId = req.body.id;
+    const { id: productId } = req.query;
+
+    if (!productId) {
+      return res.status(400).json({ error: "Product ID is required" });
+    }
 
     const product = await prisma.product.findUnique({
       where: { id: productId },
@@ -41,7 +45,6 @@ export default async function handler(req, res) {
 
     res.status(200).json({ message: "Product deleted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to delete product" });
+    res.status(500).json({ error: "Failed to delete product", details: error.message }); 
   }
 }
