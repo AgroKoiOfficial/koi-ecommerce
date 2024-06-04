@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(cuid())
+  name     String
+  email    String
+  password String
+  role     Role
+
+  cart    Cart[]
+  address Address[]
+  reviews Review[]
+  orders  Order[]
+
+  @@map("users")
+}
+
+model Category {
+  id   String @id @default(cuid())
+  name String
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  image       String?
+  video       String?
+  price       Decimal  @db.Decimal(10, 2)
+  stock       Int
+  description String   @db.Text
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+
+  carts   Cart[]
+  reviews Review[]
+  orders  Order[]
+
+  @@map("products")
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  total     Decimal    @db.Decimal(10, 2)
+  quantity  Int
+  products  Product[]
+  checkouts Checkout[]
+
+  @@map("carts")
+}
+
+model Address {
+  id         String @id @default(cuid())
+  city       String
+  postalCode String
+  province   String
+  street     String
+  userId     String
+  user       User   @relation(fields: [userId], references: [id])
+
+  @@map("addresses")
+}
+
+model Order {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  total      Decimal   @db.Decimal(10, 2)
+  quantity   Int
+  shippingId String
+  shipping   Shipping  @relation(fields: [shippingId], references: [id])
+  products   Product[]
+
+  @@map("orders")
+}
+
+model Shipping {
+  id     String  @id @default(cuid())
+  city   String
+  region String
+  fee    Decimal @db.Decimal(10, 2)
+
+  orders Order[]
+
+  @@map("shippings")
+}
+
+model Review {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  rating    Int
+  comment   String
+
+  @@map("reviews")
+}
+
+model Checkout {
+  id       String        @id @default(cuid())
+  cartId   String
+  cart     Cart          @relation(fields: [cartId], references: [id])
+  total    Decimal       @db.Decimal(10, 2)
+  quantity Int
+  couponId String
+  coupon   Coupon        @relation(fields: [couponId], references: [id])
+  payments Payment[]
+  status   PaymentStatus
+
+  @@map("checkouts")
+}
+
+model Payment {
+  id         String        @id @default(cuid())
+  checkoutId String
+  checkout   Checkout      @relation(fields: [checkoutId], references: [id])
+  total      Decimal
+  quantity   Int
+  status     PaymentStatus
+
+  @@map("payments")
+}
+
+model Coupon {
+  id         String   @id @default(cuid())
+  code       String
+  discount   Decimal  @db.Decimal(10, 2)
+  expiration DateTime
+
+  checkouts Checkout[]
+
+  @@map("coupons")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+}
