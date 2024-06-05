@@ -54,9 +54,8 @@ export default NextAuth({
       session.user.email = token.email;
       session.user.role = token.role;
 
-      if(session.user.role === "ADMIN") {
-        session.user.isAdmin = true;
-      }
+      session.user.isAdmin = token.role === "ADMIN";
+
       return session;
     },
   },

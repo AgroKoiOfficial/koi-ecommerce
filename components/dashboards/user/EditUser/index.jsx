@@ -16,6 +16,7 @@ export const EditUser = ({ user, onClose }) => {
   useEffect(() => {
     const fetchSession = async () => {
       const session = await getSession();
+    //   console.log("Session:", session); 
       setSession(session);
     };
 
@@ -30,7 +31,7 @@ export const EditUser = ({ user, onClose }) => {
       return;
     }
 
-    if (!session || !session.user.isAdmin) {
+    if (!session || (!session.user.isAdmin && session.user.id !== user.id)) {
       setError("You are not authorized to perform this action");
       return;
     }

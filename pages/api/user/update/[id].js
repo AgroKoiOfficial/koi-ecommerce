@@ -9,7 +9,9 @@ export default async function handler(req, res) {
 
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token || !token.user) {
+    // console.log("Token:", token);
+
+    if (!token || !token.role) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
@@ -25,14 +27,14 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    if (token.user.role === "ADMIN" || token.user.id === userId) {
+    if (token.role === "ADMIN" || token.sub === userId) {
       const { name, email, password, role } = req.body;
       let dataToUpdate = {
         name,
         email,
       };
 
-      if (token.user.role === "ADMIN") {
+      if (token.role === "ADMIN") {
         dataToUpdate.role = role;
       }
 

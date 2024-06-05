@@ -1,11 +1,13 @@
 import React from "react";
 import { FiMenu, FiX, FiUser, FiShoppingCart } from "react-icons/fi";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import MenuLinks from "./MenuLinks";
 import { useNavbar } from "./useNavbar";
 import Sidebar from "./Sidebar"; 
 
 const Navbar = () => {
+  const router = useRouter();
   const {
     isNavbar,
     session,
@@ -23,10 +25,10 @@ const Navbar = () => {
         isNavbar ? "border-b" : ""
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 lg:h-20">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <img className="h-12 w-12" src="/logo.png" alt="Workflow" />
+              <img className="h-12 lg:h-16 w-12 lg:w-16" src="/logo.png" alt="logo koi" />
             </div>
           </div>
           <div className="flex items-center justify-center mx-auto">

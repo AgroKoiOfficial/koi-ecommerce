@@ -60,7 +60,7 @@ export const useUserTable = () => {
         return;
       }
 
-      const response = await fetch(`/api/user/${userId}`, {
+      const response = await fetch(`/api/user/delete/${userId}`, {
         method: "DELETE",
       });
       if (response.ok) {
