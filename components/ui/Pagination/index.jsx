@@ -16,7 +16,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
     <div className="flex justify-center my-4">
       <button
-        className="bg-gray-300 px-3 py-1 mx-1 rounded disabled:opacity-50"
+        className="bg-gray-300 hover:bg-gray-400 px-3 py-1 mx-1 rounded disabled:opacity-50"
         onClick={handlePrev}
         disabled={currentPage === 1}
       >
@@ -24,7 +24,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       </button>
       <span className="mx-2">{`${currentPage} of ${totalPages}`}</span>
       <button
-        className="bg-gray-300 px-3 py-1 mx-1 rounded disabled:opacity-50"
+        className="bg-gray-300 hover:bg-gray-400 px-3 py-1 mx-1 rounded disabled:opacity-50"
         onClick={handleNext}
         disabled={currentPage === totalPages}
       >
