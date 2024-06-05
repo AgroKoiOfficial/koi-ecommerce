@@ -3,8 +3,14 @@ import { prisma } from "@/prisma/prisma";
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
+      const { page = 1, limit = 10 } = req.query;
+      const offset = (parseInt(page) - 1) * parseInt(limit);
+
+      const totalProducts = await prisma.product.count();
       const products = await prisma.product.findMany({
         include: { category: true },
+        skip: offset,
+        take: parseInt(limit),
       });
 
       const productsWithUrl = products.map((product) => {
@@ -16,6 +22,7 @@ export default async function handler(req, res) {
         };
       });
 
+      res.setHeader("X-Total-Count", totalProducts);
       res.status(200).json(productsWithUrl);
     } catch (error) {
       console.error(error);

@@ -6,6 +6,7 @@ import { getSession } from "next-auth/react";
 import { AddProduct } from "../AddProduct";
 import { EditProduct } from "../EditProduct";
 import { formatRupiah } from "@/utils/currency";
+import { Pagination } from "@/components/ui/Pagination"; 
 
 export const ProductTable = () => {
   const [products, setProducts] = useState([]);
@@ -13,14 +14,19 @@ export const ProductTable = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [session, setSession] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit] = useState(10);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/products");
+        const response = await fetch(`/api/products?page=${currentPage}&limit=${limit}`);
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
+          const totalProducts = parseInt(response.headers.get("X-Total-Count"), 10);
+          setTotalPages(Math.ceil(totalProducts / limit));
         } else {
           console.error("Failed to fetch products:", response.status);
         }
@@ -37,7 +43,7 @@ export const ProductTable = () => {
     };
 
     fetchSession();
-  }, []);
+  }, [currentPage, limit]);
 
   const handleAdd = () => {
     setModalOpen(true);
@@ -83,11 +89,11 @@ export const ProductTable = () => {
     "Video",
     "Actions",
   ];
-  const data =
-    Array.isArray(products) &&
+  
+  const data = Array.isArray(products) &&
     products.map((product, index) => {
       return {
-        No: index + 1,
+        No: index + 1 + (currentPage - 1) * limit,
         Name: product.name,
         Price: formatRupiah(product.price),
         Stock: product.stock,
@@ -111,6 +117,10 @@ export const ProductTable = () => {
       };
     });
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="container mx-auto overflow-auto scrollbar-hide">
       <div className="max-w-[15%] my-2 px-4 sm:px-6 lg:px-8">
@@ -120,11 +130,12 @@ export const ProductTable = () => {
           icon={<FiPlusCircle />}
         />
       </div>
-      {modalOpen && <AddProduct onClose={handleCloseModal}/>}
-      {editModalOpen && editProduct && <EditProduct onClose={handleCloseEditModal} product={editProduct}/>}
+      {modalOpen && <AddProduct onClose={handleCloseModal} />}
+      {editModalOpen && editProduct && <EditProduct onClose={handleCloseEditModal} product={editProduct} />}
       <div className="container overflow-auto scrollbar-hide">
         <Table columns={columns} data={data} />
       </div>
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
     </div>
   );
 };
