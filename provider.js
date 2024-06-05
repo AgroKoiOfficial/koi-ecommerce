@@ -1,7 +1,7 @@
 import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { useRouter } from "next/router";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/header/Navbar";
 function Provider({ children }) {
   const { pathname } = useRouter();
   const disableNavbar = ['register', 'login', 'dashboard', 'user'];

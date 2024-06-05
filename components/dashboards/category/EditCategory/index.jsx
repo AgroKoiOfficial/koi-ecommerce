@@ -41,7 +41,7 @@ export const EditCategory = ({ category, onClose }) => {
 
     if (response.ok) {
       setSuccess("Category updated successfully");
-      onClose(); // Menutup modal saat kategori berhasil diperbarui
+      onClose();
     } else {
       setError("Failed to update category");
     }
@@ -83,6 +83,8 @@ export const EditCategory = ({ category, onClose }) => {
                 </Button>
               </div>
             </form>
+            {error && <p className="text-red-500">{error}</p>}
+            {success && <p className="text-green-500">{success}</p>}
           </div>
         </div>
       </div>
