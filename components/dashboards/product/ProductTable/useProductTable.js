@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getSession } from "next-auth/react";
 
 export const useProductTable = () => {
@@ -10,33 +10,41 @@ export const useProductTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [limit] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const debounceFetchData = useCallback(debounce(async (query, page) => {
+    try {
+      const response = await fetch(`/api/products?page=${page}&limit=${limit}&search=${query}`);
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data);
+        const totalProducts = parseInt(response.headers.get("X-Total-Count"), 10);
+        setTotalPages(Math.ceil(totalProducts / limit));
+      } else {
+        console.error("Failed to fetch products:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }, 300), [limit]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`/api/products?page=${currentPage}&limit=${limit}`);
-        if (response.ok) {
-          const data = await response.json();
-          setProducts(data);
-          const totalProducts = parseInt(response.headers.get("X-Total-Count"), 10);
-          setTotalPages(Math.ceil(totalProducts / limit));
-        } else {
-          console.error("Failed to fetch products:", response.status);
-        }
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
+    debounceFetchData(searchQuery, currentPage);
+  }, [searchQuery, currentPage, debounceFetchData]);
 
-    fetchData();
-
+  useEffect(() => {
     const fetchSession = async () => {
       const session = await getSession();
       setSession(session);
     };
 
     fetchSession();
-  }, [currentPage, limit]);
+  }, []);
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
 
   const handleAdd = () => {
     setModalOpen(true);
@@ -81,6 +89,8 @@ export const useProductTable = () => {
     currentPage,
     totalPages,
     limit,
+    searchQuery,
+    handleSearch,
     handleAdd,
     handleCloseModal,
     handleEdit,
@@ -89,3 +99,11 @@ export const useProductTable = () => {
     setCurrentPage,
   };
 };
+
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}

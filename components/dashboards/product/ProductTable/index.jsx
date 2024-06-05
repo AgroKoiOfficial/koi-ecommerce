@@ -6,6 +6,7 @@ import { AddProduct } from "../AddProduct";
 import { EditProduct } from "../EditProduct";
 import { formatRupiah } from "@/utils/currency";
 import { Pagination } from "@/components/ui/Pagination"; 
+import { Search } from "@/components/ui/Search";
 import { useProductTable } from "./useProductTable";
 
 export const ProductTable = () => {
@@ -22,6 +23,7 @@ export const ProductTable = () => {
     handleCloseEditModal,
     handleDelete,
     setCurrentPage,
+    handleSearch,
   } = useProductTable();
 
   const columns = [
@@ -68,12 +70,17 @@ export const ProductTable = () => {
 
   return (
     <div className="container mx-auto overflow-auto scrollbar-hide">
-      <div className="max-w-[15%] my-2 px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col md:flex-row justify-between items-center my-2 px-4 sm:px-6 lg:px-8">
+        <div className="flex w-3/4 items-center space-x-2">
+        <Search onSearch={handleSearch} />
+        </div>
+        <div className="flex items-center space-x-2 mt-2 md:mt-0">
         <Button
           onClick={handleAdd}
           className="bg-blue-500 hover:bg-blue-600 text-white"
           icon={<FiPlusCircle />}
         />
+        </div>
       </div>
       {modalOpen && <AddProduct onClose={handleCloseModal} />}
       {editModalOpen && editProduct && <EditProduct onClose={handleCloseEditModal} product={editProduct} />}

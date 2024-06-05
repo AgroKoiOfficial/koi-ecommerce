@@ -3,11 +3,21 @@ import { prisma } from "@/prisma/prisma";
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
-      const { page = 1, limit = 10 } = req.query;
+      const { page = 1, limit = 10, search = '' } = req.query;
       const offset = (parseInt(page) - 1) * parseInt(limit);
 
-      const totalProducts = await prisma.product.count();
+      let where = {};
+      if (search) {
+        where = {
+          name: {
+            contains: search
+          }
+        };
+      }
+
+      const totalProducts = await prisma.product.count({ where });
       const products = await prisma.product.findMany({
+        where,
         include: { category: true },
         skip: offset,
         take: parseInt(limit),
