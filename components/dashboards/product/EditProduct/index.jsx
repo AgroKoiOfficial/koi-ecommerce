@@ -13,6 +13,8 @@ export const EditProduct = ({ product, onClose }) => {
   const [image, setImage] = useState(null);
   const [video, setVideo] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [session, setSession] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -29,16 +31,18 @@ export const EditProduct = ({ product, onClose }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("/api/categories");
+        const res = await fetch(`/api/categories?page=${page}&limit=10`);
         const data = await res.json();
-        setCategories(data);
+        const totalCount = res.headers.get('X-Total-Count');
+        setCategories((prevCategories) => [...prevCategories, ...data]);
+        setTotalPages(Math.ceil(totalCount / 10));
       } catch (error) {
         console.error("Failed to fetch categories", error);
       }
     };
 
     fetchCategories();
-  }, []);
+  }, [page]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,6 +78,17 @@ export const EditProduct = ({ product, onClose }) => {
     } catch (error) {
       console.error("Failed to update product", error);
       setError("Failed to update product");
+    }
+  };
+
+  const handleCategoryChange = (e) => {
+    const value = e.target.value;
+    if (value === "nextPage") {
+      setPage((prev) => Math.min(prev + 1, totalPages));
+    } else if (value === "prevPage") {
+      setPage((prev) => Math.max(prev - 1, 1));
+    } else {
+      setCategoryId(value);
     }
   };
 
@@ -124,12 +139,16 @@ export const EditProduct = ({ product, onClose }) => {
                   <select
                     className="w-full p-2 border border-gray-300 rounded"
                     value={categoryId}
-                    onChange={(e) => setCategoryId(e.target.value)}>
+                    onChange={handleCategoryChange}
+                  >
+                    <option value="">Select a category</option>
                     {categories.map((category) => (
                       <option key={category.id} value={category.id}>
                         {category.name}
                       </option>
                     ))}
+                    {page < totalPages && <option value="nextPage">Load more...</option>}
+                    {page > 1 && <option value="prevPage">Load previous...</option>}
                   </select>
                 </div>
                 <div className="mb-4 col-span-2">

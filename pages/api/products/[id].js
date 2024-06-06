@@ -1,12 +1,16 @@
-import prisma from "@/prisma/prisma";
+import {prisma} from "@/prisma/prisma";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
-      const productId = req.query.id;
+      const { id } = req.query;
+
+      if (!id) {
+        return res.status(400).json({ error: "Missing product ID" });
+      }
 
       const product = await prisma.product.findUnique({
-        where: { id: productId },
+        where: { id: id },
         include: { category: true },
       });
 
@@ -16,14 +20,14 @@ export default async function handler(req, res) {
 
       const productWithUrl = {
         ...product,
-        image: product.image ? `/images/${product.image}` : null,
-        video: product.video ? `/videos/${product.video}` : null,
+        image: product.image ? `${product.image}` : null,
+        video: product.video ? `${product.video}` : null,
         category: product.category.name,
       };
 
       res.status(200).json(productWithUrl);
     } catch (error) {
-      console.error(error);
+      console.error("Failed to fetch product:", error);
       res.status(500).json({ error: "Failed to fetch product" });
     }
   } else {

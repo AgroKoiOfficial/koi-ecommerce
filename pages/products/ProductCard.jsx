@@ -1,0 +1,39 @@
+import React from "react";
+import { formatRupiah } from "@/utils/currency";
+
+export default function ProductCard({ product, isLoading }) {
+  return (
+    <div
+      className={`rounded-lg shadow-md overflow-hidden py-4 m-4 md:m-0 ${
+        isLoading ? "animate-pulse" : ""
+      }`}>
+      <div className="relative overflow-hidden h-48">
+        {isLoading ? (
+          <div className="bg-gray-200 w-full h-full"></div>
+        ) : (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="absolute inset-0 w-full h-full "
+            style={{ objectFit: "contain" }}
+            loading="lazy"
+          />
+        )}
+      </div>
+      <div className="p-4 flex flex-col items-center">
+        <h2 className="text-2xl md:text-xl font-bold mb-2 text-gray-800 truncate">
+          {isLoading ? "Loading..." : product.name}
+        </h2>
+        <p className="text-base md:text-lg text-gray-700 mb-2">
+         {isLoading ? "Loading..." : formatRupiah(product.price)}
+        </p>
+        <p className="text-base md:text-lg text-gray-700 mb-2">
+          Stock: {isLoading ? "Loading..." : product.stock}
+        </p>
+        <p className="text-base md:text-lg text-gray-700">
+          Category: {isLoading ? "Loading..." : product.category}
+        </p>
+      </div>
+    </div>
+  );
+}
