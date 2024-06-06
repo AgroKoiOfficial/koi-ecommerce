@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { formatRupiah } from "@/utils/currency";
 import LoadingCard from "@/components/product/LoadingCard";
+import GetReview from "@/components/dashboards/review/GetReview";
+import { CreateReview } from "@/components/dashboards/review/CreateReview";
 
- const ProductDetail = ({ product }) => {
+const ProductDetail = ({ product }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("getReviews");
 
   useEffect(() => {
     if (product) {
@@ -50,27 +53,69 @@ import LoadingCard from "@/components/product/LoadingCard";
                 <video
                   src={product.video}
                   controls
-                  className="w-full h-auto mt-4 lg:mt-4"></video>
+                  className="w-full h-auto mt-4 lg:mt-4"
+                ></video>
               )}
             </div>
 
             <div className="lg:w-1/2 lg:pl-8 mt-4">
-              <h1 className="text-3xl lg:text-4xl font-bold mb-4">
+              <h1 className="text-3xl lg:text-4xl font-bold mb-4 text-center lg:text-left">
                 {product.name}
               </h1>
-              <p className="text-xl mb-4">
-                Price: {formatRupiah(product.price)}
+              <p className=" lg:text-lg mb-4">
+                <span className="font-bold">Price:</span>{" "}
+                {formatRupiah(product.price)}
               </p>
-              <p className="mb-4">Category: {product.category}</p>
-              <p className="mb-4">Stock: {product.stock}</p>
-              <div
-                className="mb-4 overflow-y-auto"
-                style={{ maxHeight: "200px" }}>
-                {product.description}
+              <p className="mb-4">
+                <span className="font-bold">Category:</span> {product.category}
+              </p>
+              <p className="mb-4">
+                <span className="font-bold">Stock:</span> {product.stock}
+              </p>
+              <div className="mb-4">
+                <span className="font-bold">Description:</span>
+                <p className="mt-2">{product.description}</p>
               </div>
               <button className="bg-blue-500 text-white px-4 py-2 rounded">
                 Add to Cart
               </button>
+            </div>
+          </div>
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">Reviews</h2>
+            <div className="flex mb-4">
+              <button
+                className={`mr-4 px-4 py-2 rounded ${
+                  activeTab === "getReviews"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
+                onClick={() => setActiveTab("getReviews")}
+              >
+                View Reviews
+              </button>
+              <button
+                className={`px-4 py-2 rounded ${
+                  activeTab === "createReview"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
+                onClick={() => setActiveTab("createReview")}
+              >
+                Write a Review
+              </button>
+            </div>
+            <div className="flex flex-col ">
+              <div className="w-full lg:pr-4">
+                {activeTab === "getReviews" && (
+                  <GetReview productId={product.id} />
+                )}
+              </div>
+              <div className="w-full lg:w-1/2 lg:pl-4 mt-4 lg:mt-0">
+                {activeTab === "createReview" && (
+                  <CreateReview productId={product.id} />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -80,18 +125,18 @@ import LoadingCard from "@/components/product/LoadingCard";
 };
 
 export async function getServerSideProps({ params }) {
-    const res = await fetch(`${process.env.PRODUCTS_URL}/${params.id}`);
-    const product = await res.json();
-  
-    if (!res.ok) {
-      return {
-        notFound: true,
-      };
-    }
-  
+  const res = await fetch(`${process.env.PRODUCTS_URL}/${params.id}`);
+  const product = await res.json();
+
+  if (!res.ok) {
     return {
-      props: { product },
+      notFound: true,
     };
   }
-  
+
+  return {
+    props: { product },
+  };
+}
+
 export default ProductDetail;

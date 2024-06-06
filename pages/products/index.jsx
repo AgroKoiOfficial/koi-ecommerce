@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
-import ProductCard from "./ProductCard";
+import ProductCard from "../../components/product/ProductCard";
 
 export default function Products({ products, totalProducts }) {
   const [page, setPage] = useState(1);
