@@ -1,13 +1,20 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { FiX, FiHome, FiShoppingCart, FiList, FiUsers } from "react-icons/fi";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop } from "react-icons/ci";
 import { RiCarouselView } from "react-icons/ri";
 import { MdOutlineRateReview } from "react-icons/md";
+import { Button } from "../ui/Button";
 import MenuItem from "./MenuItem";
 
 const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
+  const router = useRouter();
+
+  const handleBackToHome = () => {
+    router.push("/");
+  };
   return (
     <div
       className={`${
@@ -18,6 +25,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
         <div className="flex items-center justify-between px-4 py-4">
           {/* Logo */}
           <div className="flex items-center">
+            <img src="/logo.png" alt="Logo" className="w-8 h-8" />
             <span className="ml-2 text-xl font-bold">Agro</span>
           </div>
           {/* Close Button */}
@@ -96,6 +104,13 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
               ]}
             />
           </ul>
+          <div className="w-[40%] md:w-auto flex  flex-1 items-center justify-center bottom-0 fixed m-8">
+            <Button
+              className="bg-white  hover:bg-gray-100 text-gray-900 font-semibold"
+              onClick={handleBackToHome}>
+              Back to Home
+            </Button>
+          </div>
         </div>
       </div>
     </div>

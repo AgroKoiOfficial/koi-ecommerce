@@ -39,7 +39,7 @@ export default function Login() {
         email: data.email,
         password: data.password,
       });
-      console.log('Response dari signIn:', response); // Tambahkan log ini
+      console.log('Response dari signIn:', response);
   
       if (response.error) {
         console.error('Kesalahan login:', response.error);

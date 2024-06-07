@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { formatRupiah } from "@/utils/currency";
 
 export default function ProductCard({ product, isLoading }) {
@@ -7,16 +8,25 @@ export default function ProductCard({ product, isLoading }) {
       className={`rounded-lg shadow-md overflow-hidden py-4 m-4 md:m-0 ${
         isLoading ? "animate-pulse" : ""
       }`}>
-      <div className="relative overflow-hidden h-48">
+      <div className="relative overflow-hidden h-48 w-full">
         {isLoading ? (
           <div className="bg-gray-200 w-full h-full"></div>
         ) : (
-          <img
+          <Image
             src={product.image}
             alt={product.name}
-            className="absolute inset-0 w-full h-full "
-            style={{ objectFit: "contain" }}
-            loading="lazy"
+          // loading="lazy"  
+            priority={true}
+            width={200}
+            height={200}
+            style={{
+              objectFit: "contain",
+              height: "100%",
+              width: "auto",
+              marginInline: "auto",
+              animation: "ease-in"
+            }}
+            className="absolute inset-0"
           />
         )}
       </div>
@@ -25,7 +35,7 @@ export default function ProductCard({ product, isLoading }) {
           {isLoading ? "Loading..." : product.name}
         </h2>
         <p className="text-base md:text-lg text-gray-700 mb-2">
-         {isLoading ? "Loading..." : formatRupiah(product.price)}
+          {isLoading ? "Loading..." : formatRupiah(product.price)}
         </p>
         <p className="text-base md:text-lg text-gray-700 mb-2">
           Stock: {isLoading ? "Loading..." : product.stock}

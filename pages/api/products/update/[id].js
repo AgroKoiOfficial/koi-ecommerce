@@ -27,7 +27,7 @@ const upload = multer({
     },
   }),
   fileFilter: function (req, file, cb) {
-    const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+    const allowedImageTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
     const allowedVideoTypes = [
       "video/mp4",
       "video/mpeg",

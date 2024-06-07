@@ -60,19 +60,21 @@ const ReviewComponent = () => {
                 <div className="flex flex-col flex-grow">
                   <div className="flex justify-between items-center">
                     <div>
-                      <div className="flex items-center mb-1">{renderStars(review.rating)}</div>
+                      <div className="flex items-center mb-1">
+                        {renderStars(review.rating)}
+                      </div>
                       <p className="text-md">User: {review.user.name}</p>
                       <p className="text-md">Product: {review.product.name}</p>
                       <p className="text-md">Comment: {review.comment}</p>
                     </div>
                     {session && (
                       <div className="w-8 h-8">
-                      <Button
-                        onClick={() => handleDeleteReview(review.id)}
-                        className="focus:outline-none bg-red-500 hover:bg-red-600 text-white rounded-md"
-                        icon={<FiTrash />}
-                      />
-                    </div>
+                        <Button
+                          onClick={() => handleDeleteReview(review.id)}
+                          className="focus:outline-none bg-red-500 hover:bg-red-600 text-white rounded-md"
+                          icon={<FiTrash />}
+                        />
+                      </div>
                     )}
                   </div>
                 </div>
