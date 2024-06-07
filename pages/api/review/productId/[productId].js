@@ -5,14 +5,14 @@ export default async function handler(req, res) {
     return res.status(405).end();
   }
 
-  const { productId } = req.query; // Mengambil productId dari req.query.productId
+  const { productId } = req.query; 
 
   try {
-    console.log("Received productId:", productId); // Debugging line
+    // console.log("Received productId:", productId); 
 
     const reviews = await prisma.review.findMany({
       where: {
-        productId: productId, // Menggunakan productId yang diperoleh dari req.query
+        productId: productId,
       },
       include: {
         user: {
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       },
     });
 
-    console.log("Fetched reviews:", reviews); 
+    // console.log("Fetched reviews:", reviews); 
 
     if (reviews.length === 0) {
       return res.status(404).json({ error: "No reviews found for this product" });

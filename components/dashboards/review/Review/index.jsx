@@ -20,7 +20,7 @@ export const Review = ({ review }) => {
     <div className="bg-white rounded-lg p-4 shadow-md mb-4">
       <div className="flex items-center mb-2">{renderStars()}</div>
       <p className="text-gray-700 mb-2">{review.comment}</p>
-      <p className="text-gray-500 text-sm">- {review.user?.name}</p>
+      <p className="text-gray-900 text-sm font-semibold">- {review.user?.name}</p>
     </div>
   );
 };
