@@ -5,6 +5,8 @@ import { getSession } from "next-auth/react";
 import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/Button";
 import { TextArea } from "@/components/ui/TextArea";
+import { toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const CreateReview = ({ productId }) => {
   const router = useRouter();
@@ -16,6 +18,7 @@ export const CreateReview = ({ productId }) => {
     const session = await getSession();
 
     if (!session) {
+      toast.error("You must be logged in to create a review");
       router.push("/login");
       return;
     }
@@ -37,13 +40,15 @@ export const CreateReview = ({ productId }) => {
       });
 
       if (response.ok) {
-        alert("Review created successfully!");
+        toast.success("Review created successfully!");
+        setRating(0);
+        setComment("");
       } else {
         throw new Error("Failed to create review");
       }
     } catch (error) {
       console.error("Failed to create review:", error);
-      alert("Failed to create review. Please try again later.");
+      toast.error("Failed to create review. Please try again later.");
     }
   };
 
@@ -80,13 +85,14 @@ export const CreateReview = ({ productId }) => {
         <TextArea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="w-full "
+          className="w-full"
           rows={4}
         />
       </div>
       <Button
         type="submit"
-        className={`bg-yellow-500 hover:bg-yellow-600 text-white`}>
+        className={`bg-yellow-500 hover:bg-yellow-600 text-white`}
+      >
         Submit
       </Button>
     </form>
