@@ -4,6 +4,7 @@ import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop } from "react-icons/ci";
 import { RiCarouselView } from "react-icons/ri";
+import { MdOutlineRateReview } from "react-icons/md";
 import MenuItem from "./MenuItem";
 
 const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
@@ -87,7 +88,11 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   href: "/dashboard/carousel",
                   icon: <RiCarouselView className="h-5 w-5 mr-2" />,
                 },
-                { title: "Content Item 2", href: "#", icon: null },
+                {
+                  title: "Product Review",
+                  href: "/dashboard/review",
+                  icon: <MdOutlineRateReview className="h-5 w-5 mr-2" />,
+                },
               ]}
             />
           </ul>

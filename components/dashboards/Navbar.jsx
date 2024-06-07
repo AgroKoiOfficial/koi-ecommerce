@@ -1,7 +1,10 @@
 import React from "react";
 import { Button } from "../ui/Button";
+import { getSession } from "next-auth/react";
 
 const Navbar = ({ isNavbar, toggleSidebar, handleLogout, title }) => {
+  const { data: session } = getSession();
+  // console.log("Session:", session);
   return (
     <nav
       className={`${
@@ -30,10 +33,15 @@ const Navbar = ({ isNavbar, toggleSidebar, handleLogout, title }) => {
             <div className="text-lg font-semibold text-gray-800">{title}</div>
           </div>
         </div>
-        <div>
+
+        <div className="flex items-center">
+          {session ? (
+            <div className="text-gray-800 mr-4">{session.user?.name}</div>
+          ) : null}
           <Button
             onClick={handleLogout}
-            className="focus:outline-none bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">
+            className="focus:outline-none bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+          >
             Logout
           </Button>
         </div>

@@ -44,6 +44,7 @@ export default NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.name = user.name;
         token.email = user.email;
         token.role = user.role;
       }
@@ -51,6 +52,7 @@ export default NextAuth({
     },
     async session({ session, token }) {
       session.user.id = token.id;
+      session.user.name = token.name;
       session.user.email = token.email;
       session.user.role = token.role;
 
