@@ -1,48 +1,78 @@
 import { prisma } from "@/prisma/prisma";
-import { getToken } from "next-auth/jwt";
 
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).end();
-  }
+  if (req.method === "GET") {
+    try {
+      const { page = 1, limit = 10, search = '' } = req.query;
+      const offset = (parseInt(page) - 1) * parseInt(limit);
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+      let where = {};
+      if (search) {
+        where = {
+          OR: [
+            {
+              user: {
+                name: {
+                  contains: search
+                }
+              }
+            },
+            {
+              product: {
+                name: {
+                  contains: search
+                }
+              }
+            }
+          ]
+        };
+      }
 
-  if (!token) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  if (token.role !== "ADMIN") {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  try {
-    const carts = await prisma.cart.findMany({
-      select: {
-        id: true,
-        total: true,
-        quantity: true,
-        user: {
-          select: {
-            name: true,
+      const totalCarts = await prisma.cart.count({ where });
+      const carts = await prisma.cart.findMany({
+        where,
+        select: {
+          id: true,
+          total: true,
+          quantity: true,
+          user: {
+            select: {
+              name: true,
+            },
           },
-        },
-        product: {
-          select: {
-            name: true,
-            image: true,
-            category: {
-              select: {
-                name: true,
+          product: {
+            select: {
+              name: true,
+              image: true,
+              category: {
+                select: {
+                  name: true,
+                },
               },
             },
           },
         },
-      },
-    });
-    res.status(200).json(carts);
-  } catch (error) {
-    console.error("Error fetching carts:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+        skip: offset,
+        take: parseInt(limit),
+      });
+
+      const cartsWithUrl = carts.map((cart) => {
+        return {
+          ...cart,
+          product: {
+            ...cart.product,
+            image: cart.product.image ? `${cart.product.image}` : null,
+          },
+        };
+      });
+
+      res.setHeader("X-Total-Count", totalCarts);
+      res.status(200).json(cartsWithUrl);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Failed to fetch carts" });
+    }
+  } else {
+    res.status(405).json({ error: "Method Not Allowed" });
   }
 }

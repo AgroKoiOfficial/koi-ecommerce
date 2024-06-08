@@ -5,7 +5,7 @@ import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import Image from "next/image";
 import { formatRupiah } from "@/utils/currency";
 import { Button } from "@/components/ui/Button";
-import { useCart } from "./useCart";
+import { useCart } from "../../hooks/useCart";
 import Link from "next/link";
 
 function Cart() {
