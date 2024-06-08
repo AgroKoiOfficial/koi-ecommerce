@@ -29,7 +29,7 @@ export const AdminCart = () => {
 
   const columns = [
     "No",
-    "User",
+    "User Name",
     "Product Name",
     "Image",
     "Total",
@@ -41,7 +41,7 @@ export const AdminCart = () => {
     Array.isArray(carts) &&
     carts.map((cart, index) => ({
       No: index + 1 + (currentPage - 1) * 10,
-      User: `${cart.user.name}`,
+      "User Name": `${cart.user.name}`,
       "Product Name": cart.product.name,
       Image: cart.product.image,
       Total: formatRupiah(cart.total),
@@ -60,7 +60,7 @@ export const AdminCart = () => {
   return (
     <div className="container mx-auto overflow-auto scrollbar-hide">
       <div className="flex flex-col md:flex-row justify-between items-center my-2 px-4 sm:px-6 lg:px-8">
-        <div className="flex w-3/4 items-center space-x-2">
+        <div className="flex w-full items-center space-x-2">
           <Search onSearch={handleSearch} />
         </div>
       </div>
