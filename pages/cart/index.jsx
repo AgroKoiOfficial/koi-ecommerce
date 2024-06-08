@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { formatRupiah } from "@/utils/currency";
 import { getSession } from "next-auth/react";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import Image from "next/image";
+import { Button } from "@/components/ui/Button";
 
 function Cart() {
   const [cartData, setCartData] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCartData = async () => {
@@ -24,19 +29,19 @@ function Cart() {
     fetchCartData();
   }, []);
 
-
   const handleDeleteItem = async (id) => {
     try {
       await fetch(`/api/cart/delete/${id}`, {
         method: "DELETE",
       });
       const updatedCartData = cartData.filter((item) => item.id !== id);
+      toast.success("Product deleted successfully!");
       setCartData(updatedCartData);
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
-  
+
   const handleUpdateQuantity = async (id, newQuantity) => {
     try {
       const response = await fetch(`/api/cart/update/${id}`, {
@@ -49,10 +54,11 @@ function Cart() {
       if (response.ok) {
         if (newQuantity === 0) {
           const updatedCartData = cartData.filter((item) => item.id !== id);
+          toast.success("Product deleted successfully!");
           setCartData(updatedCartData);
         } else {
           const updatedCartData = cartData.map((item) => {
-            if (item.id === id) { 
+            if (item.id === id) {
               return {
                 ...item,
                 quantity: newQuantity,
@@ -60,6 +66,7 @@ function Cart() {
             }
             return item;
           });
+          toast.success("Quantity updated successfully!");
           setCartData(updatedCartData);
         }
       } else {
@@ -69,8 +76,6 @@ function Cart() {
       console.error("Error updating quantity:", error);
     }
   };
-  
-  
 
   const calculateTotalQuantity = () => {
     return cartData.reduce((total, item) => total + item.quantity, 0);
@@ -84,7 +89,7 @@ function Cart() {
   };
 
   return (
-    <main className="pt-20 lg:pt-24 overflow-y-auto mx-auto mb-56">
+    <main className="pt-20 lg:pt-24 overflow-y-auto mx-auto mb-56 scrollbar-hide">
       {cartData.map((item) => (
         <div
           key={item.id}
@@ -144,7 +149,18 @@ function Cart() {
         </div>
       )}
       {cartData.length === 0 && (
-        <p className="text-center mt-8 text-gray-500">Your cart is empty</p>
+        <div className="mt-8 mx-4 border-t border-gray-200 pt-4">
+          <p className="text-center mt-16 text-gray-900 text-3xl font-bold">
+            Your cart is empty
+          </p>
+          <div className="flex justify-center w-48 items-center mx-auto">
+          <Button
+            className="mx-auto mt-8 bg-gradient-to-r from-red-700 to-red-500 text-white"
+            onClick={() => router.push("/products")}>
+            Continue Shopping
+          </Button>
+          </div>
+        </div>
       )}
     </main>
   );
