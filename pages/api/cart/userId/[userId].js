@@ -23,6 +23,7 @@ export default async function handler(req, res) {
           include: {
             product: {
               select: {
+                id: true,
                 name: true,
                 image: true,
                 price: true,
