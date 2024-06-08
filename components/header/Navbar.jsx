@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import MenuLinks from "./MenuLinks";
 import { useNavbar } from "./useNavbar";
-import Sidebar from "./Sidebar"; 
+import Sidebar from "./Sidebar";
 
 const Navbar = () => {
   const router = useRouter();
@@ -14,6 +14,7 @@ const Navbar = () => {
     isSidebarOpen,
     isDropdownOpen,
     dropdownRef,
+    userCart,
     handleLogout,
     toggleSidebar,
     toggleDropdown,
@@ -28,7 +29,11 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <img className="h-12 lg:h-16 w-12 lg:w-16" src="/logo.png" alt="logo koi" />
+              <img
+                className="h-12 lg:h-16 w-12 lg:w-16"
+                src="/logo.png"
+                alt="logo koi"
+              />
             </div>
           </div>
           <div className="flex items-center justify-center mx-auto">
@@ -43,8 +48,13 @@ const Navbar = () => {
             <div className="flex items-center mr-4">
               <Link
                 href={"/cart"}
-                className="text-gray-600 hover:text-gray-700">
+                className="relative text-gray-600 hover:text-gray-700">
                 <FiShoppingCart size={24} />
+                {userCart && userCart.length > 0 && (
+                  <span className="absolute -top-3 -right-3 bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                    {userCart.length}
+                  </span>
+                )}
               </Link>
             </div>
             {session && session.user ? (
@@ -55,7 +65,7 @@ const Navbar = () => {
                   <FiUser size={24} />
                 </button>
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg">
+                  <div className="relative right-10 mt-2 w-48 bg-white border rounded-lg shadow-lg">
                     <a
                       href={session.user.isAdmin ? "/dashboard" : "/user"}
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-200">

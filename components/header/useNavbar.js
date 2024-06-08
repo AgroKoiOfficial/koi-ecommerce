@@ -7,6 +7,7 @@ export const useNavbar = () => {
   const [session, setSession] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userCart, setUserCart] = useState(null);
   const router = useRouter();
   const dropdownRef = useRef(null);
 
@@ -34,6 +35,24 @@ export const useNavbar = () => {
 
     fetchSession();
   }, []);
+
+  useEffect(() => {
+    const fetchUserCart = async () => {
+      try {
+        const session = await getSession();
+        if (session && session.user) {
+          const userId = session.user.id;
+          const response = await fetch(`/api/cart/userId/${userId}`);
+          const data = await response.json();
+          setUserCart(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user cart:", error);
+      }
+    };
+
+    fetchUserCart();
+  }, [session]);
 
   const handleLogout = () => {
     signOut();
@@ -75,6 +94,7 @@ export const useNavbar = () => {
     handleLogout,
     toggleSidebar,
     toggleDropdown,
+    userCart
   };
 };
 

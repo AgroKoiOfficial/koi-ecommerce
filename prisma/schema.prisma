@@ -51,11 +51,15 @@ model Product {
 
 model Cart {
   id        String     @id @default(cuid())
+  productId String
   userId    String
   user      User       @relation(fields: [userId], references: [id])
   total     Decimal    @db.Decimal(10, 2)
   quantity  Int
-  products  Product[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  expiresAt DateTime
+  product   Product    @relation(fields: [productId], references: [id])
   checkouts Checkout[]
 
   @@map("carts")
@@ -116,7 +120,7 @@ model Checkout {
   total    Decimal       @db.Decimal(10, 2)
   quantity Int
   couponId String?
-  coupon   Coupon?        @relation(fields: [couponId], references: [id])
+  coupon   Coupon?       @relation(fields: [couponId], references: [id])
   payments Payment[]
   status   PaymentStatus
 
@@ -146,12 +150,11 @@ model Coupon {
 }
 
 model Carousel {
-  id     String   @id @default(cuid())
-  image  String?
-  title  String?
-  color  String?   @default("white")
+  id    String  @id @default(cuid())
+  image String?
+  title String?
+  color String? @default("white")
 }
-
 
 enum Role {
   USER
