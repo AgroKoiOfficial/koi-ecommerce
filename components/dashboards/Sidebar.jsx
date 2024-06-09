@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { FiX, FiHome, FiShoppingCart, FiList, FiUsers, } from "react-icons/fi";
+import { FaShippingFast } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart  } from "react-icons/ci";
@@ -67,6 +68,11 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   title: "Cart",
                   href: "/dashboard/cart",
                   icon: <CiShoppingCart className="h-5 w-5 mr-2" />,
+                },
+                {
+                  title: "Shipping",
+                  href: "/dashboard/shipping",
+                  icon: <FaShippingFast className="h-5 w-5 mr-2" />,
                 },
               ]}
             />

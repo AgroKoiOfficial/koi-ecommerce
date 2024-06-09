@@ -7,7 +7,7 @@ import { EditProduct } from "../EditProduct";
 import { formatRupiah } from "@/utils/currency";
 import { Pagination } from "@/components/ui/Pagination"; 
 import { Search } from "@/components/ui/Search";
-import { useProductTable } from "./useProductTable";
+import { useProductTable } from "../../../../hooks/dashboard/useProductTable";
 
 export const ProductTable = () => {
   const {

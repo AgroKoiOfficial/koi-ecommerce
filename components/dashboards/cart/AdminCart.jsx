@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { formatRupiah } from "@/utils/currency";
 import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
-import { useAdminCart } from "./useAdminCart";
+import { useAdminCart } from "../../../hooks/dashboard/useAdminCart";
 
 export const AdminCart = () => {
   const {

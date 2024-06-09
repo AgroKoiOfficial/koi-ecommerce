@@ -3,7 +3,7 @@ import { Table } from "@/components/ui/Table";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import { Button } from "@/components/ui/Button";
 import { EditUser } from "../EditUser";
-import { useUserTable } from "./useUserTable";
+import { useUserTable } from "../../../../hooks/dashboard/useUserTable";
 import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
 

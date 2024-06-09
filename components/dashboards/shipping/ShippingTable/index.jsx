@@ -1,19 +1,20 @@
 import React from "react";
-import { Table } from "@/components/ui/Table";
 import { FiEdit, FiTrash, FiPlusCircle } from "react-icons/fi";
-import { Button } from "@/components/ui/Button";
-import { AddCategory } from "../AddCategory";
-import { EditCategory } from "../EditCategory";
-import { useCategoryTable } from "../../../../hooks/dashboard/useCategoryTable";
-import { Pagination } from "@/components/ui/Pagination";
+import { Table } from "@/components/ui/Table";
 import { Search } from "@/components/ui/Search";
+import { Button } from "@/components/ui/Button";
+import { AddShipping } from "../AddShipping";
+import { EditShipping } from "../EditShipping";
+import { formatRupiah } from "@/utils/currency";
+import { Pagination } from "@/components/ui/Pagination";
+import { useShippingTable } from "../../../../hooks/dashboard/useShippingTable";
 
-export const CategoryTable = () => {
+const ShippingTable = () => {
   const {
-    categories,
+    shippings,
     modalOpen,
     editModalOpen,
-    editCategory,
+    editShipping,
     currentPage,
     totalPages,
     handleAdd,
@@ -23,26 +24,29 @@ export const CategoryTable = () => {
     handleDelete,
     setCurrentPage,
     handleSearch,
-  } = useCategoryTable();
+  } = useShippingTable();
 
-  const columns = ["No", "Name", "Action"];
+  const columns = ["No", "City", "Region", "Fee", "Actions"];
 
-  const data = Array.isArray(categories) &&
-    categories.map((category, index) => {
+  const data =
+    Array.isArray(shippings) &&
+    shippings.map((shipping, index) => {
       return {
         No: index + 1 + (currentPage - 1) * 10,
-        Name: category.name,
-        Action: (
+        City: shipping.city,
+        Region: shipping.region,
+        Fee: formatRupiah(shipping.fee),
+        Actions: (
           <div className="flex max-w-[25%] items-center justify-center space-x-1 mx-auto">
             <Button
               className="bg-blue-500 hover:bg-blue-600 text-white"
               icon={<FiEdit />}
-              onClick={() => handleEdit(category)}
+              onClick={() => handleEdit(shipping)}
             />
             <Button
               className="bg-red-500 hover:bg-red-600 text-white"
               icon={<FiTrash />}
-              onClick={() => handleDelete(category.id)}
+              onClick={() => handleDelete(shipping.id)}
             />
           </div>
         ),
@@ -66,13 +70,25 @@ export const CategoryTable = () => {
             icon={<FiPlusCircle />}
           />
         </div>
+        {modalOpen && <AddShipping onClose={handleCloseModal} />}
+        {editModalOpen && editShipping && (
+          <EditShipping
+            onClose={handleCloseEditModal}
+            shipping={editShipping}
+          />
+        )}
       </div>
-      {modalOpen && <AddCategory onClose={handleCloseModal} />}
-      {editModalOpen && editCategory && <EditCategory onClose={handleCloseEditModal} category={editCategory} />}
       <div className="container overflow-auto scrollbar-hide">
         <Table columns={columns} data={data} />
       </div>
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
+
 };
+
+export default ShippingTable;

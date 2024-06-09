@@ -3,7 +3,7 @@ import { FiMenu, FiX, FiUser, FiShoppingCart } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import MenuLinks from "./MenuLinks";
-import { useNavbar } from "./useNavbar";
+import { useNavbar } from "../../hooks/useNavbar";
 import Sidebar from "./Sidebar";
 
 const Navbar = () => {
