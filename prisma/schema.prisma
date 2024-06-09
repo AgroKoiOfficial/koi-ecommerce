@@ -139,15 +139,18 @@ model Payment {
 }
 
 model Coupon {
-  id         String   @id @default(cuid())
-  code       String
-  discount   Decimal  @db.Decimal(10, 2)
-  expiration DateTime
+  id           String      @id @default(cuid())
+  code         String
+  decimalValue Decimal?    @db.Decimal(10, 2)
+  percentValue Decimal?    @db.Decimal(5, 2)
+  expiration   DateTime
+  discountType DiscountType
 
-  checkouts Checkout[]
+  checkouts    Checkout[]
 
   @@map("coupons")
 }
+
 
 model Carousel {
   id    String  @id @default(cuid())
@@ -164,4 +167,9 @@ enum Role {
 enum PaymentStatus {
   PAID
   UNPAID
+}
+
+enum DiscountType {
+  DECIMAL
+  PERCENT
 }
