@@ -60,13 +60,13 @@ model Cart {
   updatedAt DateTime   @updatedAt
   expiresAt DateTime
   product   Product    @relation(fields: [productId], references: [id])
-  checkouts Checkout[]
 
   @@map("carts")
 }
 
 model Address {
   id         String @id @default(cuid())
+  phone      String
   city       String
   postalCode String
   province   String
@@ -87,6 +87,8 @@ model Order {
   shippingId String
   shipping   Shipping  @relation(fields: [shippingId], references: [id])
   products   Product[]
+  checkoutId String
+  checkout   Checkout  @relation(fields: [checkoutId], references: [id])
 
   @@map("orders")
 }
@@ -118,13 +120,13 @@ model Checkout {
   id       String        @id @default(cuid())
   addressId String
   address  Address       @relation(fields: [addressId], references: [id])
-  cartId   String
-  cart     Cart          @relation(fields: [cartId], references: [id])
+  cart     Json
   total    Decimal       @db.Decimal(10, 2)
   quantity Int
   couponId String?
   coupon   Coupon?       @relation(fields: [couponId], references: [id])
   payments Payment[]
+  order    Order[]
   status   PaymentStatus
 
   @@map("checkouts")
