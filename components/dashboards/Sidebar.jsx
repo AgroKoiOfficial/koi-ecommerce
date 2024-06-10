@@ -6,7 +6,7 @@ import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart  } from "react-icons/ci";
 import { RiCarouselView } from "react-icons/ri";
-import { MdOutlineRateReview } from "react-icons/md";
+import { MdOutlineRateReview, MdOutlineDiscount  } from "react-icons/md";
 import { Button } from "../ui/Button";
 import MenuItem from "./MenuItem";
 
@@ -73,6 +73,11 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   title: "Shipping",
                   href: "/dashboard/shipping",
                   icon: <FaShippingFast className="h-5 w-5 mr-2" />,
+                },
+                {
+                  title: "Discount",
+                  href: "/dashboard/discount",
+                  icon: <MdOutlineDiscount className="h-5 w-5 mr-2" />,
                 },
               ]}
             />
