@@ -73,6 +73,7 @@ model Address {
   street     String
   userId     String
   user       User   @relation(fields: [userId], references: [id])
+  checkouts  Checkout[]
 
   @@map("addresses")
 }
@@ -115,6 +116,8 @@ model Review {
 
 model Checkout {
   id       String        @id @default(cuid())
+  addressId String
+  address  Address       @relation(fields: [addressId], references: [id])
   cartId   String
   cart     Cart          @relation(fields: [cartId], references: [id])
   total    Decimal       @db.Decimal(10, 2)
@@ -141,6 +144,7 @@ model Payment {
 model Coupon {
   id           String      @id @default(cuid())
   code         String
+  minimumPrice Decimal?    @db.Decimal(10, 2)
   decimalValue Decimal?    @db.Decimal(10, 2)
   percentValue Decimal?    @db.Decimal(5, 2)
   expiration   DateTime

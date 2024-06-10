@@ -14,14 +14,18 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { code, decimalValue, percentValue, discountType, expiration } = req.body;
+    const { code, minimumPrice, decimalValue, percentValue, discountType, expiration } = req.body;
 
     if (discountType === "DECIMAL" && percentValue != null) {
-      return res.status(400).json({ message: "Percent value should be null when discount type is DECIMAL" });
+      return res.status(400).json({
+        message: "Percent value should be null when discount type is DECIMAL",
+      });
     }
 
     if (discountType === "PERCENT" && decimalValue != null) {
-      return res.status(400).json({ message: "Decimal value should be null when discount type is PERCENT" });
+      return res.status(400).json({
+        message: "Decimal value should be null when discount type is PERCENT",
+      });
     }
 
     if (!code || !expiration || (!decimalValue && !percentValue)) {
@@ -30,16 +34,26 @@ export default async function handler(req, res) {
 
     const localTimezone = "Asia/Jakarta";
     const dateObj = new Date(expiration);
-    const formattedExpiration = format(dateObj, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx", { timeZone: localTimezone });
+    const formattedExpiration = format(
+      dateObj,
+      "yyyy-MM-dd'T'HH:mm:ss.SSSxxx",
+      { timeZone: localTimezone }
+    );
+
+    const couponData = {
+      code,
+      decimalValue: discountType === "DECIMAL" ? decimalValue : null,
+      percentValue: discountType === "PERCENT" ? percentValue : null,
+      discountType,
+      expiration: new Date(formattedExpiration),
+    };
+
+    if (minimumPrice !== undefined) {
+      couponData.minimumPrice = minimumPrice;
+    }
 
     const coupon = await prisma.coupon.create({
-      data: {
-        code,
-        decimalValue: discountType === "DECIMAL" ? decimalValue : null,
-        percentValue: discountType === "PERCENT" ? percentValue : null,
-        discountType,
-        expiration: new Date(formattedExpiration),
-      },
+      data: couponData,
     });
 
     return res.status(201).json(coupon);
