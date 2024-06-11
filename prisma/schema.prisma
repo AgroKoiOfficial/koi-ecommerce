@@ -100,6 +100,7 @@ model Shipping {
   fee    Decimal @db.Decimal(10, 2)
 
   orders Order[]
+  checkout Checkout[]
 
   @@map("shippings")
 }
@@ -120,8 +121,10 @@ model Checkout {
   id       String        @id @default(cuid())
   addressId String
   address  Address       @relation(fields: [addressId], references: [id])
+  shippingId String
+  shipping Shipping?    @relation(fields: [shippingId], references: [id])
   cart     Json
-  total    Decimal       @db.Decimal(10, 2)
+  total   Int
   quantity Int
   couponId String?
   coupon   Coupon?       @relation(fields: [couponId], references: [id])

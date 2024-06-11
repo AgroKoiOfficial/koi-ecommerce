@@ -7,9 +7,11 @@ import { formatRupiah } from "@/utils/currency";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "../../hooks/useCart";
 import Link from "next/link";
+import { useSession, getSession } from 'next-auth/react';
 
 function Cart() {
   const router = useRouter();
+  const { data: session } = useSession();
   const {
     cartData,
     handleDeleteItem,
@@ -17,6 +19,14 @@ function Cart() {
     calculateTotalQuantity,
     calculateTotalPrice,
   } = useCart();
+
+  const handleCheckout = async () => {
+    if (session) {
+      router.push("/checkout");
+    } else {
+      router.push("/login");
+    }
+  };
 
   return (
     <>
@@ -104,6 +114,13 @@ function Cart() {
           </div>
         </div>
       )}
+       {cartData.length > 0 && (
+          <div className="flex items-center justify-center mx-auto mt-8 p-4 md:px-16 lg:px-96">
+            <Button onClick={handleCheckout} className="bg-blue-500 text-white hover:bg-blue-600">
+              Checkout
+            </Button>
+          </div>
+        )}
     </main>
     </>
   );
