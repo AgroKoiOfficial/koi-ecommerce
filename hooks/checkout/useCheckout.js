@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getSession } from 'next-auth/react';
 
-const useCheckout = (cart, address, shippingId, selectedCoupon) => {
+const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 

@@ -8,10 +8,6 @@ export default async function handler(req, res) {
 
   const session = await getSession({ req });
 
-  if (!session || !session.user) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
   try {
     const checkouts = await prisma.checkout.findMany({
       include: {
@@ -30,16 +26,17 @@ export default async function handler(req, res) {
       address: {
         city: checkout.address.city,
         province: checkout.address.province,
+        phone:checkout.address.phone
       },
       shipping: {
         city: checkout.shipping.city,
         region: checkout.shipping.region,
         fee: checkout.shipping.fee,
       },
-      coupon: {
-        code: checkout.coupon.code,
-        discountType: checkout.coupon.discountType,
-      },
+      coupon: checkout.coupon ? { 
+        code: checkout.coupon.code || "", 
+        discountType: checkout.coupon.discountType || "", 
+      } : null, 
     }));
 
     return res.status(200).json({ checkouts: simplifiedCheckouts });

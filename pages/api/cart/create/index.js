@@ -16,13 +16,15 @@ export default async function handler(req, res) {
     const { userId, productId, total, quantity } = req.body;
 
     const product = await prisma.product.findUnique({
-      where: {
-        id: productId,
-      },
+      where: { id: productId },
     });
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
+    }
+
+    if (product.quantity <= 0) {
+      return res.status(400).json({ error: "Product is out of stock" });
     }
 
     if (product.quantity < quantity) {
@@ -35,24 +37,17 @@ export default async function handler(req, res) {
       });
 
       if (existingCartItem && existingCartItem.userId !== userId) {
-        return res
-          .status(400)
-          .json({ error: "Product is reserved by another user" });
+        return res.status(400).json({ error: "Product is reserved by another user" });
       }
     }
 
     const userCartItem = await prisma.cart.findFirst({
-      where: {
-        userId,
-        productId,
-      },
+      where: { userId, productId },
     });
 
     if (userCartItem) {
       const updatedCartItem = await prisma.cart.update({
-        where: {
-          id: userCartItem.id,
-        },
+        where: { id: userCartItem.id },
         data: {
           total: userCartItem.total + total,
           quantity: userCartItem.quantity + quantity,

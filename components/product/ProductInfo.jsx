@@ -39,17 +39,17 @@ const ProductInfo = ({ product }) => {
         router.push("/cart");
       } else {
         const errorData = await response.json();
-        toast.error("Failed to add product to cart. Stock not enough. ");
+        toast.error("Failed to add product to cart. Stock not enough.");
       }
     } catch (error) {
-      toast.error("Failed to add product to cart. stock not enough.");
+      toast.error("Failed to add product to cart. Stock not enough.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="mb-4">
       <h1 className="text-3xl lg:text-4xl font-bold mb-4 text-center lg:text-left">
         {product.name}
       </h1>
@@ -66,14 +66,19 @@ const ProductInfo = ({ product }) => {
         <span className="font-bold">Description:</span>
         <p className="mt-2">{product.description}</p>
       </div>
-      <div className="mb-4 md:w-1/5">
-        <Button
-          className="bg-blue-500 hover:bg-blue-700 text-white"
-          onClick={handleAddToCart}
-          disabled={loading}>
-          {loading ? "Adding..." : "Add to Cart"}
-        </Button>
-      </div>
+      {product.stock > 0 ? (
+        <div className="mb-4 md:w-1/5">
+          <Button
+            className="bg-blue-500 hover:bg-blue-700 text-white"
+            onClick={handleAddToCart}
+            disabled={loading}
+          >
+            {loading ? "Adding..." : "Add to Cart"}
+          </Button>
+        </div>
+      ) : (
+        <p className="text-red-500 font-bold">Stock is out</p>
+      )}
     </div>
   );
 };
