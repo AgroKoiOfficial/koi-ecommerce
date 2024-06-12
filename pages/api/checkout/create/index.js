@@ -80,7 +80,8 @@ export default async function handler(req, res) {
 
     console.log("Shipping found:", shipping);
 
-    total += parseInt(shipping.fee);
+    const shippingFee = parseInt(shipping.fee);
+    total += shippingFee;
 
     const defaultStatus = "UNPAID";
 
@@ -115,7 +116,7 @@ export default async function handler(req, res) {
       },
     });
 
-    await sendCheckoutEmail(token.email, cart, discount, total);
+    await sendCheckoutEmail(token.email, cart, discount, shippingFee, total);
 
     console.log("Checkout created successfully:", newCheckout);
 

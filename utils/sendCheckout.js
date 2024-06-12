@@ -1,23 +1,7 @@
-import nodemailer from "nodemailer";
+import {transporter} from "./email.js"
+import { formatRupiah } from "./currency.js";
 
-export const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.APP_PASSWORD,
-  },
-});
-
-const formatRupiah = (number) => {
-  return number.toLocaleString('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-  });
-};
-
-export const sendCheckoutEmail = async (tokenEmail, cart, discount, total) => {
+export const sendCheckoutEmail = async (tokenEmail, cart, discount, shippingFee, total) => {
   const cartItemsHtml = cart
     .map(
       (item) => `
@@ -39,9 +23,9 @@ export const sendCheckoutEmail = async (tokenEmail, cart, discount, total) => {
       <table style="width: 100%; border-collapse: collapse;">
         <thead>
           <tr>
-            <th style="padding: 8px; border: 1px solid #ddd;">Produk</th>
-            <th style="padding: 8px; border: 1px solid #ddd;">Jumlah</th>
-            <th style="padding: 8px; border: 1px solid #ddd;">Harga</th>
+            <th style="padding: 8px; border: 1px solid #ddd; background-color: #f2f2f2; color: #333;">Produk</th>
+            <th style="padding: 8px; border: 1px solid #ddd; background-color: #f2f2f2; color: #333;">Jumlah</th>
+            <th style="padding: 8px; border: 1px solid #ddd; background-color: #f2f2f2; color: #333;">Harga</th>
           </tr>
         </thead>
         <tbody>
@@ -50,6 +34,9 @@ export const sendCheckoutEmail = async (tokenEmail, cart, discount, total) => {
       </table>
       <p style="font-size: 16px; color: #555; margin-top: 20px;">
         Diskon: ${discount > 0 ? formatRupiah(Number(discount)) : "Tidak ada"}
+      </p>
+      <p style="font-size: 16px; color: #555; margin-top: 10px;">
+        Biaya Pengiriman: ${formatRupiah(Number(shippingFee))}
       </p>
       <p style="font-size: 16px; color: #555; margin-top: 10px;">
         Total: ${formatRupiah(Number(total))}
