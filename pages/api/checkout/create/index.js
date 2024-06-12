@@ -1,5 +1,6 @@
 import { prisma } from "@/prisma/prisma";
 import { getToken } from "next-auth/jwt";
+import { sendCheckoutEmail } from "@/utils/sendCheckout.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -22,6 +23,7 @@ export default async function handler(req, res) {
 
     let total = 0;
     let quantity = 0;
+    let discount = 0;
 
     for (const cartItem of cart) {
       if (!cartItem.product || !cartItem.product.price || !cartItem.quantity) {
@@ -50,7 +52,6 @@ export default async function handler(req, res) {
 
       console.log("Coupon found:", coupon);
 
-      let discount = 0;
       if (coupon.discountType === "PERCENT") {
         discount = total * (coupon.percentValue / 100);
       } else {
@@ -113,6 +114,8 @@ export default async function handler(req, res) {
         userId: userId,
       },
     });
+
+    await sendCheckoutEmail(token.email, cart, discount, total);
 
     console.log("Checkout created successfully:", newCheckout);
 
