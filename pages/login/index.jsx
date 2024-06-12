@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
@@ -14,6 +15,7 @@ export default function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const passwordRef = useRef(null);
 
   useEffect(() => {
@@ -33,24 +35,22 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     try {
-      console.log('Mengirim data:', data);
+      setLoading(true)
       const response = await signIn("credentials", {
         redirect: false,
         email: data.email,
         password: data.password,
       });
-      console.log('Response dari signIn:', response);
   
       if (response.error) {
-        console.error('Kesalahan login:', response.error);
         setError(response.error);
       } else {
-        console.log('Login berhasil:', response);
         router.push("/");
       }
     } catch (err) {
-      console.error('Kesalahan tak terduga saat login:', err);
       setError("Terjadi kesalahan tak terduga. Silakan coba lagi.");
+    }finally{
+      setLoading(false)
     }
   };
   
@@ -60,6 +60,12 @@ export default function Login() {
   };
 
   return (
+    <>
+      <Head>
+        <title>Login</title>
+        <link rel="icon" href="/logo.png" />
+        <meta name="description" content="Login" />
+      </Head>
     <main className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
         <h1 className="text-3xl font-bold mb-8 text-center">Login</h1>
@@ -94,7 +100,7 @@ export default function Login() {
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white"
             >
-              Login
+              {loading ? "Loading..." : "Login"}
             </Button>
           </div>
         </form>
@@ -104,7 +110,14 @@ export default function Login() {
             Daftar
           </Link>
         </p>
+        <p className="text-center mt-4 text-gray-600">
+          Lupa kata sandi?{" "}
+          <Link href="/forgot-password" className="text-blue-500">
+            Lupa kata sandi
+          </Link>
+        </p>
       </div>
     </main>
+    </>
   );
 }

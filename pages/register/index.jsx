@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Input } from "@/components/ui/Input";
@@ -32,6 +34,7 @@ export default function Register() {
     });
 
     if (response.ok) {
+      toast.success("Registration successful");
       router.push("/login");
     } else {
       const { message } = await response.json();
@@ -44,6 +47,11 @@ export default function Register() {
   };
 
   return (
+    <>
+      <Head>
+        <title>Register</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
     <main className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
         <h1 className="text-3xl font-bold mb-8 text-center">Register</h1>
@@ -96,5 +104,6 @@ export default function Register() {
         </p>
       </div>
     </main>
+    </>
   );
 }

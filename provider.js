@@ -5,8 +5,8 @@ import Footer from "@/components/Footer";
 
 function Provider({ children }) {
   const { pathname } = useRouter();
-  const disableNavbar = ['register', 'login', 'dashboard', 'user'];
-  const disableFooter = ['register', 'login', 'dashboard', 'user'];
+  const disableNavbar = ['register', 'login', 'reset-password', 'forgot-password', 'dashboard', 'user'];
+  const disableFooter = ['register', 'login', 'reset-password', 'forgot-password',  'dashboard', 'user'];
 
   return (
     <>
