@@ -7,6 +7,6 @@ export const transporter = nodemailer.createTransport({
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.APP_PASSWORD
-        ,
     },
+    disableReplyTo: true
 })

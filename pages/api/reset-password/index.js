@@ -48,6 +48,7 @@ export default async function handler(req, res) {
         <p style="font-size: 16px; color: #555; margin-bottom: 20px;">Your password has been reset successfully.</p>
       </div>
     `,
+      replyTo: "noreply@example.com",
     });
 
     res.status(200).json({ message: "Password reset successful" });

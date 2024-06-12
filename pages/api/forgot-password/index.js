@@ -49,6 +49,7 @@ export default async function handler(req, res) {
           </p>
         </div>
       `,
+      replyTo: 'noreply@example.com'
     });
 
     res.status(200).json({ message: "Email sent" });
