@@ -1,6 +1,7 @@
 import { prisma } from "@/prisma/prisma";
 import { getToken } from "next-auth/jwt";
 import { sendCheckoutEmail } from "@/utils/sendCheckout.js";
+import { sendCheckoutToAdmin } from "@/utils/sendCheckoutToAdmin.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -19,6 +20,32 @@ export default async function handler(req, res) {
     if (!userId || !addressId || !shippingId || !cart || cart.length === 0) {
       console.error("Invalid input data:", req.body);
       return res.status(400).json({ message: "Cart is empty" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    });
+
+    if (!user) {
+      console.error("User not found for id:", userId);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const address = await prisma.address.findUnique({
+      where: {
+        id: addressId,
+      },
+    });
+
+    if (!address) {
+      console.error("Address not found for id:", addressId);
+      return res.status(404).json({ message: "Address not found" });
     }
 
     let total = 0;
@@ -116,7 +143,9 @@ export default async function handler(req, res) {
       },
     });
 
-    await sendCheckoutEmail(token.email, cart, discount, shippingFee, total);
+    await sendCheckoutEmail(user.email, cart, discount, shippingFee, total);
+
+    await sendCheckoutToAdmin(user, address, cart, discount, shippingFee, total);
 
     console.log("Checkout created successfully:", newCheckout);
 

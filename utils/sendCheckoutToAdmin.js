@@ -1,7 +1,28 @@
-import {transporter} from "./email.js"
+import { transporter } from "./email.js";
 import { formatRupiah } from "./currency.js";
 
-export const sendCheckoutEmail = async (tokenEmail, cart, discount, shippingFee, total) => {
+export const sendCheckoutToAdmin = async (userInfo, address, cart, discount, shippingFee, total) => {
+  const { name, email } = userInfo;
+  const { street, city, province, postalCode, phone } = address;
+
+  const addressInfo = `
+    <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
+      Jalan: ${street}
+    </p>
+    <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
+      Kota: ${city}
+    </p>
+    <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
+      Provinsi: ${province}
+    </p>
+    <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
+      Kode Pos: ${postalCode}
+    </p>
+    <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
+      Telepon: ${phone}
+    </p>
+  `;
+
   const cartItemsHtml = cart
     .map(
       (item) => `
@@ -15,11 +36,21 @@ export const sendCheckoutEmail = async (tokenEmail, cart, discount, shippingFee,
     .join("");
 
   const emailHtml = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-      <h1 style="font-size: 24px; color: #333; margin-bottom: 20px;">Mohon Selesaikan Pesanan</h1>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+      <h1 style="font-size: 24px; color: #333; margin-bottom: 20px;">Checkout Notification</h1>
       <p style="font-size: 16px; color: #555; margin-bottom: 20px;">
-        Terima kasih telah melakukan checkout. Mohon selesaikan pesanan Anda sekarang.
+        Pengguna telah melakukan checkout:
       </p>
+      <p style="font-size: 16px; color: #555; margin-bottom: 20px;">
+        Nama Pengguna: ${name}
+      </p>
+      <p style="font-size: 16px; color: #555; margin-bottom: 20px;">
+        Email Pengguna: ${email}
+      </p>
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 20px; color: #333; margin-bottom: 10px;">Alamat Pengiriman</h2>
+        ${addressInfo}
+      </div>
       <table style="width: 100%; border-collapse: collapse;">
         <thead>
           <tr>
@@ -47,12 +78,12 @@ export const sendCheckoutEmail = async (tokenEmail, cart, discount, shippingFee,
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: tokenEmail,
-      subject: "Checkout Sedang Diproses",
+      to: process.env.EMAIL_ADMIN,
+      subject: "Checkout Notification",
       html: emailHtml,
     });
   } catch (error) {
     console.error("Error sending email:", error);
     throw new Error("Failed to send email");
   }
-};
+}
