@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { FiX, FiHome, FiShoppingCart, FiList, FiUsers, } from "react-icons/fi";
-import { FaShippingFast } from "react-icons/fa";
+import { FaShippingFast, FaWhatsapp } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart  } from "react-icons/ci";
@@ -116,6 +116,11 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   title: "Product Review",
                   href: "/dashboard/review",
                   icon: <MdOutlineRateReview className="h-5 w-5 mr-2" />,
+                },
+                {
+                  title: "Whatsapp CTA",
+                  href: "/dashboard/cta",
+                  icon: <FaWhatsapp className="h-5 w-5 mr-2" />,
                 },
               ]}
             />

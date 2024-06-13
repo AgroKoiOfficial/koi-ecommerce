@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import ProductCard from "../../components/product/ProductCard";
+import {CTA} from "@/components/CTA"; 
 
 export default function Products({ products, totalProducts }) {
   const [page, setPage] = useState(1);
@@ -67,6 +68,16 @@ export default function Products({ products, totalProducts }) {
             </Link>
           ))}
         </div>
+        <div className="flex justify-center mt-8">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={loadMore}
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Load More"}
+          </button>
+        </div>
+        <CTA />
         {loading && <p className="text-center mt-8">Loading...</p>}
       </main>
     </>

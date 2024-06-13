@@ -169,6 +169,15 @@ model Carousel {
   color String? @default("white")
 }
 
+model CustomerService {
+  id            String    @id @default(cuid())
+  name          String
+  phoneNumber   String
+  active        Boolean   @default(false)
+  message       String
+  lastAccessed  DateTime?  @updatedAt
+}
+
 enum Role {
   USER
   ADMIN
