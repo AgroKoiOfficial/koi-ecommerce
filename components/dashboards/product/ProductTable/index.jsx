@@ -2,12 +2,12 @@ import React from "react";
 import { Table } from "@/components/ui/Table";
 import { FiEdit, FiTrash, FiPlusCircle } from "react-icons/fi";
 import { Button } from "@/components/ui/Button";
-import { AddProduct } from "../AddProduct";
-import { EditProduct } from "../EditProduct";
+import { AddProduct } from "@/components/dashboards/product/AddProduct";
+import { EditProduct } from "@/components/dashboards/product/EditProduct";
 import { formatRupiah } from "@/utils/currency";
 import { Pagination } from "@/components/ui/Pagination"; 
 import { Search } from "@/components/ui/Search";
-import { useProductTable } from "../../../../hooks/dashboard/useProductTable";
+import { useProductTable } from "@/hooks/dashboard/useProductTable";
 
 export const ProductTable = () => {
   const {

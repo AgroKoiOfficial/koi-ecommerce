@@ -2,9 +2,9 @@ import React from "react";
 import { Table } from "@/components/ui/Table";
 import { FiEdit, FiTrash, FiPlusCircle } from "react-icons/fi";
 import { Button } from "@/components/ui/Button";
-import { AddCategory } from "../AddCategory";
-import { EditCategory } from "../EditCategory";
-import { useCategoryTable } from "../../../../hooks/dashboard/useCategoryTable";
+import { AddCategory } from "@/components/dashboards/category/AddCategory";
+import { EditCategory } from "@/components/dashboards/category/EditCategory";
+import { useCategoryTable } from "@/hooks/dashboard/useCategoryTable";
 import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
 

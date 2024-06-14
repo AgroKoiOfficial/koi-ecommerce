@@ -2,8 +2,8 @@ import React from "react";
 import { Table } from "@/components/ui/Table";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import { Button } from "@/components/ui/Button";
-import { EditUser } from "../EditUser";
-import { useUserTable } from "../../../../hooks/dashboard/useUserTable";
+import { EditUser } from "@/components/dashboards/user/EditUser";
+import { useUserTable } from "@/hooks/dashboard/useUserTable";
 import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
 
