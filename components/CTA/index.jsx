@@ -28,9 +28,11 @@ export const CTA = () => {
           <div className="flex items-center">
             <FaWhatsapp className="cta-icon w-8 h-8 text-green-500 mr-2" />
             <span className="text-gray-800">
-              Halo {data.name}, apakah ada yang bisa dibantu?
+              Halo {data?.name}, apakah ada yang bisa dibantu?
             </span>
           </div>
+          {data?.message && (
+          
           <a
             href={`https://wa.me/+${data?.phoneNumber}?text=${data?.message}`}
             target="_blank"
@@ -38,6 +40,7 @@ export const CTA = () => {
             className="block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mt-2 rounded-md text-center">
             Hubungi
           </a>
+          )}
         </div>
       )}
     </div>

@@ -8,49 +8,59 @@ export default async function handler(req, res) {
 
   const session = await getSession({ req });
 
-//   if (!session || !session.user) {
-//     return res.status(401).json({ error: "Unauthorized" });
-//   }
+  if (!session || !session.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
 
   const userId = session.user.id;
 
   try {
+    console.log("Fetching checkouts for user:", userId);
+
     const userCheckouts = await prisma.checkout.findMany({
       where: {
-        cart: {
-          some: {
-            userId: userId,
-          },
-        },
+        address: {
+          userId: userId
+        }
       },
       include: {
         address: true,
         shipping: true,
         coupon: true,
-      },
+        payments: true,
+        order: true
+      }
     });
 
-    const simplifiedCheckouts = userCheckouts.map((checkout) => ({
-      id: checkout.id,
-      total: checkout.total,
-      quantity: checkout.quantity,
-      status: checkout.status,
+    // console.log("User checkouts found:", userCheckouts);
+
+    const checkoutsWithRelations = userCheckouts.map(checkout => ({
+      ...checkout,
       address: {
         city: checkout.address.city,
         province: checkout.address.province,
+        postalCode: checkout.address.postalCode,
+        street: checkout.address.street,
+        phone: checkout.address.phone
       },
-      shipping: {
-        city: checkout.shipping.city,
-        region: checkout.shipping.region,
-        fee: checkout.shipping.fee,
-      },
-      coupon: {
-        code: checkout.coupon.code,
-        discountType: checkout.coupon.discountType,
-      },
+      shipping: checkout.shipping
+        ? {
+            city: checkout.shipping.city,
+            region: checkout.shipping.region,
+            fee: checkout.shipping.fee
+          }
+        : null,
+      coupon: checkout.coupon
+        ? {
+            code: checkout.coupon.code,
+            discountType: checkout.coupon.discountType,
+          }
+        : null
     }));
 
-    return res.status(200).json({ checkouts: simplifiedCheckouts });
+    console.log("Checkouts with relations:", checkoutsWithRelations);
+
+    return res.status(200).json({ checkouts: checkoutsWithRelations });
   } catch (error) {
     console.error("Error getting user checkouts:", error);
     return res.status(500).json({ message: "Failed to get user checkouts" });

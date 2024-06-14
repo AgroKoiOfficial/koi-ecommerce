@@ -19,20 +19,14 @@ export default async function handler(req, res) {
       return res.status(404).json({ message: 'No active customer service available' });
     }
 
-    let serviceToAccess = null;
-    for (let i = 0; i < activeServices.length; i++) {
-      const s = activeServices[i];
-      if (s.lastAccessed === null || s.lastAccessed.toISOString() !== device) {
-        serviceToAccess = s;
-        break;
-      }
-    }
+    // Finding the next service to access
+    let serviceToAccess = activeServices.find(service => service.lastAccessed === null || service.lastAccessed.toISOString() !== device);
 
     if (!serviceToAccess) {
       serviceToAccess = activeServices[0];
     }
 
-  
+    // Update the lastAccessed for the selected service
     const updatedService = await prisma.customerService.update({
       where: { id: serviceToAccess.id },
       data: {
