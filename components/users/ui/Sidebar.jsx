@@ -1,12 +1,12 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { FiX, FiHome, FiShoppingCart, FiList, FiUsers } from "react-icons/fi";
-import { FaShippingFast, FaWhatsapp } from "react-icons/fa";
+import { FaShippingFast } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart } from "react-icons/ci";
 import { RiCarouselView } from "react-icons/ri";
-import { MdOutlineRateReview, MdOutlineDiscount } from "react-icons/md";
+import { MdOutlineRateReview, MdOutlineShoppingCartCheckout  } from "react-icons/md";
 import { Button } from "../../ui/Button";
 import MenuItem from "./MenuItem";
 
@@ -58,7 +58,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
               title="Orders"
               href="#"
               submenu={[
-                { title: "Submenu Item 1", href: "#", icon: null },
+                { title: "Checkout History", href: "/user/checkout-history", icon: <MdOutlineShoppingCartCheckout className="h-5 w-5 mr-2" /> },
                 { title: "Submenu Item 2", href: "#", icon: null },
               ]}
             />
