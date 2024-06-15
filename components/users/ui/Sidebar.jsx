@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { FiX, FiHome, FiShoppingCart, FiList, FiUsers } from "react-icons/fi";
-import { FaShippingFast } from "react-icons/fa";
+import { FiX, FiHome, FiShoppingCart, FiList } from "react-icons/fi";
+import { FaShippingFast, FaRegUser, FaUser  } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart } from "react-icons/ci";
@@ -61,6 +61,14 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                 { title: "Checkout History", href: "/user/checkout-history", icon: <MdOutlineShoppingCartCheckout className="h-5 w-5 mr-2" /> },
                 { title: "Submenu Item 2", href: "#", icon: null },
               ]}
+            />
+            <MenuItem
+            icon={<FaRegUser  className="h-5 w-5 mr-2" />}
+            title={'User Management'}
+            href={'#'}
+            submenu={[
+              { title: " User Info", href: "/user/user-management", icon: <FaUser className="h-5 w-5 mr-2"/> },
+            ]}
             />
           </ul>
           <div className="w-[40%] md:w-auto flex  flex-1 items-center justify-center bottom-0 fixed m-8">

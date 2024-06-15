@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getSession } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
 import Navbar from '@/components/users/ui/Navbar';
 import Sidebar from '@/components/users/ui/Sidebar';
 

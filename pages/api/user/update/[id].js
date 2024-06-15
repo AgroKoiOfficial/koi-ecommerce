@@ -9,7 +9,6 @@ export default async function handler(req, res) {
 
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    // console.log("Token:", token);
 
     if (!token || !token.role) {
       return res.status(401).json({ error: "Unauthorized" });
