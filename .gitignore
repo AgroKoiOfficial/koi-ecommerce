@@ -29,6 +29,13 @@ yarn-error.log*
 .env
 .env.production
 
+# migration
+prisma/migrations/
+
+# media 
+public/videos/
+public/images/
+
 # vercel
 .vercel
 

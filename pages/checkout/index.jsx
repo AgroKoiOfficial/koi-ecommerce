@@ -46,7 +46,6 @@ const Checkout = () => {
         const data = await response.json();
         if (response.ok) {
           setAddresses(data);
-          // Set selected address if exists
           if (data.length > 0) {
             setSelectedAddressId(data[0].id);
           }

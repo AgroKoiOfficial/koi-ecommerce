@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { FiX, FiHome, FiShoppingCart, FiList, FiUsers, } from "react-icons/fi";
-import { FaShippingFast, FaWhatsapp } from "react-icons/fa";
+import { FiX, FiHome, FiShoppingCart, FiList, FiUsers } from "react-icons/fi";
+import { FaShippingFast, FaWhatsapp, FaQuestion  } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart  } from "react-icons/ci";
@@ -122,8 +122,14 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   href: "/dashboard/cta",
                   icon: <FaWhatsapp className="h-5 w-5 mr-2" />,
                 },
+                {
+                  title : "FAQ",
+                  href : "/dashboard/faqs",
+                  icon : <FaQuestion className="h-5 w-5 mr-2" />
+                }
               ]}
             />
+            
           </ul>
           <div className="w-[40%] md:w-auto flex  flex-1 items-center justify-center bottom-0 fixed m-8">
             <Button
