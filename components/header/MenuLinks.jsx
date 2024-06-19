@@ -47,6 +47,14 @@ const MenuLinks = ({ className, itemClassName }) => {
           Contact
         </span>
       </Link>
+      <Link href="/faqs" passHref>
+        <span
+          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
+            router.pathname === "/faqs" ? "text-red-500 font-bold" : ""
+          }`}>
+          FAQs
+        </span>
+      </Link>
     </div>
   );
 };

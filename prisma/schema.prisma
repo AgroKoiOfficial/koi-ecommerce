@@ -179,7 +179,7 @@ model CustomerService {
 
 model FAQ {
   id        String   @id @default(cuid())
-  slug      String
+  slug      String   @unique
   question  String
   category  String
   answer    String   @db.Text
