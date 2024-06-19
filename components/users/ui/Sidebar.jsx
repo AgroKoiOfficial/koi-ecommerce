@@ -1,11 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { FiX, FiHome, FiShoppingCart, FiList } from "react-icons/fi";
-import { FaShippingFast, FaRegUser, FaUser  } from "react-icons/fa";
+import { FaShippingFast, FaRegUser, FaUser , FaRegAddressCard  } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart } from "react-icons/ci";
-import { RiCarouselView } from "react-icons/ri";
 import { MdOutlineRateReview, MdOutlineShoppingCartCheckout  } from "react-icons/md";
 import { Button } from "../../ui/Button";
 import MenuItem from "./MenuItem";
@@ -68,6 +67,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
             href={'#'}
             submenu={[
               { title: " User Info", href: "/user/user-management", icon: <FaUser className="h-5 w-5 mr-2"/> },
+              { title: "Address", href: "/user/address", icon: <FaRegAddressCard className="h-5 w-5 mr-2"/> },
             ]}
             />
           </ul>
