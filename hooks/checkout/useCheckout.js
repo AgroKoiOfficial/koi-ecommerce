@@ -14,31 +14,50 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
       }
 
       const responseCart = await fetch(`/api/cart/userId/${session.user.id}`);
+      if (!responseCart.ok) {
+        throw new Error("Failed to fetch user's cart");
+      }
       const userCartData = await responseCart.json();
 
-      const addressResponse = await fetch("/api/address/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phone: address.phone,
-          city: address.city,
-          postalCode: address.postalCode,
-          province: address.province,
-          street: address.street,
-          userId: session.user.id,
-        }),
-      });
+      let addressId = address.id; 
 
-      if (!addressResponse.ok) {
-        throw new Error("Failed to save address");
+      if (!addressId) {
+     
+        const addressResponse = await fetch("/api/address/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: address.phone,
+            city: address.city,
+            postalCode: address.postalCode,
+            province: address.province,
+            street: address.street,
+            userId: session.user.id,
+          }),
+        });
+
+        if (!addressResponse.ok) {
+          throw new Error("Failed to save address");
+        }
+
+        const newAddress = await addressResponse.json();
+        addressId = newAddress.id;
+      } else {
+        const addressResponse = await fetch(`/api/address/userId/${session.user.id}`);
+        if (!addressResponse.ok) {
+          throw new Error("Failed to fetch user's addresses");
+        }
+        const existingAddresses = await addressResponse.json();
+        const existingAddress = existingAddresses.find(addr => addr.id === addressId);
+        if (!existingAddress) {
+          throw new Error("Address not found");
+        }
+        addressId = existingAddress.id;
       }
 
-      const newAddress = await addressResponse.json();
-      const { id: addressId } = newAddress;
-
-      const response = await fetch("/api/checkout/create", {
+      const checkoutResponse = await fetch("/api/checkout/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,9 +71,9 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
         }),
       });
 
-      if (response.ok) {
+      if (checkoutResponse.ok) {
         setMessage("Checkout successful!");
-        setCart([]);
+        setCart([]); 
       } else {
         setMessage("Checkout failed!");
       }

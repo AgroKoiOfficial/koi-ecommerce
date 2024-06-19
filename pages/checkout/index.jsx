@@ -33,9 +33,10 @@ const Checkout = () => {
 
   const { handleCheckout, loading, message } = useCheckout(
     cart,
-    address,
+    createNewAddress ? address : addresses.find(addr => addr.id === selectedAddressId),
     shippingId,
-    selectedCoupon
+    selectedCoupon,
+    setCart
   );
 
   useEffect(() => {
@@ -254,7 +255,7 @@ const Checkout = () => {
         {loading ? "Processing..." : "Checkout"}
       </button>
 
-      {/* {message && <div className="mt-4 text-red-500">{message}</div>} */}
+      {message && <div className="mt-4 text-red-500">{message}</div>}
     </div>
   );
 };
