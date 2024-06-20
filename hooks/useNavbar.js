@@ -55,9 +55,7 @@ export const useNavbar = () => {
   }, [session]);
 
   const handleLogout = () => {
-    signOut({
-      callbackUrl: "process.env.BASE_URL/login",
-    });
+    signOut();
     router.push("/login");
   };
 
