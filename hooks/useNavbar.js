@@ -55,8 +55,9 @@ export const useNavbar = () => {
   }, [session]);
 
   const handleLogout = () => {
-    signOut();
-    router.push("/login");
+    signOut({
+      callbackUrl: process.env.NEXTAUTH_URL,
+    });
   };
 
   const toggleSidebar = () => {
