@@ -1,12 +1,14 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { FiX, FiHome, FiShoppingCart, FiList, FiUsers } from "react-icons/fi";
-import { FaShippingFast, FaWhatsapp, FaQuestion  } from "react-icons/fa";
+import { FaShippingFast, FaWhatsapp, FaQuestion } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
-import { CiShop, CiShoppingCart  } from "react-icons/ci";
+import { CiShop, CiShoppingCart } from "react-icons/ci";
 import { RiCarouselView } from "react-icons/ri";
-import { MdOutlineRateReview, MdOutlineDiscount  } from "react-icons/md";
+import { MdOutlineRateReview, MdOutlineDiscount } from "react-icons/md";
+import { IoBagCheckOutline } from "react-icons/io5";
+import { SiGoogleanalytics } from "react-icons/si";
 import { Button } from "../ui/Button";
 import MenuItem from "./MenuItem";
 
@@ -45,7 +47,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
               title="Dashboard"
               href="#"
               submenu={[
-                { title: "Submenu Item 1", href: "#", icon: null },
+                { title: "Google Analytics", href: "/dashboard/analytics", icon: <SiGoogleanalytics className="h-5 w-5 mr-2" /> || null },
                 { title: "Submenu Item 2", href: "#", icon: null },
               ]}
             />
@@ -98,7 +100,11 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
               title="Orders"
               href="#"
               submenu={[
-                { title: "Submenu Item 1", href: "#", icon: null },
+                {
+                  title: "Checkout History",
+                  href: "/dashboard/checkout-history",
+                  icon: <IoBagCheckOutline className="h-5 w-5 mr-2" />,
+                },
                 { title: "Submenu Item 2", href: "#", icon: null },
               ]}
             />
@@ -123,13 +129,12 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   icon: <FaWhatsapp className="h-5 w-5 mr-2" />,
                 },
                 {
-                  title : "FAQ",
-                  href : "/dashboard/faqs",
-                  icon : <FaQuestion className="h-5 w-5 mr-2" />
-                }
+                  title: "FAQ",
+                  href: "/dashboard/faqs",
+                  icon: <FaQuestion className="h-5 w-5 mr-2" />,
+                },
               ]}
             />
-            
           </ul>
           <div className="w-[40%] md:w-auto flex  flex-1 items-center justify-center bottom-0 fixed m-8">
             <Button
