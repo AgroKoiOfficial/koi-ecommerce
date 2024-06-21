@@ -39,6 +39,9 @@ public/images/
 # vercel
 .vercel
 
+# credentials
+credentials/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

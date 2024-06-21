@@ -1,12 +1,16 @@
 import { prisma } from "@/prisma/prisma";
-import { getSession } from "next-auth/react";
+import { getToken } from 'next-auth/jwt';
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).end();
   }
 
-  const session = await getSession({ req });
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+  if (!token || token.role !== "ADMIN") {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
   try {
     const checkouts = await prisma.checkout.findMany({
@@ -22,21 +26,25 @@ export default async function handler(req, res) {
       total: checkout.total,
       quantity: checkout.quantity,
       status: checkout.status,
-      user: checkout.cart.create[0].userId,
+      user: {
+        id: checkout.cart.create[0].userId,
+      },
       address: {
         city: checkout.address.city,
         province: checkout.address.province,
-        phone:checkout.address.phone
+        phone: checkout.address.phone,
       },
       shipping: {
         city: checkout.shipping.city,
         region: checkout.shipping.region,
         fee: checkout.shipping.fee,
       },
-      coupon: checkout.coupon ? { 
-        code: checkout.coupon.code || "", 
-        discountType: checkout.coupon.discountType || "", 
-      } : null, 
+      coupon: checkout.coupon
+        ? {
+            code: checkout.coupon.code || "",
+            discountType: checkout.coupon.discountType || "",
+          }
+        : null,
     }));
 
     return res.status(200).json({ checkouts: simplifiedCheckouts });
