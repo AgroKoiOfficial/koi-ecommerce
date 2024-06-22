@@ -1,9 +1,12 @@
 import "@/styles/globals.css";
-import { GoogleTagManager, GoogleAnalytics} from '@next/third-parties/google'
 import { SessionProvider } from "next-auth/react";
 import Provider from '@/provider';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import dynamic from "next/dynamic";
+
+const GoogleTagManager = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleTagManager), { ssr: false });
+const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return (
