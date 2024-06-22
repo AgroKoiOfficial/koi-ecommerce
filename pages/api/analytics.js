@@ -1,6 +1,7 @@
 import { BetaAnalyticsDataClient } from "@google-analytics/data";
 import path from "path";
 import dotenv from "dotenv";
+import moment from "moment";
 
 dotenv.config();
 
@@ -26,6 +27,26 @@ export default async function handler(req, res) {
           name: "screenPageViews",
         },
       ],
+      dimensions: [
+        {
+          name: "date",
+        },
+      ],
+      pageSize: 10000,
+      dimensionFilters: [
+        {
+          dimensionName: "pagePath",
+          expressions: ["*"],
+        },
+        {
+          dimensionName: "pageTitle",
+          expressions: ["*"],
+        },
+        {
+          dimensionName: "pagePath",
+          expressions: ["*"],
+        },
+      ],
     });
 
     if (!response || !response.rows) {
@@ -34,7 +55,7 @@ export default async function handler(req, res) {
     }
 
     const pageViews = response.rows.map((row) => ({
-      date: row.dimensionValues[0]?.value || "", 
+      date: moment(row.dimensionValues[0]?.value).format("YYYY-MM-DD"), 
       count: parseInt(row.metricValues[0]?.value, 10) || 0,
     }));
 

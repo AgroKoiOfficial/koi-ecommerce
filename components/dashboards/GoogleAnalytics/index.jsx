@@ -15,7 +15,7 @@ const GoogleAnalytics = () => {
         setPageViews(data);
       } catch (error) {
         console.error("Error fetching analytics data:", error);
-        // Handle error state or retry logic here
+        setPageViews([]);
       }
     };
 
@@ -31,21 +31,52 @@ const GoogleAnalytics = () => {
       const myChart = new Chart(ctx, {
         type: "line",
         data: {
-          labels: pageViews.map((item) => item.date),
+          labels: pageViews.map((item) => item.date), 
           datasets: [
             {
               label: "Page Views",
-              data: pageViews.map((item) => item.count), 
+              data: pageViews.map((item) => item.count),
               backgroundColor: "rgba(54, 162, 235, 0.2)",
               borderColor: "rgba(54, 162, 235, 1)",
               borderWidth: 1,
+              fill: false,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHitRadius: 10,
+              pointBackgroundColor: "rgba(54, 162, 235, 1)",
+              pointBorderColor: "rgba(54, 162, 235, 1)",
+              pointBorderWidth: 2,
+              pointHoverRadius: 5,
+              pointHoverBackgroundColor: "rgba(54, 162, 235, 1)",
+              pointHoverBorderColor: "rgba(54, 162, 235, 1)",
+              pointHoverBorderWidth: 2,
+              pointHitRadius: 10,
             },
           ],
+        },
+        plugins: {
+          legend: {
+            display: false,
+          },
         },
         options: {
           scales: {
             y: {
               beginAtZero: true,
+            },
+            x: {
+              grid: {
+                display: true,
+              },
+              ticks: {
+                display: true,
+                color: "rgba(0, 0, 0, 0.6)",
+                font: {
+                  size: 12,
+                },
+                padding: 10,
+                autoSkip: true,
+              },
             },
           },
           responsive: true,
@@ -57,7 +88,7 @@ const GoogleAnalytics = () => {
         myChart.destroy();
       };
     }
-  }, [pageViews]); 
+  }, [pageViews]);
 
   return (
     <div className="w-full h-full">
