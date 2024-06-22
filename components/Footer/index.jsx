@@ -1,22 +1,27 @@
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="w-full relative bottom-0 bg-gradient-to-r from-blue-900 to-red-700 text-white py-8">
+    <footer className="w-full bg-gradient-to-r from-blue-900 to-red-700 text-white py-8">
       <div className="container mx-auto px-4 flex flex-col lg:flex-row justify-between items-center">
         <div className="flex items-center mb-4 lg:mb-0 lg:items-start">
-          <img
-            src="/logo.png"
-            alt="Logo"
-            className="h-16 lg:w-20 w-16 lg:h-20 mr-4 lg:mr-2 mb-2 lg:mt-8"
+          <Image
+            src="/logo.ico"
+            alt="Company Logo"
+            width={64}
+            height={64}
+            priority={true}
+            style={{ objectFit: "contain", maxWidth: "100%", height: "auto" }}
           />
-          <span className="text-lg lg:text-xl font-bold lg:mt-12">
+          <span className="text-lg lg:text-xl font-bold ml-4 lg:mt-4">
             Jual Ikan Koi
           </span>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center lg:text-lg">
+        <nav aria-label="Footer Navigation" className="flex flex-col lg:flex-row items-center lg:text-lg">
           <ul className="flex flex-col lg:flex-row lg:space-x-6 space-y-4 lg:space-y-0">
             <li>
               <a href="/" className="text-gray-300 hover:text-white">
@@ -24,39 +29,39 @@ const Footer = () => {
               </a>
             </li>
             <li>
-              <a href="/products" className="text-gray-300 hover:text-white">
+              <Link href="/products" className="text-gray-300 hover:text-white">
                 Products
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/about" className="text-gray-300 hover:text-white">
+              <Link href="/about" className="text-gray-300 hover:text-white">
                 About
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/contact" className="text-gray-300 hover:text-white">
+              <Link href="/contact" className="text-gray-300 hover:text-white">
                 Contact
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/faq" className="text-gray-300 hover:text-white">
-                FAQ
-              </a>
+              <Link href="/faqs" className="text-gray-300 hover:text-white">
+                FAQS
+              </Link>
             </li>
           </ul>
-        </div>
+        </nav>
 
-        <div className="flex mt-4 lg:mt-0">
-          <a href="#" className="text-gray-300 hover:text-white mr-4">
+        <address className="flex mt-4 lg:mt-0 space-x-4">
+          <a href="#" className="text-gray-300 hover:text-white" aria-label="Facebook">
             <FaFacebook size={24} />
           </a>
-          <a href="#" className="text-gray-300 hover:text-white mr-4">
+          <a href="#" className="text-gray-300 hover:text-white" aria-label="Twitter">
             <FaTwitter size={24} />
           </a>
-          <a href="#" className="text-gray-300 hover:text-white">
+          <a href="#" className="text-gray-300 hover:text-white" aria-label="Instagram">
             <FaInstagram size={24} />
           </a>
-        </div>
+        </address>
       </div>
       <div className="mt-6 text-gray-400 text-sm text-center">
         <p className="mb-2 text-white">
