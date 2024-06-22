@@ -5,16 +5,44 @@ import ProductInfo from "@/components/product/ProductInfo";
 import ProductMedia from "@/components/product/ProductMedia";
 import ProductReviews from "@/components/product/ProductReviews";
 
-const ProductDetail = ({ product }) => {
-  const [isLoading, setIsLoading] = useState(true);
+export async function getServerSideProps({ params }) {
+  const { slug } = params;
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/slug/${slug}`);
+  
+    if (!res.ok) {
+      console.error(`Failed to fetch product with slug ${slug}: ${res.statusText}`);
+      return {
+        notFound: true,
+      };
+    }
+
+    const product = await res.json();
+
+    return {
+      props: {
+        product,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching product:", error.message);
+    return {
+      notFound: true,
+    };
+  }
+}
+
+function ProductDetail({ product }) {
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (product) {
-      setIsLoading(false);
+      setLoading(false);
     }
   }, [product]);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <main className="pt-16 lg:pt-20 mb-16 lg:mb-20">
         <div className="container mx-auto px-4">
@@ -50,21 +78,6 @@ const ProductDetail = ({ product }) => {
       </main>
     </>
   );
-};
-
-export async function getServerSideProps({ params }) {
-  const res = await fetch(`${process.env.PRODUCTS_URL}/${params.id}`);
-  const product = await res.json();
-
-  if (!res.ok) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: { product },
-  };
 }
 
 export default ProductDetail;

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
 import { getSession } from "next-auth/react";
+import slug from "slug";
 
 export const AddProduct = ({ onClose }) => {
   const [name, setName] = useState("");
@@ -44,10 +45,16 @@ export const AddProduct = ({ onClose }) => {
     fetchCategories();
   }, [page]);
 
+  const generateSlug = (productName) => {
+    return slug(productName, { lower: true });
+  };
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
+    formData.append("slug", generateSlug(name));
     formData.append("name", name);
     formData.append("price", price);
     formData.append("stock", stock);
@@ -111,6 +118,17 @@ export const AddProduct = ({ onClose }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">
+                    Slug
+                  </label>
+                  <Input
+                    type="text"
+                    value={generateSlug(name)}
+                    readOnly
+                    className="bg-gray-100"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">
                     Name
                   </label>
                   <Input
@@ -147,7 +165,8 @@ export const AddProduct = ({ onClose }) => {
                   <select
                     className="w-full p-2 border border-gray-300 rounded"
                     value={categoryId}
-                    onChange={handleCategoryChange}>
+                    onChange={handleCategoryChange}
+                  >
                     <option value="">Select a category</option>
                     {categories.map((category) => (
                       <option key={category.id} value={category.id}>
@@ -195,12 +214,14 @@ export const AddProduct = ({ onClose }) => {
               <div className="flex justify-end mt-4">
                 <Button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded">
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
                   Add Product
                 </Button>
                 <Button
                   onClick={onClose}
-                  className="bg-red-500 text-white px-4 py-2 rounded ml-2">
+                  className="bg-red-500 text-white px-4 py-2 rounded ml-2"
+                >
                   Cancel
                 </Button>
               </div>

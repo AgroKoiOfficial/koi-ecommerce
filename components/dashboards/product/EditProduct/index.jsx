@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
 import { getSession } from "next-auth/react";
+import slug from "slug";
 
 export const EditProduct = ({ product, onClose }) => {
   const [name, setName] = useState(product.name);
@@ -18,6 +19,7 @@ export const EditProduct = ({ product, onClose }) => {
   const [session, setSession] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [slugName, setSlugName] = useState("");
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -33,7 +35,7 @@ export const EditProduct = ({ product, onClose }) => {
       try {
         const res = await fetch(`/api/categories?page=${page}&limit=10`);
         const data = await res.json();
-        const totalCount = res.headers.get('X-Total-Count');
+        const totalCount = res.headers.get("X-Total-Count");
         setCategories((prevCategories) => [...prevCategories, ...data]);
         setTotalPages(Math.ceil(totalCount / 10));
       } catch (error) {
@@ -44,10 +46,16 @@ export const EditProduct = ({ product, onClose }) => {
     fetchCategories();
   }, [page]);
 
+  useEffect(() => {
+    // Set initial slug based on product name
+    setSlugName(slug(product.name, { lower: true }));
+  }, [product.name]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
+    formData.append("slug", slugName);
     formData.append("name", name);
     formData.append("price", price);
     formData.append("stock", stock);
@@ -114,6 +122,17 @@ export const EditProduct = ({ product, onClose }) => {
                 </div>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">
+                    Slug
+                  </label>
+                  <Input
+                    type="text"
+                    value={slugName}
+                    readOnly
+                    className="bg-gray-100"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">
                     Price
                   </label>
                   <Input
@@ -147,8 +166,12 @@ export const EditProduct = ({ product, onClose }) => {
                         {category.name}
                       </option>
                     ))}
-                    {page < totalPages && <option value="nextPage">Load more...</option>}
-                    {page > 1 && <option value="prevPage">Load previous...</option>}
+                    {page < totalPages && (
+                      <option value="nextPage">Load more...</option>
+                    )}
+                    {page > 1 && (
+                      <option value="prevPage">Load previous...</option>
+                    )}
                   </select>
                 </div>
                 <div className="mb-4 col-span-2">
@@ -160,7 +183,7 @@ export const EditProduct = ({ product, onClose }) => {
                     onChange={(e) => setDescription(e.target.value)}
                   />
                 </div>
-                <div className="mb-4 ">
+                <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">
                     Image
                   </label>
@@ -182,12 +205,14 @@ export const EditProduct = ({ product, onClose }) => {
               <div className="flex justify-end mt-4">
                 <Button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded">
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
                   Update Product
                 </Button>
                 <Button
                   onClick={onClose}
-                  className="bg-red-500 text-white px-4 py-2 rounded ml-2">
+                  className="bg-red-500 text-white px-4 py-2 rounded ml-2"
+                >
                   Cancel
                 </Button>
               </div>
