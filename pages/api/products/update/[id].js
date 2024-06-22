@@ -75,10 +75,11 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: "An unknown error occurred" });
       }
 
-      const { id, name, price, stock, description, categoryId } = req.body;
+      const { id, slug, name, price, stock, description, categoryId } = req.body;
       const { image, video } = req.files;
 
       const updateData = {
+        slug,
         name,
         price: parseFloat(price),
         stock: parseInt(stock),

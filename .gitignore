@@ -42,6 +42,9 @@ public/images/
 # credentials
 credentials/
 
+#analyze
+analyze/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

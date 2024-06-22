@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import Image from "next/image";
 import { MdPlayArrow, MdPause, MdReplay } from "react-icons/md";
 
 const ProductMedia = ({ product }) => {
@@ -30,14 +31,22 @@ const ProductMedia = ({ product }) => {
   return (
     <div className="lg:w-1/2 lg:mx-auto lg:text-center">
       {product.image && (
-        <img
+        <Image
           src={product.image}
           alt={product.name}
-          className="w-auto h-96 object-contain mb-4 mx-auto shadow-lg"
+          width={100}
+          height={100}
+          priority={true}
+          style={{ objectFit: "contain",}}
+          className="h-96 w-full mb-4 mx-auto"
         />
       )}
       {product.video && (
-        <div className="relative mt-4 rounded-lg overflow-hidden shadow-lg">
+        <div className="relative mt-8 lg:mt-12 rounded-lg overflow-hidden ">
+          <h2 className="text-xl md:text-xl font-bold mb-2 text-center text-gray-800">Video</h2>
+         <div className="relative">
+          <div className="absolute inset-0 bg-black opacity-25"></div>
+          </div>
           <video
             ref={videoRef}
             src={product.video}
@@ -45,7 +54,7 @@ const ProductMedia = ({ product }) => {
             autoPlay={false}
             loop={false}
             muted
-            className="w-full h-auto transition-transform transform hover:scale-105"
+            className="max-w-full mx-auto h-full lg:h-96 transition-transform transform hover:scale-105"
             style={{ backgroundColor: "#000" }}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPaused(true)}>

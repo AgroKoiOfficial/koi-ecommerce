@@ -8,17 +8,16 @@ export default function ProductCard({ product, isLoading }) {
       className={`rounded-lg shadow-md overflow-hidden py-4 m-4 md:m-0 ${
         isLoading ? "animate-pulse" : ""
       }`}>
-      <div className="relative overflow-hidden h-48 w-full">
+      <div className="relative overflow-hidden h-72 w-full">
         {isLoading ? (
           <div className="bg-gray-200 w-full h-full"></div>
         ) : (
           <Image
             src={product.image}
             alt={product.name}
-          // loading="lazy"  
             priority={true}
-            width={200}
-            height={200}
+            width={100}
+            height={100}
             style={{
               objectFit: "contain",
               height: "100%",

@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: "An unknown error occurred" });
       }
 
-      const { name, price, stock, description, categoryId } = req.body;
+      const { slug, name, price, stock, description, categoryId } = req.body;
       const { image, video } = req.files;
 
       if (!name || !price || !stock || !description || !categoryId) {
@@ -47,6 +47,7 @@ export default async function handler(req, res) {
       }
 
       const productData = {
+        slug,
         name,
         price: parseFloat(price),
         stock: parseInt(stock),
