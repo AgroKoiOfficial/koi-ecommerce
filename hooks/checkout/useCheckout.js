@@ -19,10 +19,9 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
       }
       const userCartData = await responseCart.json();
 
-      let addressId = address.id; 
+      let addressId = address.id;
 
       if (!addressId) {
-     
         const addressResponse = await fetch("/api/address/create", {
           method: "POST",
           headers: {
@@ -43,7 +42,7 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
         }
 
         const newAddress = await addressResponse.json();
-        addressId = newAddress.id;
+        addressId = newAddress.id; 
       } else {
         const addressResponse = await fetch(`/api/address/userId/${session.user.id}`);
         if (!addressResponse.ok) {
@@ -73,7 +72,7 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
 
       if (checkoutResponse.ok) {
         setMessage("Checkout successful!");
-        setCart([]); 
+        setCart([]);
       } else {
         setMessage("Checkout failed!");
       }

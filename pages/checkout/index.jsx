@@ -44,8 +44,8 @@ const Checkout = () => {
       const session = await getSession();
       if (session) {
         const response = await fetch(`/api/address/userId/${session.user.id}`);
-        const data = await response.json();
         if (response.ok) {
+          const data = await response.json();
           setAddresses(data);
           if (data.length > 0) {
             setSelectedAddressId(data[0].id);
@@ -81,7 +81,7 @@ const Checkout = () => {
 
   const handleCreateNewAddress = () => {
     setCreateNewAddress(true);
-    setSelectedAddressId("");
+    setSelectedAddressId(""); 
     setAddress({
       phone: "",
       city: "",
@@ -213,9 +213,8 @@ const Checkout = () => {
               alt={item.product.name}
               width={100}
               height={100}
-             priority={true}
-              style={{ width : "auto", height : "auto" }}
-             
+              priority={true}
+              style={{ width: "auto", height: "auto" }}
             />
             <div className="ml-4">
               <div>{item.product.name}</div>
