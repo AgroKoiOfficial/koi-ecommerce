@@ -30,7 +30,7 @@ export const CreateReview = ({ productId }) => {
         if (response.ok) {
           const data = await response.json();
           // console.log(data);
-          const hasCheckedOut = data.length >= 1;
+          const hasCheckedOut = data.length > 0;
           setCanReview(hasCheckedOut);
         } else {
           throw new Error("Failed to fetch user data");
