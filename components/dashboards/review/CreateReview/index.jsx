@@ -1,17 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/Button";
 import { TextArea } from "@/components/ui/TextArea";
-import { toast} from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const CreateReview = ({ productId }) => {
   const router = useRouter();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [canReview, setCanReview] = useState(false);
+
+  useEffect(() => {
+    const checkUserCanReview = async () => {
+      const session = await getSession();
+
+      if (!session) {
+        setCanReview(false);
+        return;
+      }
+
+      const userId = session.user.id;
+
+      try {
+        const response = await fetch(`/api/review/getUserId/${userId}`);
+        if (response.ok) {
+          const data = await response.json();
+          // console.log(data);
+          const hasCheckedOut = data.length >= 1;
+          setCanReview(hasCheckedOut);
+        } else {
+          throw new Error("Failed to fetch user data");
+        }
+      } catch (error) {
+        console.error("Failed to check user data:", error);
+        setCanReview(false);
+      }
+    };
+
+    checkUserCanReview();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +57,10 @@ export const CreateReview = ({ productId }) => {
     const userId = session.user.id;
 
     try {
+      if (!canReview) {
+        throw new Error("User is not allowed to review");
+      }
+
       const response = await fetch("/api/review/create", {
         method: "POST",
         headers: {
@@ -73,6 +108,10 @@ export const CreateReview = ({ productId }) => {
     }
     return stars;
   };
+
+  if (!canReview) {
+    return <p className="text-gray-900 font-bold text-center">Kamu tidak diizinkan untuk memberikan ulasan. Silahkan untuk masuk dan checkout</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit}>

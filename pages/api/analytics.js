@@ -30,23 +30,9 @@ export default async function handler(req, res) {
       dimensions: [
         {
           name: "date",
-        },
+        }
       ],
       pageSize: 10000,
-      dimensionFilters: [
-        {
-          dimensionName: "pagePath",
-          expressions: ["*"],
-        },
-        {
-          dimensionName: "pageTitle",
-          expressions: ["*"],
-        },
-        {
-          dimensionName: "pagePath",
-          expressions: ["*"],
-        },
-      ],
     });
 
     if (!response || !response.rows) {
@@ -54,11 +40,14 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "No data found" });
     }
 
-    const pageViews = response.rows.map((row) => ({
+    let pageViews = response.rows.map((row) => ({
       date: moment(row.dimensionValues[0]?.value).format("YYYY-MM-DD"), 
       count: parseInt(row.metricValues[0]?.value, 10) || 0,
     }));
 
+    pageViews = pageViews.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // console.log(pageViews); 
     res.status(200).json(pageViews);
   } catch (error) {
     console.error("Error fetching page views:", error);

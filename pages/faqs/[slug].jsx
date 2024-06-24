@@ -1,6 +1,12 @@
 import React from "react";
 import Head from "next/head";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const GoogleAnalytics = dynamic(
+  () => import("@next/third-parties/google").then((mod) => mod.GoogleAnalytics),
+  { ssr: false }
+);
 
 export async function getServerSideProps({ params }) {
   const { slug } = params;
@@ -50,6 +56,8 @@ function FaqDetail({ faq }) {
           </Link>
         </div>
       </main>
+
+      <GoogleAnalytics gaId="G-BKXLWYCWM3" />
     </>
   );
 }

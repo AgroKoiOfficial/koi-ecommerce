@@ -25,13 +25,13 @@ const GoogleAnalytics = () => {
   useEffect(() => {
     Chart.register(...registerables);
 
-    const ctx = document.getElementById("myChart");
+    const ctx = document.getElementById("myChart").getContext("2d");
 
     if (ctx && pageViews.length > 0) {
       const myChart = new Chart(ctx, {
         type: "line",
         data: {
-          labels: pageViews.map((item) => item.date), 
+          labels: pageViews.map((item) => item.date),
           datasets: [
             {
               label: "Page Views",
@@ -41,12 +41,12 @@ const GoogleAnalytics = () => {
               borderWidth: 1,
               fill: false,
               tension: 0.4,
-              pointRadius: 0,
+              pointRadius: 5,
               pointHitRadius: 10,
               pointBackgroundColor: "rgba(54, 162, 235, 1)",
               pointBorderColor: "rgba(54, 162, 235, 1)",
               pointBorderWidth: 2,
-              pointHoverRadius: 5,
+              pointHoverRadius: 7,
               pointHoverBackgroundColor: "rgba(54, 162, 235, 1)",
               pointHoverBorderColor: "rgba(54, 162, 235, 1)",
               pointHoverBorderWidth: 2,
@@ -54,17 +54,20 @@ const GoogleAnalytics = () => {
             },
           ],
         },
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
         options: {
           scales: {
             y: {
               beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Page Views'
+              }
             },
             x: {
+              title: {
+                display: true,
+                text: 'Date'
+              },
               grid: {
                 display: true,
               },

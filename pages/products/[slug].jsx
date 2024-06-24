@@ -4,6 +4,9 @@ import LoadingCard from "@/components/product/LoadingCard";
 import ProductInfo from "@/components/product/ProductInfo";
 import ProductMedia from "@/components/product/ProductMedia";
 import ProductReviews from "@/components/product/ProductReviews";
+import dynamic from "next/dynamic";
+
+const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
 
 export async function getServerSideProps({ params }) {
   const { slug } = params;
@@ -76,7 +79,9 @@ function ProductDetail({ product }) {
           </div>
         </div>
       </main>
+      <GoogleAnalytics gaId="G-BKXLWYCWM3" />
     </>
+
   );
 }
 

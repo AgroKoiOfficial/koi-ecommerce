@@ -3,6 +3,9 @@ import Head from "next/head";
 import { Search } from "@/components/ui/Search";
 import { Pagination } from "@/components/ui/Pagination";
 import FaqCard from "@/components/FaqCard";
+import dynamic from "next/dynamic";
+
+const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
 
 function debounce(func, wait) {
   let timeout;
@@ -212,6 +215,7 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
           {loading && <p className="text-center mt-8">Loading...</p>}
         </div>
       </main>
+      <GoogleAnalytics gaId="G-BKXLWYCWM3" />
     </>
   );
 }

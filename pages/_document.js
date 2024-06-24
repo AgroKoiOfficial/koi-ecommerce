@@ -1,6 +1,9 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Document() {
+  const nonce = uuidv4();
+
   return (
     <Html lang="en">
       <Head>
@@ -29,7 +32,7 @@ export default function Document() {
       </Head>
       <body>
         <Main />
-        <NextScript></NextScript>
+        <NextScript nonce={nonce}></NextScript>
       </body>
     </Html>
   );

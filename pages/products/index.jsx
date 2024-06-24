@@ -3,6 +3,10 @@ import Link from "next/link";
 import Head from "next/head";
 import ProductCard from "../../components/product/ProductCard";
 import { CTA } from "@/components/CTA";
+import dynamic from "next/dynamic";
+
+const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
+
 
 export default function Products({ products, totalProducts }) {
   const [page, setPage] = useState(1);
@@ -92,6 +96,8 @@ export default function Products({ products, totalProducts }) {
         </div>
         <CTA />
       </main>
+
+      <GoogleAnalytics gaId="G-BKXLWYCWM3" />
     </>
   );
 }
