@@ -13,13 +13,17 @@ export const CreateReview = ({ productId }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [canReview, setCanReview] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
     const checkUserCanReview = async () => {
+      setIsLoading(true); 
+
       const session = await getSession();
 
       if (!session) {
         setCanReview(false);
+        setIsLoading(false); 
         return;
       }
 
@@ -29,21 +33,20 @@ export const CreateReview = ({ productId }) => {
         const response = await fetch(`/api/checkout/userId/${userId}`);
         if (response.ok) {
           const { checkouts } = await response.json();
-          console.log("User checkouts:", checkouts);
           const hasCheckedOut = Array.isArray(checkouts) && checkouts.length > 0;
           setCanReview(hasCheckedOut);
         } else {
-          console.error("Failed to fetch user checkouts:", response.statusText);
           setCanReview(false);
         }
       } catch (error) {
-        console.error("Failed to check user checkouts:", error);
         setCanReview(false);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     checkUserCanReview();
-  }, []);
+  }, [productId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,11 +83,9 @@ export const CreateReview = ({ productId }) => {
         setRating(0);
         setComment("");
       } else {
-        console.error("Failed to create review:", response.statusText);
         throw new Error("Failed to create review");
       }
     } catch (error) {
-      console.error("Failed to create review:", error);
       toast.error("Failed to create review. Please try again later.");
     }
   };
@@ -111,8 +112,20 @@ export const CreateReview = ({ productId }) => {
     return stars;
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+      <p className="text-gray-900 font-bold">Loading...</p>
+    </div>
+    )
+  }
+
   if (!canReview) {
-    return <p className="text-gray-900 font-bold text-center">Kamu tidak diizinkan untuk memberikan ulasan. Silahkan untuk masuk dan checkout</p>;
+    return (
+      <p className="text-gray-900 font-bold text-center">
+        Kamu tidak diizinkan untuk memberikan ulasan. Silahkan untuk masuk dan checkout
+      </p>
+    );
   }
 
   return (
