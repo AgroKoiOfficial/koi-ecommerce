@@ -26,17 +26,18 @@ export const CreateReview = ({ productId }) => {
       const userId = session.user.id;
 
       try {
-        const response = await fetch(`/api/review/getUserId/${userId}`);
+        const response = await fetch(`/api/checkout/userId/${userId}`);
         if (response.ok) {
-          const data = await response.json();
-          // console.log(data);
-          const hasCheckedOut = data.length > 0;
+          const { checkouts } = await response.json();
+          console.log("User checkouts:", checkouts);
+          const hasCheckedOut = Array.isArray(checkouts) && checkouts.length > 0;
           setCanReview(hasCheckedOut);
         } else {
-          throw new Error("Failed to fetch user data");
+          console.error("Failed to fetch user checkouts:", response.statusText);
+          setCanReview(false);
         }
       } catch (error) {
-        console.error("Failed to check user data:", error);
+        console.error("Failed to check user checkouts:", error);
         setCanReview(false);
       }
     };
@@ -79,6 +80,7 @@ export const CreateReview = ({ productId }) => {
         setRating(0);
         setComment("");
       } else {
+        console.error("Failed to create review:", response.statusText);
         throw new Error("Failed to create review");
       }
     } catch (error) {
