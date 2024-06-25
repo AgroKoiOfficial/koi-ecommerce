@@ -9,7 +9,12 @@ export async function middleware(req) {
 
   const authRoutes = ["/cart", "/checkout", "/payment", "/user"];
   const adminRoutes = ["/dashboard"];
-  const guestRoutes = ["/register", "/login", "/forgot-password", "/reset-password"];
+  const guestRoutes = [
+    "/register",
+    "/login",
+    "/forgot-password",
+    "/reset-password",
+  ];
 
   if (guestRoutes.some((route) => pathname.startsWith(route)) && token) {
     url.pathname = "/";
@@ -27,9 +32,7 @@ export async function middleware(req) {
   ) {
     url.pathname = "/";
     return NextResponse.redirect(url);
-  }
-
-  return NextResponse.next();
+  } 
 }
 
 export const config = {

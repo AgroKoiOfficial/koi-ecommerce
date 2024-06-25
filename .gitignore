@@ -35,6 +35,7 @@ prisma/migrations/
 # media 
 public/videos/
 public/images/
+public/carousels/
 
 # vercel
 .vercel

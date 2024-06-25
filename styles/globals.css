@@ -3,9 +3,21 @@
 @tailwind utilities;
 
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+  display: none;
+}
 
-  .table-container {
-    overflow-x: auto;
-  }
+.table-container {
+  overflow-x: auto;
+}
+
+.embla {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+}
+.embla__slide {
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+}

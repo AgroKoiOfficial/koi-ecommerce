@@ -3,7 +3,7 @@ import { getToken } from "next-auth/jwt";
 import multer from "multer";
 import path from "path";
 
-const upload = multer({ 
+const upload = multer({
   dest: "public/carousels/",
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|webp/;
@@ -54,17 +54,16 @@ export default async function handler(req, res) {
 
       const { title, color } = req.body;
 
-      if (!title || !color || !req.file) {
-        return res.status(400).json({ error: "All fields are required" });
-      }
-
       try {
-        const imagePath = `/carousels/${req.file.filename}`;
-        
+        let imagePath = null;
+        if (req.file) {
+          imagePath = `/carousels/${req.file.filename}`;
+        }
+
         const carousel = await prisma.carousel.create({
           data: {
-            title,
-            color,
+            title: title || null,
+            color: color || null,
             image: imagePath,
           },
         });

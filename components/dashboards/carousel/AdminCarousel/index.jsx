@@ -1,40 +1,80 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { getSession } from "next-auth/react";
+import PreviewCarousel from "@/components/dashboards/carousel/PreviewCarousel";
+import AddCarouselForm from "@/components/dashboards/carousel/AddCarouselForm";
+import CarouselList from "@/components/dashboards/carousel/CarouselList";
 
-const AdminCarousel = ({ action, carousel, onSubmit }) => {
-  const [title, setTitle] = useState(carousel ? carousel.title : '');
-  const [color, setColor] = useState(carousel ? carousel.color : '');
-  const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(carousel ? carousel.image : null);
+const AdminCarousel = () => {
+  const [carousels, setCarousels] = useState([]);
+  const [titleInput, setTitleInput] = useState("");
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    setImagePreview(URL.createObjectURL(file));
+  useEffect(() => {
+    const fetchCarousels = async () => {
+      try {
+        const response = await fetch("/api/carousel");
+        if (!response.ok) {
+          throw new Error("Failed to fetch carousels");
+        }
+        const data = await response.json();
+        setCarousels(data);
+      } catch (error) {
+        console.error("Error fetching carousels:", error);
+      }
+    };
+
+    fetchCarousels();
+  }, []);
+
+  const handleAddCarousel = async (formData) => {
+    try {
+      const session = await getSession();
+      const response = await fetch("/api/carousel/add/", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add carousel");
+      }
+
+      const newCarousel = await response.json();
+      setCarousels([...carousels, newCarousel]);
+      setTitleInput("");
+    } catch (error) {
+      console.error("Error adding carousel:", error);
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleDeleteCarousel = async (carouselId) => {
+    try {
+      const session = await getSession();
+      const response = await fetch(`/api/carousel/delete/${carouselId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+      });
 
-    const formData = new FormData();
-    if (title) formData.append('title', title);
-    if (color) formData.append('color', color);
-    if (image) formData.append('image', image);
+      if (!response.ok) {
+        throw new Error("Failed to delete carousel");
+      }
 
-    onSubmit(formData);
+      setCarousels(carousels.filter((carousel) => carousel.id !== carouselId));
+    } catch (error) {
+      console.error("Error deleting carousel:", error);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-lg shadow-md">
-      <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} className="border border-gray-300 rounded-md px-4 py-2 w-full mb-4" />
-      <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="border border-gray-300 rounded-md px-4 py-2 w-full mb-4" />
-      <div className="mb-4">
-        <input type="file" onChange={handleImageChange} className="hidden" id="file-input" />
-        <label htmlFor="file-input" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md cursor-pointer">Choose Image</label>
-        {imagePreview && <img src={imagePreview} alt="Preview" className="mt-2 h-20" />}
-      </div>
-      <button type="submit" className={`bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mr-2 ${action === 'add' ? 'hidden' : ''}`}>Update</button>
-      <button type="submit" className={`bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mr-2 ${action === 'update' ? 'hidden' : ''}`}>Add</button>
-    </form>
+    <div className="flex flex-col space-y-4">
+      <h1 className="text-2xl font-bold mb-4 text-center">Carousels Preview</h1>
+      <PreviewCarousel carousels={carousels} />
+      <AddCarouselForm onAddCarousel={handleAddCarousel} />
+      <CarouselList carousels={carousels} onDeleteCarousel={handleDeleteCarousel} />
+    </div>
   );
 };
 
