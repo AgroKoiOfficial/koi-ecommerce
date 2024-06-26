@@ -42,7 +42,7 @@ const Carousel = ({ carousels }) => {
               <div className="relative">
                 <Image
                   src={carousel.image}
-                  alt={carousel.title}
+                  alt={carousel.title || "Carousel Image"}
                   width={1920}
                   height={1080}
                   priority={true}

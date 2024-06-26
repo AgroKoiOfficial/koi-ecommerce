@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import dynamic from "next/dynamic";
 import Carousel from "@/components/Carousel";
 import LastestProducts from "@/components/product/LastestProducts";
@@ -29,6 +30,10 @@ export async function getStaticProps() {
 export default function Home({ carousels }) {
   return (
     <>
+      <Head>
+        <title>Koi Toko</title>
+        <meta name="description" content="Koi Toko, Jual Ikan Koi, Berkualitas" />
+      </Head>
       <main className="flex flex-col justify-center items-center pt-16 mb-20">
         <Carousel carousels={carousels} />
         <div className="mt-4 lg:mt-8 flex flex-col justify-center items-center">
