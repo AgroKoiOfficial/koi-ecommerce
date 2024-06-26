@@ -38,14 +38,21 @@ const Carousel = ({ carousels }) => {
       <div className="embla__container">
         {Array.isArray(carousels) && carousels.length > 0 ? (
           carousels.map((carousel, index) => (
-            <div className="embla__slide" key={carousel.id} role="group" aria-roledescription="slide" aria-label={`Slide ${index + 1} of ${carousels.length}`}>
+            <div
+              className="embla__slide"
+              key={carousel.id}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`Slide ${index + 1} of ${carousels.length}`}
+            >
               <div className="relative">
                 <Image
                   src={carousel.image}
                   alt={carousel.title || "Carousel Image"}
                   width={1920}
                   height={1080}
-                  priority={true}
+                  priority={index === 0}
+                  loading={index === 0 ? "eager" : "lazy"}
                   className="w-full lg:w-2/3 object-cover mb-2"
                   style={{
                     maxWidth: "100%",
