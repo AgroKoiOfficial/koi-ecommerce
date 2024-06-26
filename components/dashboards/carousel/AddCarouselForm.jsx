@@ -14,7 +14,7 @@ const AddCarouselForm = ({ onAddCarousel }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-       return setSelectedColor(reader.result);
+       console.log(reader.result);
       };
       reader.readAsDataURL(file);
     }
