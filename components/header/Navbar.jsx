@@ -74,12 +74,12 @@ const Navbar = () => {
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute top-2 right-4 mt-2 w-48 bg-white border rounded-lg shadow-lg" role="menu">
-                    <a
+                    <Link
                       href={session.user.isAdmin ? "/dashboard" : "/user"}
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                       role="menuitem">
                       {session.user.isAdmin ? "Dashboard" : "User"}
-                    </a>
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"

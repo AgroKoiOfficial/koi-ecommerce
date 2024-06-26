@@ -13,7 +13,7 @@ const Footer = () => {
             alt="Company Logo"
             width={64}
             height={64}
-            priority={true}
+            loading="lazy"
             style={{ objectFit: "contain", maxWidth: "100%", height: "auto" }}
           />
           <span className="text-lg lg:text-xl font-bold ml-4 lg:mt-4">

@@ -22,7 +22,7 @@ export async function getStaticProps() {
     props: {
       carousels,
     },
-    revalidate: 3600,
+    revalidate: 120,
   };
 }
 

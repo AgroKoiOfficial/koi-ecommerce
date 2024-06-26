@@ -30,11 +30,9 @@ const LatestProducts = () => {
                 src={product.image}
                 alt={product.name}
                 priority={true}
-                layout="fill"
-                sizes="(100vw, 100vh)"
-                // width={100}
-                // height={100}
-                // style={{ objectFit: "contain", height: "auto", width: "auto", marginInline: "auto" }}
+                width={100}
+                height={100}
+                style={{ objectFit: "contain", height: "100%", width: "auto", marginInline: "auto" }}
                 className="w-full h-full"
               />
             </div>
