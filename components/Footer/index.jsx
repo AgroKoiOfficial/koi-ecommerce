@@ -13,20 +13,23 @@ const Footer = () => {
             alt="Company Logo"
             width={64}
             height={64}
-            loading="lazy"
+            priority={true}
             style={{ objectFit: "contain", maxWidth: "100%", height: "auto" }}
           />
+
           <span className="text-lg lg:text-xl font-bold ml-4 lg:mt-4">
             Jual Ikan Koi
           </span>
         </div>
 
-        <nav aria-label="Footer Navigation" className="flex flex-col lg:flex-row items-center lg:text-lg">
+        <nav
+          aria-label="Footer Navigation"
+          className="flex flex-col lg:flex-row items-center lg:text-lg">
           <ul className="flex flex-col lg:flex-row lg:space-x-6 space-y-4 lg:space-y-0">
             <li>
-              <a href="/" className="text-gray-300 hover:text-white">
+              <Link href="/" className="text-gray-300 hover:text-white">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
               <Link href="/products" className="text-gray-300 hover:text-white">
@@ -52,13 +55,22 @@ const Footer = () => {
         </nav>
 
         <address className="flex mt-4 lg:mt-0 space-x-4">
-          <a href="#" className="text-gray-300 hover:text-white" aria-label="Facebook">
+          <a
+            href="#"
+            className="text-gray-300 hover:text-white"
+            aria-label="Facebook">
             <FaFacebook size={24} />
           </a>
-          <a href="#" className="text-gray-300 hover:text-white" aria-label="Twitter">
+          <a
+            href="#"
+            className="text-gray-300 hover:text-white"
+            aria-label="Twitter">
             <FaTwitter size={24} />
           </a>
-          <a href="#" className="text-gray-300 hover:text-white" aria-label="Instagram">
+          <a
+            href="#"
+            className="text-gray-300 hover:text-white"
+            aria-label="Instagram">
             <FaInstagram size={24} />
           </a>
         </address>
