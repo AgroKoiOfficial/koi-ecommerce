@@ -5,7 +5,7 @@ import Carousel from "@/components/Carousel";
 import { Inter } from "next/font/google";
 
 const LatestProducts = dynamic(
-  () => import("@/components/product/LatestProducts"),
+  () => import("@/components/product/LastestProducts"),
   { ssr: true }
 );
 
