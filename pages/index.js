@@ -2,8 +2,12 @@ import React from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import Carousel from "@/components/Carousel";
-import LastestProducts from "@/components/product/LastestProducts";
 import { Inter } from "next/font/google";
+
+const LastestProducts = dynamic(
+  () => import("@/components/product/LastestProducts"),
+  { ssr: true }
+);
 
 const GoogleAnalytics = dynamic(
   () => import("@next/third-parties/google").then((mod) => mod.GoogleAnalytics),
@@ -32,7 +36,10 @@ export default function Home({ carousels }) {
     <>
       <Head>
         <title>Koi Toko</title>
-        <meta name="description" content="Koi Toko, Jual Ikan Koi, Berkualitas" />
+        <meta
+          name="description"
+          content="Koi Toko, Jual Ikan Koi, Berkualitas"
+        />
       </Head>
       <main className="flex flex-col justify-center items-center pt-16 mb-20">
         <Carousel carousels={carousels} />
