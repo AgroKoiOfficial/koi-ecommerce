@@ -2,12 +2,9 @@ import React from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import Carousel from "@/components/Carousel";
+import LatestProducts from "@/components/product/LastestProducts";
 import { Inter } from "next/font/google";
 
-const LatestProducts = dynamic(
-  () => import("@/components/product/LastestProducts"),
-  { ssr: true }
-);
 
 const GoogleAnalytics = dynamic(
   () => import("@next/third-parties/google").then((mod) => mod.GoogleAnalytics),
