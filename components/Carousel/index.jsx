@@ -34,17 +34,11 @@ const Carousel = ({ carousels }) => {
   }, [emblaApi]);
 
   return (
-    <div className="embla mt-4 lg:mt-8" ref={emblaRef} aria-roledescription="carousel">
+    <div className="embla mt-4 lg:mt-8 relative" ref={emblaRef} aria-roledescription="carousel">
       <div className="embla__container">
         {Array.isArray(carousels) && carousels.length > 0 ? (
           carousels.map((carousel, index) => (
-            <div
-              className="embla__slide"
-              key={carousel.id}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`Slide ${index + 1} of ${carousels.length}`}
-            >
+            <div className="embla__slide" key={carousel.id} role="group" aria-roledescription="slide" aria-label={`Slide ${index + 1} of ${carousels.length}`}>
               <div className="relative">
                 <Image
                   src={carousel.image}
@@ -53,10 +47,12 @@ const Carousel = ({ carousels }) => {
                   height={1080}
                   priority={index === 0}
                   loading={index === 0 ? "eager" : "lazy"}
-                  className="w-full lg:w-2/3 object-cover mb-2"
+                  className="w-full object-cover"
                   style={{
+                    width: "100%",
                     maxWidth: "100%",
-                    height: "auto",
+                    minHeight: "30vh",
+                    maxHeight: "60vh",
                     margin: "0 auto",
                   }}
                 />
