@@ -5,7 +5,6 @@ import Carousel from "@/components/Carousel";
 import LastestProducts from "@/components/product/LastestProducts";
 import { Inter } from "next/font/google";
 
-
 const GoogleAnalytics = dynamic(
   () => import("@next/third-parties/google").then((mod) => mod.GoogleAnalytics),
   { ssr: false }
@@ -14,18 +13,27 @@ const GoogleAnalytics = dynamic(
 const inter = Inter({ subsets: ["latin"] });
 
 export async function getStaticProps() {
-  const res = await fetch(`${process.env.BASE_URL}/api/carousel`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch carousels");
-  }
-  const carousels = await res.json();
+  try {
+    const res = await fetch(`${process.env.BASE_URL}/api/carousel`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch carousels, status: ${res.status}`);
+    }
+    const carousels = await res.json();
 
-  return {
-    props: {
-      carousels,
-    },
-    revalidate: 120,
-  };
+    return {
+      props: {
+        carousels,
+      },
+      revalidate: 120,
+    };
+  } catch (error) {
+    console.error("Error fetching carousels:", error.message);
+    return {
+      props: {
+        carousels: [],
+      },
+    };
+  }
 }
 
 export default function Home({ carousels }) {
