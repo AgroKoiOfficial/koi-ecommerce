@@ -16,7 +16,6 @@ const Footer = () => {
             priority={true}
             style={{ objectFit: "contain", maxWidth: "100%", height: "auto" }}
           />
-
           <span className="text-lg lg:text-xl font-bold ml-4 lg:mt-4">
             Jual Ikan Koi
           </span>
@@ -24,7 +23,8 @@ const Footer = () => {
 
         <nav
           aria-label="Footer Navigation"
-          className="flex flex-col lg:flex-row items-center lg:text-lg">
+          className="flex flex-col lg:flex-row items-center lg:text-lg"
+        >
           <ul className="flex flex-col lg:flex-row lg:space-x-6 space-y-4 lg:space-y-0">
             <li>
               <Link href="/" className="text-gray-300 hover:text-white">
@@ -58,19 +58,22 @@ const Footer = () => {
           <a
             href="#"
             className="text-gray-300 hover:text-white"
-            aria-label="Facebook">
+            aria-label="Facebook"
+          >
             <FaFacebook size={24} />
           </a>
           <a
             href="#"
             className="text-gray-300 hover:text-white"
-            aria-label="Twitter">
+            aria-label="Twitter"
+          >
             <FaTwitter size={24} />
           </a>
           <a
             href="#"
             className="text-gray-300 hover:text-white"
-            aria-label="Instagram">
+            aria-label="Instagram"
+          >
             <FaInstagram size={24} />
           </a>
         </address>
