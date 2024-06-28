@@ -1,6 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import Image from "next/image";
 import dynamic from "next/dynamic";
 import Carousel from "@/components/Carousel";
 import LastestProducts from "@/components/product/LastestProducts";
@@ -10,6 +9,8 @@ const GoogleAnalytics = dynamic(
   () => import("@next/third-parties/google").then((mod) => mod.GoogleAnalytics),
   { ssr: false }
 );
+
+const Services = dynamic(() => import("@/components/Services"), { ssr: true });
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,6 +54,7 @@ export default function Home({ carousels }) {
           <h1 className="text-3xl font-bold mb-4 lg:mb-8">Produk Terbaru</h1>
           <LastestProducts />
         </div>
+        <Services />
       </main>
       <GoogleAnalytics gaId="G-BKXLWYCWM3" />
     </>
