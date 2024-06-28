@@ -1,12 +1,12 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { FiX, FiHome, FiShoppingCart, FiList, FiUsers } from "react-icons/fi";
-import { FaShippingFast, FaWhatsapp, FaQuestion } from "react-icons/fa";
+import { FaShippingFast, FaWhatsapp, FaQuestion, FaServicestack } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart } from "react-icons/ci";
 import { RiCarouselView } from "react-icons/ri";
-import { MdOutlineRateReview, MdOutlineDiscount } from "react-icons/md";
+import { MdOutlineRateReview, MdOutlineDiscount  } from "react-icons/md";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { SiGoogleanalytics } from "react-icons/si";
 import { Button } from "../ui/Button";
@@ -133,6 +133,11 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   href: "/dashboard/faqs",
                   icon: <FaQuestion className="h-5 w-5 mr-2" />,
                 },
+                {
+                  title: "Service",
+                  href: "/dashboard/services",
+                  icon: <FaServicestack className="h-5 w-5 mr-2" />,
+                }
               ]}
             />
           </ul>

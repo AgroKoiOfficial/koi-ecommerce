@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import Carousel from "@/components/Carousel";
 import LastestProducts from "@/components/product/LastestProducts";
@@ -41,12 +42,15 @@ export default function Home({ carousels }) {
     <>
       <Head>
         <title>Koi Toko</title>
-        <meta name="description" content="Koi Toko, Jual Ikan Koi, Berkualitas" />
+        <meta
+          name="description"
+          content="Koi Toko, Jual Ikan Koi, Berkualitas"
+        />
       </Head>
       <main className="flex flex-col justify-center items-center pt-16 mb-20">
         <Carousel carousels={carousels} />
         <div className="mt-4 lg:mt-8 flex flex-col justify-center items-center">
-          <h1 className="text-3xl font-bold mb-4">Produk Terbaru</h1>
+          <h1 className="text-3xl font-bold mb-4 lg:mb-8">Produk Terbaru</h1>
           <LastestProducts />
         </div>
       </main>

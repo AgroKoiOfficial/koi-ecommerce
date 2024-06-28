@@ -19,7 +19,7 @@ model User {
   address Address[]
   reviews Review[]
   orders  Order[]
-
+  posts   Posts[]
   payments Payment[]
 
   @@map("users")
@@ -36,7 +36,7 @@ model Category {
 
 model Product {
   id          String   @id @default(cuid())
-  slug        String? @unique
+  slug        String?  @unique
   name        String
   image       String?
   video       String?
@@ -191,6 +191,42 @@ model FAQ {
   answer    String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("services")
+}
+
+model PostsCategory {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts Posts[]
+
+  @@map("posts_categories")
+}
+
+model Posts {
+  id         String        @id @default(cuid())
+  slug       String        @unique
+  title      String
+  authorId     String
+  author     User          @relation(fields: [authorId], references: [id])
+  image      String?
+  categoryId String
+  category   PostsCategory @relation(fields: [categoryId], references: [id])
+  content    String        @db.Text
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@map("posts")
 }
 
 enum Role {
