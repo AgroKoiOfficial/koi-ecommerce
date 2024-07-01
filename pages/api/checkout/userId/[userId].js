@@ -28,7 +28,6 @@ export default async function handler(req, res) {
         shipping: true,
         coupon: true,
         payments: true,
-        order: true
       }
     });
 
