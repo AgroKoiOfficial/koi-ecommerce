@@ -114,6 +114,7 @@ export default async function handler(req, res) {
 
     const newCheckout = await prisma.checkout.create({
       data: {
+        userId: userId,
         addressId: addressId,
         shippingId: shippingId,
         total: total,
