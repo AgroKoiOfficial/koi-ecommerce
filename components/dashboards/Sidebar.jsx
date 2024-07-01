@@ -5,8 +5,8 @@ import { FaShippingFast, FaWhatsapp, FaQuestion, FaServicestack } from "react-ic
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart } from "react-icons/ci";
-import { RiCarouselView } from "react-icons/ri";
-import { MdOutlineRateReview, MdOutlineDiscount  } from "react-icons/md";
+import { RiCarouselView, RiPagesFill } from "react-icons/ri";
+import { MdOutlineRateReview, MdOutlineDiscount, MdOutlineContactMail} from "react-icons/md";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { SiGoogleanalytics } from "react-icons/si";
 import { Button } from "../ui/Button";
@@ -106,6 +106,23 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   icon: <IoBagCheckOutline className="h-5 w-5 mr-2" />,
                 },
                 { title: "Submenu Item 2", href: "#", icon: null },
+              ]}
+            />
+            <MenuItem
+              icon={<FiList className="h-5 w-5 mr-2" />}
+              title="About"
+              href="#"
+              submenu={[
+                {
+                  title: "Page",
+                  href: "/dashboard/abouts",
+                  icon: <RiPagesFill className="h-5 w-5 mr-2" />,
+                },
+                {
+                  title: "Contact",
+                  href: "/dashboard/contacts",
+                  icon: <MdOutlineContactMail className="h-5 w-5 mr-2" />,
+                }
               ]}
             />
             <MenuItem

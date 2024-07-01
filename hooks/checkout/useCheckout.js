@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { getSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleCheckout = async () => {
+  const router = useRouter();
+
+   const handleCheckout = async () => {
     setLoading(true);
     try {
       const session = await getSession();
@@ -19,7 +22,7 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
       }
       const userCartData = await responseCart.json();
 
-      let addressId = address.id;
+      let addressId = address?.id;
 
       if (!addressId) {
         const addressResponse = await fetch("/api/address/create", {
@@ -28,11 +31,11 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            phone: address.phone,
-            city: address.city,
-            postalCode: address.postalCode,
-            province: address.province,
-            street: address.street,
+            phone: address?.phone || "",
+            city: address?.city || "",
+            postalCode: address?.postalCode || "",
+            province: address?.province || "",
+            street: address?.street || "",
             userId: session.user.id,
           }),
         });
@@ -73,6 +76,7 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
       if (checkoutResponse.ok) {
         setMessage("Checkout successful!");
         setCart([]);
+        // router.push("/payment");
       } else {
         setMessage("Checkout failed!");
       }

@@ -15,12 +15,14 @@ model User {
   resetToken String?
   role       Role
 
-  cart    Cart[]
-  address Address[]
-  reviews Review[]
-  orders  Order[]
-  posts   Posts[]
-  payments Payment[]
+  cart      Cart[]
+  address   Address[]
+  reviews   Review[]
+  posts     Posts[]
+  payments  Payment[]
+  checkouts Checkout[]
+
+  createdAt DateTime @default(now())
 
   @@map("users")
 }
@@ -49,7 +51,6 @@ model Product {
 
   carts   Cart[]
   reviews Review[]
-  orders  Order[]
 
   @@map("products")
 }
@@ -83,28 +84,12 @@ model Address {
   @@map("addresses")
 }
 
-model Order {
-  id         String    @id @default(cuid())
-  userId     String
-  user       User      @relation(fields: [userId], references: [id])
-  total      Decimal   @db.Decimal(10, 2)
-  quantity   Int
-  shippingId String
-  shipping   Shipping  @relation(fields: [shippingId], references: [id])
-  products   Product[]
-  checkoutId String
-  checkout   Checkout  @relation(fields: [checkoutId], references: [id])
-
-  @@map("orders")
-}
-
 model Shipping {
   id     String  @id @default(cuid())
   city   String
   region String
   fee    Decimal @db.Decimal(10, 2)
 
-  orders   Order[]
   checkout Checkout[]
 
   @@map("shippings")
@@ -124,6 +109,8 @@ model Review {
 
 model Checkout {
   id         String        @id @default(cuid())
+  userId     String
+  user       User          @relation(fields: [userId], references: [id])
   addressId  String
   address    Address       @relation(fields: [addressId], references: [id])
   shippingId String
@@ -134,8 +121,8 @@ model Checkout {
   couponId   String?
   coupon     Coupon?       @relation(fields: [couponId], references: [id])
   payments   Payment[]
-  order      Order[]
   status     PaymentStatus
+  createdAt  DateTime      @default(now())
 
   @@map("checkouts")
 }
@@ -199,6 +186,7 @@ model Service {
   content   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   @@map("services")
 }
 
@@ -217,7 +205,7 @@ model Posts {
   id         String        @id @default(cuid())
   slug       String        @unique
   title      String
-  authorId     String
+  authorId   String
   author     User          @relation(fields: [authorId], references: [id])
   image      String?
   categoryId String
@@ -229,6 +217,39 @@ model Posts {
   @@map("posts")
 }
 
+model About {
+  id        String   @id @default(cuid())
+  title     String
+  image     String?
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("abouts")
+}
+
+model CompanyContact {
+  id        String   @id @default(cuid())
+  address   String
+  email     String
+  phone     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("company_contacts")
+}
+
+model Contact {
+  id           String   @id @default(cuid())
+  name         String
+  emailOrPhone String
+  subject      String
+  message      String   @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("contacts")
+}
+
 enum Role {
   USER
   ADMIN
@@ -237,6 +258,8 @@ enum Role {
 enum PaymentStatus {
   PAID
   UNPAID
+  EXPIRED
+  FAILED
 }
 
 enum DiscountType {

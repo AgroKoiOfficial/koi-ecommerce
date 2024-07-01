@@ -15,6 +15,19 @@ export default async function handler(req, res) {
         where.category = { name: category };
       }
 
+      const categoriesWithProducts = await prisma.category.findMany({
+        where: {
+          products: {
+            some: {
+              AND: [
+                where.name ? { name: { contains: search } } : {},
+                where.category ? { category: { name: category } } : {}
+              ]
+            }
+          }
+        }
+      });
+
       const totalProducts = await prisma.product.count({ where });
       const products = await prisma.product.findMany({
         where,
@@ -32,8 +45,10 @@ export default async function handler(req, res) {
         };
       });
 
+      const displayedCategories = categoriesWithProducts.map((cat) => cat.name);
+
       res.setHeader("X-Total-Count", totalProducts);
-      res.status(200).json(productsWithUrl);
+      res.status(200).json({ productsWithUrl, displayedCategories });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to fetch products" });

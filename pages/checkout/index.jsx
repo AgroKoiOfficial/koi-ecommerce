@@ -30,6 +30,7 @@ const Checkout = () => {
     street: "",
   });
   const [createNewAddress, setCreateNewAddress] = useState(false);
+  const [hasCheckedOutBefore, setHasCheckedOutBefore] = useState(false);
 
   const { handleCheckout, loading, message } = useCheckout(
     cart,
@@ -49,7 +50,11 @@ const Checkout = () => {
           setAddresses(data);
           if (data.length > 0) {
             setSelectedAddressId(data[0].id);
+            setHasCheckedOutBefore(true);
           }
+        } else if (response.status === 404) {
+          setAddresses([]);
+          setHasCheckedOutBefore(false);
         }
       }
     };
@@ -89,6 +94,14 @@ const Checkout = () => {
       province: "",
       street: "",
     });
+  };
+
+  const handleCheckoutClick = () => {
+    if (createNewAddress && (!address.phone || !address.city || !address.postalCode || !address.province || !address.street)) {
+      setMessage("Please fill out all address fields.");
+      return;
+    }
+    handleCheckout();
   };
 
   return (
@@ -134,7 +147,7 @@ const Checkout = () => {
             ))}
           </select>
         </div>
-        {addresses.length > 0 && !createNewAddress ? (
+        {hasCheckedOutBefore && !createNewAddress ? (
           <div className="mb-4">
             <h2 className="text-xl font-semibold">Select Address</h2>
             <select
@@ -207,7 +220,9 @@ const Checkout = () => {
       <div className="md:col-span-1 mt-4 lg:m-4">
         <h2 className="text-xl font-semibold mb-4">Product List</h2>
         {cart.map((item) => (
-          <div key={item.id} className="border p-2 mb-2 flex flex-col lg:flex-row items-center">
+          <div
+            key={item.id}
+            className="border p-2 mb-2 flex flex-col lg:flex-row items-center">
             <Image
               src={item.product.image}
               alt={item.product.name}
@@ -248,7 +263,7 @@ const Checkout = () => {
       </div>
 
       <button
-        onClick={handleCheckout}
+        onClick={handleCheckoutClick}
         className="bg-blue-500 text-white p-2 rounded w-full"
         disabled={loading}>
         {loading ? "Processing..." : "Checkout"}

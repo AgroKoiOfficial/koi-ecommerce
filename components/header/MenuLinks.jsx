@@ -12,7 +12,7 @@ const MenuLinks = ({ className, itemClassName }) => {
           className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
             router.pathname === "/" ? "text-red-500 font-bold" : ""
           }`}>
-          Home
+          Beranda
         </span>
       </Link>
       <Link href="/products" passHref>
@@ -20,7 +20,7 @@ const MenuLinks = ({ className, itemClassName }) => {
           className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
             router.pathname === "/products" ? "text-red-500 font-bold" : ""
           }`}>
-          Products
+          Produk
         </span>
       </Link>
       <Link href="/categories" passHref>
@@ -28,23 +28,15 @@ const MenuLinks = ({ className, itemClassName }) => {
           className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
             router.pathname === "/categories" ? "text-red-500 font-bold" : ""
           }`}>
-          Categories
+          Kategori
         </span>
       </Link>
-      <Link href="/about" passHref>
+      <Link href="/abouts" passHref>
         <span
           className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
-            router.pathname === "/about" ? "text-red-500 font-bold" : ""
+            router.pathname === "/abouts" ? "text-red-500 font-bold" : ""
           }`}>
-          About
-        </span>
-      </Link>
-      <Link href="/contact" passHref>
-        <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
-            router.pathname === "/contact" ? "text-red-500 font-bold" : ""
-          }`}>
-          Contact
+          Tentang Kami
         </span>
       </Link>
       <Link href="/faqs" passHref>
