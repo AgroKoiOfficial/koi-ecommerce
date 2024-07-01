@@ -48,7 +48,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
               href="#"
               submenu={[
                 { title: "Google Analytics", href: "/dashboard/analytics", icon: <SiGoogleanalytics className="h-5 w-5 mr-2" /> || null },
-                { title: "Submenu Item 2", href: "#", icon: null },
+                { title: "Checkout Analytics", href: "/dashboard/checkout", icon: <IoBagCheckOutline className="h-5 w-5 mr-2" /> || null },
               ]}
             />
             <MenuItem
@@ -105,7 +105,6 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   href: "/dashboard/checkout-history",
                   icon: <IoBagCheckOutline className="h-5 w-5 mr-2" />,
                 },
-                { title: "Submenu Item 2", href: "#", icon: null },
               ]}
             />
             <MenuItem

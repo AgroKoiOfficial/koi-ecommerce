@@ -18,6 +18,7 @@ export default async function handler(req, res) {
         address: true,
         shipping: true,
         coupon: true,
+        user: true,
       },
     });
 
@@ -27,8 +28,19 @@ export default async function handler(req, res) {
       quantity: checkout.quantity,
       status: checkout.status,
       user: {
-        id: checkout.cart.create[0].userId,
+        name: checkout.user.name,
+        email: checkout.user.email,
       },
+      cart: checkout.cart.create.map((cart) => ({
+        id: cart.id,
+        quantity: cart.quantity,
+        product: {
+          id: cart.product.id,
+          name: cart.product.name,
+          price: cart.product.price,
+          image: cart.product.image,
+        },
+      })),
       address: {
         city: checkout.address.city,
         province: checkout.address.province,

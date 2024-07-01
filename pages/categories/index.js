@@ -93,7 +93,7 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
             <h2 className="text-2xl text-center font-bold mb-4">
               Produk {selectedCategory}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredProducts.map((product) => (
                 <>
                   <Link href={`/products/${product.slug}`} key={product.id}>
@@ -107,7 +107,7 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
                         height={100}
                         priority={true}
                         style={{
-                          width: "50%",
+                          width: "auto",
                           height: "auto",
                           margin: "0 auto",
                         }}
