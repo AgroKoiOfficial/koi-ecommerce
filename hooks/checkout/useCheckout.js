@@ -8,7 +8,7 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
 
   const router = useRouter();
 
-   const handleCheckout = async () => {
+  const handleCheckout = async () => {
     setLoading(true);
     try {
       const session = await getSession();
@@ -25,33 +25,38 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
       let addressId = address?.id;
 
       if (!addressId) {
+        const addressData = {
+          phone: address?.phone || "",
+          city: address?.city || "",
+          postalCode: address?.postalCode || "",
+          province: address?.province || "",
+          street: address?.street || "",
+          userId: session.user.id,
+        };
+
         const addressResponse = await fetch("/api/address/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            phone: address?.phone || "",
-            city: address?.city || "",
-            postalCode: address?.postalCode || "",
-            province: address?.province || "",
-            street: address?.street || "",
-            userId: session.user.id,
-          }),
+          body: JSON.stringify(addressData),
         });
 
         if (!addressResponse.ok) {
-          throw new Error("Failed to save address");
+          const errorText = await addressResponse.text();
+          throw new Error(`Failed to save address: ${errorText}`);
         }
 
         const newAddress = await addressResponse.json();
-        addressId = newAddress.id; 
+        addressId = newAddress.id;
       } else {
         const addressResponse = await fetch(`/api/address/userId/${session.user.id}`);
         if (!addressResponse.ok) {
-          throw new Error("Failed to fetch user's addresses");
+          const errorText = await addressResponse.text();
+          throw new Error(`Failed to fetch user's addresses: ${errorText}`);
         }
         const existingAddresses = await addressResponse.json();
+        
         const existingAddress = existingAddresses.find(addr => addr.id === addressId);
         if (!existingAddress) {
           throw new Error("Address not found");
@@ -76,13 +81,12 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
       if (checkoutResponse.ok) {
         setMessage("Checkout successful!");
         setCart([]);
-        // router.push("/payment");
       } else {
+        const errorText = await checkoutResponse.text();
         setMessage("Checkout failed!");
       }
     } catch (error) {
-      console.error("Error during checkout:", error);
-      setMessage("Checkout failed!");
+      setMessage(`Checkout failed: ${error.message}`);
     }
     setLoading(false);
   };

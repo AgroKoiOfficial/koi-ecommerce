@@ -42,7 +42,7 @@ function Cart() {
           key={item.id}
           className="flex flex-col md:flex-row items-center mt-8 mb-4 mx-4 relative bg-white rounded-lg shadow-md p-4">
           <Link
-            href={`/products/${item.product.id}`}
+            href={`/products/${item.product.slug}`}
             key={item.id}
             className=" inset-0">
             <div className="flex justify-center md:justify-start items-center md:mr-4">

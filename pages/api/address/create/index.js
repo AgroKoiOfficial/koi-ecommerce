@@ -24,9 +24,10 @@ export default async function handler(req, res) {
         userId,
       },
     });
-
+    console.log(address);
     res.status(201).json(address);
   } catch (error) {
+    console.error("Error saving address:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }

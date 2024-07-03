@@ -50,10 +50,15 @@ const Checkout = () => {
           setAddresses(data);
           if (data.length > 0) {
             setSelectedAddressId(data[0].id);
+            setCreateNewAddress(false); 
             setHasCheckedOutBefore(true);
+          } else {
+            setCreateNewAddress(true); 
+            setHasCheckedOutBefore(false);
           }
         } else if (response.status === 404) {
           setAddresses([]);
+          setCreateNewAddress(true);
           setHasCheckedOutBefore(false);
         }
       }
@@ -81,7 +86,7 @@ const Checkout = () => {
 
   const handleAddressSelect = (e) => {
     setSelectedAddressId(e.target.value);
-    setCreateNewAddress(false);
+    setCreateNewAddress(false); 
   };
 
   const handleCreateNewAddress = () => {
@@ -268,8 +273,7 @@ const Checkout = () => {
         disabled={loading}>
         {loading ? "Processing..." : "Checkout"}
       </button>
-
-      {message && <div className="mt-4 text-red-500">{message}</div>}
+      {message && <p className="text-red-500">{message}</p>}
     </div>
   );
 };
