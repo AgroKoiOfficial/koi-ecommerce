@@ -58,7 +58,7 @@ export default function Register() {
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-6">
-            <Label>Name</Label>
+            <Label>Nama</Label>
             <Input
               id="name"
               type="text"
@@ -97,7 +97,7 @@ export default function Register() {
           </div>
         </form>
         <p className="text-center mt-4 text-gray-600">
-          Already have an account?{" "}
+         Sudah punya akun?{" "}
           <Link href="/login" className="text-blue-500">
             Login
           </Link>

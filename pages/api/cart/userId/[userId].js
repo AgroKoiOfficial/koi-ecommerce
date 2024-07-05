@@ -24,6 +24,7 @@ export default async function handler(req, res) {
             product: {
               select: {
                 id: true,
+                slug: true,
                 name: true,
                 image: true,
                 price: true,

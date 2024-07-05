@@ -8,7 +8,7 @@ const ProductReviews = ({ productId }) => {
 
   return (
     <div className="mt-8 lg:mt-12">
-      <h2 className="text-2xl font-bold mb-4">Reviews</h2>
+      <h2 className="text-2xl font-bold mb-4">Review</h2>
       <div className="flex mb-4">
         <Button
           className={`mr-4 px-4 py-2 rounded ${
@@ -18,7 +18,7 @@ const ProductReviews = ({ productId }) => {
           }`}
           onClick={() => setActiveTab("getReviews")}
         >
-          Reviews
+          Review
         </Button>
         <Button
           className={`px-4 py-2 rounded ${
@@ -28,7 +28,7 @@ const ProductReviews = ({ productId }) => {
           }`}
           onClick={() => setActiveTab("createReview")}
         >
-          Comments
+          Komentar
         </Button>
       </div>
       <div className="flex flex-col">

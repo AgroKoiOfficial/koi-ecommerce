@@ -4,7 +4,7 @@ import { Chart, registerables } from "chart.js";
 import AdminDashboard from "@/layouts/AdminDashboard";
 import { subDays, format } from "date-fns";
 
-export default function Dashboard() {
+export default function Checkouts() {
   const [checkouts, setCheckouts] = useState([]);
 
   useEffect(() => {
@@ -31,9 +31,8 @@ export default function Dashboard() {
     const ctx = document.getElementById("myChart")?.getContext("2d");
 
     if (ctx && checkouts) {
-      // Ambil 30 label tanggal terakhir
       const endDate = new Date();
-      const startDate = subDays(endDate, 29); // 30 hari terakhir termasuk hari ini
+      const startDate = subDays(endDate, 29);
       const labels = [];
       const paidData = [];
       const unpaidData = [];
@@ -41,7 +40,7 @@ export default function Dashboard() {
       for (let i = 0; i < 30; i++) {
         const date = subDays(endDate, i);
         const formattedDate = format(date, "yyyy-MM-dd");
-        labels.unshift(formattedDate); // Untuk menampilkan tanggal terbaru di sebelah kanan
+        labels.unshift(formattedDate);
         const data = checkouts[formattedDate];
         paidData.unshift(data?.PAID || 0);
         unpaidData.unshift(data?.UNPAID || 0);

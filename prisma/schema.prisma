@@ -13,12 +13,12 @@ model User {
   email      String  @unique
   password   String
   resetToken String?
+  deleteToken String?
   role       Role
 
   cart      Cart[]
   address   Address[]
   reviews   Review[]
-  posts     Posts[]
   payments  Payment[]
   checkouts Checkout[]
 
@@ -205,8 +205,7 @@ model Posts {
   id         String        @id @default(cuid())
   slug       String        @unique
   title      String
-  authorId   String
-  author     User          @relation(fields: [authorId], references: [id])
+  author     String
   image      String?
   categoryId String
   category   PostsCategory @relation(fields: [categoryId], references: [id])

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
@@ -7,6 +7,20 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
   const [message, setMessage] = useState("");
 
   const router = useRouter();
+
+  useEffect(() => {
+    const midtransScriptUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    const myMidtransClientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
+    
+    let scriptTag = document.createElement('script');
+    scriptTag.src = midtransScriptUrl;
+    scriptTag.setAttribute('data-client-key', myMidtransClientKey);
+    document.body.appendChild(scriptTag);
+
+    return () => {
+      document.body.removeChild(scriptTag);
+    };
+  }, []);
 
   const handleCheckout = async () => {
     setLoading(true);
@@ -79,6 +93,25 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
       });
 
       if (checkoutResponse.ok) {
+        const { token } = await checkoutResponse.json();
+        if (token) {
+          window.snap.pay(token, {
+            onSuccess: function(result) {
+              console.log('Payment success:', result);
+              router.push('/transaction-result?order_id=' + result.order_id + '&status_code=' + result.status_code + '&transaction_status=' + result.transaction_status);
+            },
+            onPending: function(result) {
+              console.log('Payment pending:', result);
+              router.push('/transaction-result?order_id=' + result.order_id + '&status_code=' + result.status_code + '&transaction_status=' + result.transaction_status);
+            },
+            onError: function(result) {
+              console.error('Payment error:', result);
+              setMessage("Payment failed. Please try again.");
+            },
+            onClose: function() {
+              console.log('Payment popup closed');
+            }
+          })}
         setMessage("Checkout successful!");
         setCart([]);
       } else {

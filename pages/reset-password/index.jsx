@@ -49,7 +49,7 @@ export default function ResetPassword() {
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
           <h1 className="text-3xl font-bold mb-4">Reset Password</h1>
           <p className="text-gray-600 mb-8">
-            Enter your email, reset token, and new password.
+            Masukan email, token, dan kata sandi baru
           </p>
 
           <form onSubmit={handleSubmit} className="w-full max-w-sm">

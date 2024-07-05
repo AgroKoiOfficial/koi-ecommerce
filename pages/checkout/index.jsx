@@ -6,6 +6,7 @@ import useRegions from "@/hooks/checkout/useRegions";
 import useCoupons from "@/hooks/checkout/useCoupons";
 import useCheckout from "@/hooks/checkout/useCheckout";
 import { formatRupiah } from "@/utils/currency";
+import { Input } from "@/components/ui/Input";
 
 const Checkout = () => {
   const { cart, setCart } = useCart();
@@ -113,9 +114,9 @@ const Checkout = () => {
     <div className="container mx-auto p-4 grid gap-4 grid-cols-1 md:grid-cols-2 pt-20">
       <div className="md:col-span-1 mt-4">
         <div className="mb-4">
-          <h2 className="text-xl font-semibold mb-4">Region</h2>
+          <h2 className="text-xl font-semibold mb-4">Pulau</h2>
           <select onChange={handleRegionChange} className="border p-2 w-full">
-            <option value="">Select Region</option>
+            <option value="">Pilih Pulau</option>
             {regions.map((region) => (
               <option key={region.region} value={region.region}>
                 {region.region}
@@ -125,9 +126,9 @@ const Checkout = () => {
         </div>
         {region && (
           <div className="mb-4">
-            <h2 className="text-xl font-semibold">City</h2>
+            <h2 className="text-xl font-semibold">Kota</h2>
             <select onChange={handleCityChange} className="border p-2 w-full">
-              <option value="">Select City</option>
+              <option value="">Pilih Kota</option>
               {cities.map((city) => (
                 <option key={city.city} value={city.city}>
                   {city.city} - {formatRupiah(city.fee)}
@@ -137,11 +138,11 @@ const Checkout = () => {
           </div>
         )}
         <div className="mb-4">
-          <h2 className="text-xl font-semibold">Coupons</h2>
+          <h2 className="text-xl font-semibold">Kupon</h2>
           <select
             onChange={(e) => setSelectedCoupon(e.target.value)}
             className="border p-2 w-full">
-            <option value="">Select Coupon</option>
+            <option value="">Pilih Kupon</option>
             {coupons.map((coupon) => (
               <option key={coupon.id} value={coupon.id}>
                 {coupon.code} -{" "}
@@ -154,12 +155,12 @@ const Checkout = () => {
         </div>
         {hasCheckedOutBefore && !createNewAddress ? (
           <div className="mb-4">
-            <h2 className="text-xl font-semibold">Select Address</h2>
+            <h2 className="text-xl font-semibold">Pilih Alamat</h2>
             <select
               onChange={handleAddressSelect}
               className="border p-2 w-full"
               value={selectedAddressId}>
-              <option value="">Select Address</option>
+              <option value="">Pilih Alamat</option>
               {addresses.map((addr) => (
                 <option key={addr.id} value={addr.id}>
                   {`${addr.street}, ${addr.city}, ${addr.province}, ${addr.postalCode}`}
@@ -169,111 +170,106 @@ const Checkout = () => {
             <button
               onClick={handleCreateNewAddress}
               className="mt-2 bg-gray-200 text-gray-800 p-2 rounded">
-              Create New Address
+              Buat Alamat Baru
             </button>
           </div>
         ) : (
           <div className="mb-4">
-            <h2 className="text-xl font-semibold">Enter Address</h2>
-            <input
+            <h2 className="text-xl font-semibold">Masukan Alamat</h2>
+            <div className="mb-4">
+            <Input
               type="text"
-              placeholder="Phone"
+              placeholder="Nomor Hp"
               value={address.phone}
               onChange={(e) =>
                 setAddress({ ...address, phone: e.target.value })
               }
-              className="border p-2 w-full"
             />
-            <input
+            </div>
+            <div className="mb-4">
+            <Input
               type="text"
-              placeholder="City"
+              placeholder="Kota"
               value={address.city}
               onChange={(e) => setAddress({ ...address, city: e.target.value })}
-              className="border p-2 w-full"
             />
-            <input
+            </div>
+            <div className="mb-4">
+            <Input
               type="text"
-              placeholder="Postal Code"
+              placeholder="Kode Pos"
               value={address.postalCode}
               onChange={(e) =>
                 setAddress({ ...address, postalCode: e.target.value })
               }
-              className="border p-2 w-full"
             />
-            <input
+            </div>
+            <div className="mb-4">
+            <Input
               type="text"
-              placeholder="Province"
+              placeholder="Provinsi"
               value={address.province}
               onChange={(e) =>
                 setAddress({ ...address, province: e.target.value })
               }
-              className="border p-2 w-full"
             />
-            <input
+            </div>
+            <div className="mb-4">
+            <Input
               type="text"
-              placeholder="Street"
+              placeholder="Jalan"
               value={address.street}
               onChange={(e) =>
                 setAddress({ ...address, street: e.target.value })
               }
-              className="border p-2 w-full"
             />
+            </div>
           </div>
         )}
       </div>
 
       <div className="md:col-span-1 mt-4 lg:m-4">
-        <h2 className="text-xl font-semibold mb-4">Product List</h2>
+        <h2 className="text-xl font-semibold mb-4">Produk</h2>
         {cart.map((item) => (
           <div
             key={item.id}
-            className="border p-2 mb-2 flex flex-col lg:flex-row items-center">
-            <Image
-              src={item.product.image}
-              alt={item.product.name}
-              width={100}
-              height={100}
-              priority={true}
-              style={{ width: "auto", height: "auto" }}
-            />
-            <div className="ml-4">
-              <div>{item.product.name}</div>
+            className="border p-4 mb-4 flex justify-between items-center">
+            <div className="flex items-center">
+              <Image
+                src={item.product.image}
+                alt={item.product.name}
+                width={100}
+                height={100}
+                className="mr-4"
+              />
               <div>
-                {item.quantity} x {formatRupiah(item.product.price)}
+                <h3 className="font-semibold">{item.product.name}</h3>
+                <p className="text-gray-600">{item.quantity} x {formatRupiah(item.product.price)}</p>
               </div>
             </div>
+            <p className="font-semibold">
+              {formatRupiah(item.quantity * item.product.price)}
+            </p>
           </div>
         ))}
-        <div className="mt-4">
-          <div className="text-xl font-semibold">Quantity: {cart.length}</div>
-          {selectedCoupon && (
-            <div className="text-xl font-semibold">
-              Discount:{" "}
-              {selectedCoupon.discountType === "PERCENT"
-                ? `${selectedCoupon.percentValue}%`
-                : formatRupiah(selectedCoupon.decimalValue)}
-            </div>
-          )}
-          <div className="text-xl font-semibold">
-            Total:{" "}
-            {formatRupiah(
-              cart.reduce(
-                (acc, item) =>
-                  acc + parseInt(item.product.price) * parseInt(item.quantity),
-                0
-              )
-            )}
+
+        <div className="border-t-2 border-b-2 py-2 mb-4">
+          <div className="flex justify-between items-center">
+            <p className="font-semibold">Total:</p>
+            <p className="font-semibold">
+              {formatRupiah(cart.reduce((total, item) => total + item.quantity * item.product.price, 0))}
+            </p>
           </div>
         </div>
-      </div>
 
-      <button
-        onClick={handleCheckoutClick}
-        className="bg-blue-500 text-white p-2 rounded w-full"
-        disabled={loading}>
-        {loading ? "Processing..." : "Checkout"}
-      </button>
-      {message && <p className="text-red-500">{message}</p>}
+        {message && <p className="text-red-600">{message}</p>}
+
+        <button
+          onClick={handleCheckoutClick}
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded">
+          {loading ? "Processing..." : "Checkout"}
+        </button>
+      </div>
     </div>
   );
 };

@@ -61,7 +61,7 @@ function Cart() {
               {item.product.name}
             </p>
             <p className="text-sm md:text-md lg:text-lg mb-2">
-              Price: {formatRupiah(item.product.price)}
+              Harga: {formatRupiah(item.product.price)}
             </p>
             <div className="flex items-center mt-2 md:mt-4 w-8 ">
               <Button
@@ -89,11 +89,11 @@ function Cart() {
       {cartData.length > 0 && (
         <div className="mt-8 mx-4 border-t border-gray-200 pt-4">
           <div className="flex justify-between">
-            <p className="text-lg font-semibold">Total Quantity:</p>
+            <p className="text-lg font-semibold">Total Kuantiti:</p>
             <p className="text-lg font-semibold">{calculateTotalQuantity()}</p>
           </div>
           <div className="flex justify-between mt-2">
-            <p className="text-lg font-semibold">Total Price:</p>
+            <p className="text-lg font-semibold">Total Harga:</p>
             <p className="text-lg font-semibold">
               {formatRupiah(calculateTotalPrice())}
             </p>
@@ -103,13 +103,13 @@ function Cart() {
       {cartData.length === 0 && (
         <div className="mt-8 mx-4 border-t border-gray-200 pt-4">
           <p className="text-center mt-16 text-gray-900 text-3xl font-bold">
-            Your cart is empty
+            Keranjang Anda Kosong
           </p>
           <div className="flex justify-center w-48 items-center mx-auto">
             <Button
               className="mx-auto mt-8 bg-gradient-to-r from-red-700 to-red-500 text-white"
               onClick={() => router.push("/products")}>
-              Continue Shopping
+              Lanjut Belanja
             </Button>
           </div>
         </div>

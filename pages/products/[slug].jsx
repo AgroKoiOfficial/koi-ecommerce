@@ -63,7 +63,7 @@ function ProductDetail({ product }) {
     <>
       <Head>
         <title>{product.name} - Product Detail</title>
-        <meta name="description" content={`Detail of ${product.name}`} />
+        <meta name="description" content={`Detail of ${product.name} ${product.description}`} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#ffffff" />
         <link rel="icon" href="/logo.png" />

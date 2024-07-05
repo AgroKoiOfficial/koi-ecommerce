@@ -14,7 +14,7 @@ const ProductInfo = ({ product }) => {
     setLoading(true);
     const session = await getSession();
     if (!session) {
-      toast.error("You must be logged in to add product to cart");
+      toast.error("Kamu harus login terlebih dahulu");
       setLoading(false);
       return router.push("/login");
     }
@@ -35,14 +35,14 @@ const ProductInfo = ({ product }) => {
       });
 
       if (response.ok) {
-        toast.success("Product added to cart successfully!");
+        toast.success("Produk ditambahkan ke keranjang");
         router.push("/cart");
       } else {
         const errorData = await response.json();
-        toast.error("Failed to add product to cart. Stock not enough.");
+        toast.error("Gagal menambahkan produk ke keranjang, stok tidak cukup");
       }
     } catch (error) {
-      toast.error("Failed to add product to cart. Stock not enough.");
+      toast.error("Gagal menambahkan produk ke keranjang, stok tidak cukup.");
     } finally {
       setLoading(false);
     }
@@ -54,30 +54,30 @@ const ProductInfo = ({ product }) => {
         {product.name}
       </h1>
       <p className="lg:text-lg mb-4">
-        <span className="font-bold">Price:</span> {formatRupiah(product.price)}
+        <span className="font-bold">Harga:</span> {formatRupiah(product.price)}
       </p>
       <p className="mb-4">
-        <span className="font-bold">Category:</span> {product.category}
+        <span className="font-bold">Kategori:</span> {product.category}
       </p>
       <p className="mb-4">
-        <span className="font-bold">Stock:</span> {product.stock}
+        <span className="font-bold">Stok:</span> {product.stock}
       </p>
       <div className="mb-4">
-        <span className="font-bold">Description:</span>
+        <span className="font-bold">Deskripsi:</span>
         <p className="mt-2">{product.description}</p>
       </div>
       {product.stock > 0 ? (
-        <div className="mb-4 md:w-1/5">
+        <div className="mb-4 md:w-1/5 lg:w-1/3">
           <Button
             className="bg-blue-500 hover:bg-blue-700 text-white"
             onClick={handleAddToCart}
             disabled={loading}
           >
-            {loading ? "Adding..." : "Add to Cart"}
+            {loading ? "Menambahkan..." : "Tambah keranjang"}
           </Button>
         </div>
       ) : (
-        <p className="text-red-500 font-bold">Stock is out</p>
+        <p className="text-red-500 font-bold">Stok Habis</p>
       )}
     </div>
   );

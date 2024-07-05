@@ -37,10 +37,7 @@ export default function ProductCard({ product, isLoading }) {
           {isLoading ? "Loading..." : formatRupiah(product.price)}
         </p>
         <p className="text-base md:text-lg text-gray-700 mb-2">
-          Stock: {isLoading ? "Loading..." : product.stock}
-        </p>
-        <p className="text-base md:text-lg text-gray-700">
-          Category: {isLoading ? "Loading..." : product.category}
+          Stok: {isLoading ? "Loading..." : product.stock}
         </p>
       </div>
     </div>

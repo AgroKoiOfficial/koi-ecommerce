@@ -28,7 +28,7 @@ export const useCart = () => {
         method: "DELETE",
       });
       const updatedCartData = cartData.filter((item) => item.id !== id);
-      toast.success("Product deleted successfully!");
+      toast.success("Produk Berhasil Dihapus!");
       setCartData(updatedCartData);
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -47,7 +47,7 @@ export const useCart = () => {
       if (response.ok) {
         if (newQuantity === 0) {
           const updatedCartData = cartData.filter((item) => item.id !== id);
-          toast.success("Product deleted successfully!");
+          toast.success("Produk Berhasil Dihapus!");
           setCartData(updatedCartData);
         } else {
           const updatedCartData = cartData.map((item) => {
@@ -59,11 +59,11 @@ export const useCart = () => {
             }
             return item;
           });
-          toast.success("Quantity updated successfully!");
+          toast.success("Kuantitas Berubah!");
           setCartData(updatedCartData);
         }
       } else {
-        toast.error("Failed to update quantity. Quantity must be greater than 0.");
+        toast.error("Gagal Mengubah Kuantitas, jumlah kuantitas produk tidak lebih dari satu.");
         console.error("Failed to update quantity:", response.statusText);
       }
     } catch (error) {

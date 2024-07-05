@@ -2,10 +2,17 @@ import { prisma } from "@/prisma/prisma";
 import { getToken } from "next-auth/jwt";
 import { sendCheckoutEmail } from "@/utils/sendCheckout.js";
 import { sendCheckoutToAdmin } from "@/utils/sendCheckoutToAdmin.js";
+import Midtrans from "midtrans-client";
+
+const snap = new Midtrans.Snap({
+  isProduction: false,
+  serverKey: process.env.MIDTRANS_SERVER_KEY,
+  clientKey: process.env.MIDTRANS_CLIENT_KEY,
+});
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).end();
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -53,7 +60,12 @@ export default async function handler(req, res) {
     let discount = 0;
 
     for (const cartItem of cart) {
-      if (!cartItem.product || !cartItem.product.price || !cartItem.quantity) {
+      if (
+        !cartItem.product ||
+        !cartItem.product.id ||
+        !cartItem.product.price ||
+        !cartItem.quantity
+      ) {
         console.error("Invalid cart item:", cartItem);
         return res.status(400).json({ message: "Invalid cart item" });
       }
@@ -124,7 +136,7 @@ export default async function handler(req, res) {
         cart: { create: cart },
       },
     });
-    
+
     for (const cartItem of cart) {
       await prisma.product.update({
         where: {
@@ -144,18 +156,47 @@ export default async function handler(req, res) {
       },
     });
 
-    await sendCheckoutEmail(user.email, cart, discount, shippingFee, total);
+    const parameters = {
+      transaction_details: {
+        order_id: newCheckout.id,
+        gross_amount: total,
+      },
+      credit_card: {
+        secure: true,
+      },
+      customer_details: {
+        first_name: user.name,
+        email: user.email,
+      },
+      custom_expiry: {
+        unit: "minute",
+        value: 50,
+      },
+      callbacks: {
+        finish:`${process.env.BASE_URL}/transaction-result`,
+      },
+    };
 
-    await sendCheckoutToAdmin(user, address, cart, discount, shippingFee, total);
+    snap
+      .createTransaction(parameters)
+      .then((midtransTransaction) => {
+        console.log("Midtrans Transaction:", midtransTransaction);
+        res.status(200).json({ token: midtransTransaction.token });
+        
+        sendCheckoutEmail(user.email, cart, discount, shippingFee, total);
+        sendCheckoutToAdmin(user, address, cart, discount, shippingFee, total);
+      })
+      .catch((error) => {
+        console.error("Transaction Handler Error:", error);
+        res
+          .status(500)
+          .json({ message: "Internal server error", error: error.message });
+      });
 
-    console.log("Checkout created successfully:", newCheckout);
-
-    return res.status(201).json({
-      message: "Checkout created successfully",
-      checkout: newCheckout,
-    });
   } catch (error) {
     console.error("Error creating checkout:", error);
-    return res.status(500).json({ message: "Failed to create checkout" });
+    return res
+      .status(500)
+      .json({ message: "Failed to create checkout", error: error.message });
   }
 }

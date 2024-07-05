@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { toast } from "react-toastify";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -20,17 +21,18 @@ export default function ForgotPassword() {
         body: JSON.stringify({ email }),
       });
       const data = await response.json();
+      toast.success("Email lupa kata sandi dikirim");
       setMessage(data.message);
     } catch (error) {
-      console.error("Error sending forgot password email:", error);
-      setMessage("Failed to send forgot password email");
+      toast.error("Gagal mengirim email lupa kata sandi");
+      setMessage("Gagal mengirim email lupa kata sandi");
     }
   };
 
   return (
     <>
       <Head>
-        <title>Forgot Password</title>
+        <title>Lupa Kata Sandi</title>
         <link rel="icon" href="/logo.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Forgot Password" />
@@ -39,10 +41,10 @@ export default function ForgotPassword() {
       <main className="flex justify-center items-center h-screen bg-gray-100">
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
           <h1 className=" text-2xl lg:text-4xl font-bold mb-6 text-center">
-            Forgot Password
+            Lupa Kata Sandi
           </h1>
-          <p className=" text-md lg:text-lg text-gray-700 mb-8">
-            Enter your email to reset your password.
+          <p className=" text-md text-center lg:text-lg text-gray-700 mb-8">
+            Masukan email anda dan kami akan mengirimkan token lupa kata sandi
           </p>
 
           <form onSubmit={handleSubmit} className="w-full max-w-sm">
@@ -67,7 +69,7 @@ export default function ForgotPassword() {
           {message && <p className="text-green-500 mt-4">{message}</p>}
 
           <p className="mt-8 text-gray-900 mb-8 text-center">
-            Remembered your password?{" "}
+            Ingat kata sandi?{" "}
             <Link href="/login" className="text-blue-500">
               Login
             </Link>
