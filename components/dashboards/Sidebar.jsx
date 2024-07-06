@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { FiX, FiHome, FiShoppingCart, FiList, FiUsers } from "react-icons/fi";
-import { FaShippingFast, FaWhatsapp, FaQuestion, FaServicestack } from "react-icons/fa";
+import { FaShippingFast, FaWhatsapp, FaQuestion, FaServicestack, FaInfo} from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { BiCategory } from "react-icons/bi";
 import { CiShop, CiShoppingCart } from "react-icons/ci";
@@ -154,6 +154,18 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                   href: "/dashboard/services",
                   icon: <FaServicestack className="h-5 w-5 mr-2" />,
                 }
+              ]}
+            />
+            <MenuItem
+              icon={<FaInfo className="h-5 w-5 mr-2" />}
+              title="Term & Services"
+              href="#"
+              submenu={[
+                {
+                  title: "Term & Services",
+                  href: "/dashboard/term",
+                  icon: <FaInfo className="h-5 w-5 mr-2" />,
+                },
               ]}
             />
           </ul>

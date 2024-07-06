@@ -28,22 +28,27 @@ const Footer = () => {
           <ul className="flex flex-col lg:flex-row lg:space-x-6 space-y-4 lg:space-y-0">
             <li>
               <Link href="/" className="text-gray-300 hover:text-white">
-                Home
+                Beranda
               </Link>
             </li>
             <li>
               <Link href="/products" className="text-gray-300 hover:text-white">
-                Products
+                Produk
               </Link>
             </li>
             <li>
-              <Link href="/about" className="text-gray-300 hover:text-white">
-                About
+              <Link href="/abouts" className="text-gray-300 hover:text-white">
+                Tentang Kami
               </Link>
             </li>
             <li>
               <Link href="/faqs" className="text-gray-300 hover:text-white">
                 FAQS
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms" className="text-gray-300 hover:text-white">
+            Syarat & Layanan
               </Link>
             </li>
           </ul>

@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 
 const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
 
+
 export default function Products({ products, totalProducts }) {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -24,8 +25,7 @@ export default function Products({ products, totalProducts }) {
     if (
       window.innerHeight + document.documentElement.scrollTop !==
         document.documentElement.offsetHeight ||
-      loading ||
-      !hasMore
+      loading
     ) {
       return;
     }
@@ -45,7 +45,7 @@ export default function Products({ products, totalProducts }) {
       const newData = await response.json();
       setAllProducts([...allProducts, ...newData]);
       setPage(nextPage);
-      if (newData.length === 0 || newData.length < perPage) {
+      if (newData.length === 0) {
         setHasMore(false);
       }
     } else {
@@ -68,7 +68,7 @@ export default function Products({ products, totalProducts }) {
       </Head>
       <main className="pt-16 lg:pt-20 mb-16 lg:mb-20">
         <h1 className="text-3xl lg:text-4xl font-bold mb-8 text-center my-4">
-          Produk
+          Products
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           {allProducts.map((product, index) => (
@@ -81,8 +81,8 @@ export default function Products({ products, totalProducts }) {
             </Link>
           ))}
         </div>
-        {hasMore && (
-          <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-8">
+          {hasMore ? (
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               onClick={loadMore}
@@ -90,8 +90,10 @@ export default function Products({ products, totalProducts }) {
             >
               {loading ? "Loading..." : "Load More"}
             </button>
-          </div>
-        )}
+          ) : (
+            <p className="text-center mt-8">You've reached the end of the list</p>
+          )}
+        </div>
         <CTA />
       </main>
 

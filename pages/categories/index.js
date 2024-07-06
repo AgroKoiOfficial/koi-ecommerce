@@ -95,33 +95,31 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredProducts.map((product) => (
-                <>
-                  <Link href={`/products/${product.slug}`} key={product.id}>
-                    <div
-                      key={product.id}
-                      className="bg-white p-4 rounded-md shadow-md">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        width={100}
-                        height={100}
-                        priority={true}
-                        style={{
-                          width: "auto",
-                          height: "auto",
-                          margin: "0 auto",
-                        }}
-                      />
-                      <div className="mt-4 flex flex-col items-center space-y-1">
-                        <h3 className="text-lg font-bold">{product.name}</h3>
-                        <p className="text-sm font-semibold">
-                          Harga: {formatRupiah(product.price)}
-                        </p>
-                        <p className="text-sm">Stok: {product.stock}</p>
-                      </div>
+                <Link href={`/products/${product.slug}`} key={product.id}>
+                  <div
+                    key={product.id}
+                    className="bg-white p-4 rounded-md shadow-md">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={100}
+                      height={100}
+                      priority={true}
+                      style={{
+                        width: "auto",
+                        height: "auto",
+                        margin: "0 auto",
+                      }}
+                    />
+                    <div className="mt-4 flex flex-col items-center space-y-1">
+                      <h3 className="text-lg font-bold">{product.name}</h3>
+                      <p className="text-sm font-semibold">
+                        Harga: {formatRupiah(product.price)}
+                      </p>
+                      <p className="text-sm">Stok: {product.stock}</p>
                     </div>
-                  </Link>
-                </>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

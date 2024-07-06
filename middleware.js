@@ -7,7 +7,7 @@ export async function middleware(req) {
 
   const pathname = url.pathname;
 
-  const authRoutes = ["/cart", "/checkout", "/payment", "/user"];
+  const authRoutes = ["/cart", "/checkout", "/payment", "/user", "transaction-result"];
   const adminRoutes = ["/dashboard"];
   const guestRoutes = [
     "/register",
