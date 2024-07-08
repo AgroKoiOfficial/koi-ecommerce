@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { getToken } from "next-auth/jwt";
 import { uploadMedia } from "@/middleware/uploadMedia";
-import multer from "multer"
+import multer from "multer";
 
 export const config = {
   api: {
@@ -27,7 +27,6 @@ export default async function handler(req, res) {
         console.error(err);
         return res.status(500).json({ error: "Failed to upload media" });
       } else if (err) {
-      
         console.error(err);
         return res.status(500).json({ error: "An unknown error occurred" });
       }

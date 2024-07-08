@@ -11,14 +11,11 @@ const ProductMedia = ({ product }) => {
     if (videoRef.current.paused || videoRef.current.ended) {
       videoRef.current.play();
       setIsPlaying(true);
+      setIsPaused(false);
     } else {
       videoRef.current.pause();
       setIsPlaying(false);
     }
-  };
-
-  const handlePause = () => {
-    setIsPaused(true);
   };
 
   const handleReplay = () => {
@@ -37,15 +34,15 @@ const ProductMedia = ({ product }) => {
           width={100}
           height={100}
           priority={true}
-          style={{ objectFit: "contain",}}
+          style={{ objectFit: "contain" }}
           className="h-96 w-full mb-4 mx-auto"
         />
       )}
       {product.video && (
-        <div className="relative mt-8 lg:mt-12 rounded-lg overflow-hidden ">
+        <div className="relative mt-8 lg:mt-12 rounded-lg overflow-hidden">
           <h2 className="text-xl md:text-xl font-bold mb-2 text-center text-gray-800">Video</h2>
-         <div className="relative">
-          <div className="absolute inset-0 bg-black opacity-25"></div>
+          <div className="relative">
+            <div className="absolute inset-0 bg-black opacity-25"></div>
           </div>
           <video
             ref={videoRef}
@@ -53,7 +50,6 @@ const ProductMedia = ({ product }) => {
             controls={false}
             autoPlay={false}
             loop={false}
-            muted
             className="max-w-full mx-auto h-full lg:h-96 transition-transform transform hover:scale-105"
             style={{ backgroundColor: "#000" }}
             onPlay={() => setIsPlaying(true)}
