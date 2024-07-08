@@ -48,7 +48,7 @@ export default function Home({ carousels }) {
           content="Koi Toko, Jual Ikan Koi, Berkualitas"
         />
       </Head>
-      <main className="flex flex-col justify-center items-center pt-16 mb-20">
+      <main className="flex flex-col min-h-svh justify-center items-center pt-16 mb-20">
         <Carousel carousels={carousels} />
         <div className="mt-4 lg:mt-8 flex flex-col justify-center items-center">
           <h1 className="text-3xl font-bold mb-4 lg:mb-8">Produk Terbaru</h1>

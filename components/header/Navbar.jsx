@@ -36,7 +36,7 @@ const Navbar = () => {
                 width={48}
                 height={48}
                 priority={true}
-                style={{ objectFit: "contain", maxWidth: "100%", height: "auto" }}
+                style={{ objectFit: "contain", minWidth: "32px", maxWidth: "100%", height: "auto" }}
               />
             </div>
           </div>

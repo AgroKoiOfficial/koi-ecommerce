@@ -67,7 +67,7 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
         />
       </Head>
 
-      <main className="container mx-auto py-8 pt-20">
+      <main className="container min-h-screen mx-auto py-8 pt-20">
         <h1 className="text-3xl text-center font-bold mt-8 mb-4">Categories</h1>
 
         <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-8 gap-4">
