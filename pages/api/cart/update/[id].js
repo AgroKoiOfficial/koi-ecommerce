@@ -41,7 +41,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ message: "Product removed from cart" });
     }
 
-    if (product.stock === 1) {
+    if (product.stock < quantity || product.stock === 1) {
       return res.status(400).json({
         error: "Product is reserved and cannot be updated due to low stock",
       });
