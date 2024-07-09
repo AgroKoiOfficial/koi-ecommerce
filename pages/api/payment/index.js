@@ -2,7 +2,7 @@ import Midtrans from "midtrans-client";
 import { prisma } from "@/prisma/prisma";
 
 const snap = new Midtrans.Snap({
-    isProduction: false,
+    isProduction: true,
     serverKey: process.env.MIDTRANS_SERVER_KEY,
 });
 

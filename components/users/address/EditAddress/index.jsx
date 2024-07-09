@@ -32,12 +32,12 @@ const EditAddress = ({ address, setIsEditing }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <h1 className="text-3xl font-bold text-center">Edit Address</h1>
-      <Label htmlFor="street">Street Address</Label>
+      <h1 className="text-3xl font-bold text-center">Edit Alamat</h1>
+      <Label htmlFor="street">Jalan</Label>
       <Input
         label="Street Address"
         name="street"
-        placeholder="Street Address"
+        placeholder="Jalan"
         value={formData.street}
         onChange={handleChange}
         className={errors.street ? "border-red-500" : ""}
@@ -45,11 +45,11 @@ const EditAddress = ({ address, setIsEditing }) => {
       {errors.street && (
         <p className="text-red-500 text-xs italic">{errors.street}</p>
       )}
-      <Label htmlFor="postalCode">Postal Code</Label>
+      <Label htmlFor="postalCode">Kode Pos</Label>
       <Input
         label="Postal Code"
         name="postalCode"
-        placeholder="Postal Code"
+        placeholder="Kode Pos"
         value={formData.postalCode}
         onChange={handleChange}
         className={errors.postalCode ? "border-red-500" : ""}
@@ -57,11 +57,11 @@ const EditAddress = ({ address, setIsEditing }) => {
       {errors.postalCode && (
         <p className="text-red-500 text-xs italic">{errors.postalCode}</p>
       )}
-      <Label htmlFor="city">City</Label>
+      <Label htmlFor="city">Kota</Label>
       <Input
         label="City"
         name="city"
-        placeholder="City"
+        placeholder="Kota"
         value={formData.city}
         onChange={handleChange}
         className={errors.city ? "border-red-500" : ""}
@@ -71,7 +71,7 @@ const EditAddress = ({ address, setIsEditing }) => {
       <Input
         label="Province"
         name="province"
-        placeholder="Province"
+        placeholder="Provinsi"
         value={formData.province}
         onChange={handleChange}
         className={errors.province ? "border-red-500" : ""}
@@ -79,11 +79,11 @@ const EditAddress = ({ address, setIsEditing }) => {
       {errors.province && (
         <p className="text-red-500 text-xs italic">{errors.province}</p>
       )}
-      <Label htmlFor="phone">Phone</Label>
+      <Label htmlFor="phone">No Hp</Label>
       <Input
         label="Phone"
         name="phone"
-        placeholder="Phone"
+        placeholder="No Hp"
         value={formData.phone}
         onChange={handleChange}
         className={errors.phone ? "border-red-500" : ""}
@@ -98,7 +98,7 @@ const EditAddress = ({ address, setIsEditing }) => {
         <Button
           className={"ml-2 bg-red-500 hover:bg-red-600 text-white"}
           onClick={() => setIsEditing(false)}>
-          Cancel
+          Batal
         </Button>
       </div>
     </form>

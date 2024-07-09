@@ -42,10 +42,10 @@ const AddressInfo = () => {
         const updatedAddresses = addresses.filter(
           (address) => address.id !== addressId
         );
-        toast.success("Address deleted successfully");
+        toast.success("Menghapus Alamat Berhasil");
         setAddresses(updatedAddresses);
       } else {
-        toast.error("Failed to delete address");
+        toast.error("Gagal Menghapus Alamat");  
         console.error("Failed to delete address:", response.statusText);
       }
     } catch (error) {
@@ -61,40 +61,40 @@ const AddressInfo = () => {
 
   return (
     <div className="flex flex-col gap-4 p-4 w-full mx-auto">
-      <h1 className="text-3xl font-bold text-center">Address Info</h1>
+      <h1 className="text-3xl font-bold text-center">Informasi Alamat</h1>
       <div className="flex flex-col lg:flex-row gap-4">
         {addresses.length > 0 ? (
           addresses.map((address) => (
             <div
               key={address.id}
               className="w-full p-4 border rounded-lg shadow-md h-3/4">
-              <h2 className="text-2xl font-bold mb-4 text-center">Address</h2>
+              <h2 className="text-2xl font-bold mb-4 text-center">Alamat</h2>
               <div className="flex flex-col gap-2">
                 <div className="mb-2">
                   <p className="text-lg ">
-                    <span className="font-semibold">Street Address:</span>{" "}
+                    <span className="font-semibold">Jalan:</span>{" "}
                     {address.street}
                   </p>
                 </div>
                 <div className="mb-2">
                   <p className="text-lg">
-                    <span className="font-semibold">Postal Code: </span>
+                    <span className="font-semibold">Kode Pos: </span>
                     {""} {address.postalCode}
                   </p>
                 </div>
                 <div className="mb-2">
                   <p className="text-lg">
-                    <span className="font-semibold">City:</span> {address.city}
+                    <span className="font-semibold">Kota:</span> {address.city}
                   </p>
                 </div>
                 <div className="mb-2">
                   <p className="text-lg">
-                    <span className="font-semibold">Province:</span> {address.province}
+                    <span className="font-semibold">Provinsi:</span> {address.province}
                   </p>
                 </div>
                 <div className="mb-2">
                   <p className="text-lg">
-                    <span className="font-semibold">Phone:</span> {address.phone}
+                    <span className="font-semibold">No Telp:</span> {address.phone}
                   </p>
                 </div>
               </div>
@@ -113,13 +113,13 @@ const AddressInfo = () => {
             </div>
           ))
         ) : (
-          <p className="text-lg">No address found. Please add an address.</p>
+          <p className="text-lg">Tidak ada alamat.</p>
         )}
       </div>
       <Button
         onClick={handleCreate}
         className={`bg-blue-500 hover:bg-blue-700 text-white`}>
-        Add Address
+       Alamat Baru
       </Button>
       {isEditing && (
         <EditAddress address={isEditing} setIsEditing={setIsEditing} />

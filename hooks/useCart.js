@@ -19,6 +19,7 @@ export const useCart = () => {
         console.error("Error fetching cart data:", error);
       }
     };
+
     fetchCartData();
   }, []);
 
@@ -27,9 +28,12 @@ export const useCart = () => {
       await fetch(`/api/cart/delete/${id}`, {
         method: "DELETE",
       });
-      const updatedCartData = cartData.filter((item) => item.id !== id);
+
+      setCartData((prevCartData) =>
+        prevCartData.filter((item) => item.id !== id)
+      );
+
       toast.success("Produk Berhasil Dihapus!");
-      setCartData(updatedCartData);
     } catch (error) {
       console.error("Error deleting item:", error);
     }
@@ -44,23 +48,20 @@ export const useCart = () => {
         },
         body: JSON.stringify({ quantity: newQuantity }),
       });
+
       if (response.ok) {
         if (newQuantity === 0) {
-          const updatedCartData = cartData.filter((item) => item.id !== id);
+          setCartData((prevCartData) =>
+            prevCartData.filter((item) => item.id !== id)
+          );
           toast.success("Produk Berhasil Dihapus!");
-          setCartData(updatedCartData);
         } else {
-          const updatedCartData = cartData.map((item) => {
-            if (item.id === id) {
-              return {
-                ...item,
-                quantity: newQuantity,
-              };
-            }
-            return item;
-          });
+          setCartData((prevCartData) =>
+            prevCartData.map((item) =>
+              item.id === id ? { ...item, quantity: newQuantity } : item
+            )
+          );
           toast.success("Kuantitas Berubah!");
-          setCartData(updatedCartData);
         }
       } else {
         toast.error("Gagal Mengubah Kuantitas, jumlah kuantitas produk tidak lebih dari satu.");

@@ -73,9 +73,9 @@ const Review = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-4">Reviews</h1>
+      <h1 className="text-2xl font-bold mb-4">Review</h1>
       {reviews.length === 0 ? (
-        <p>No reviews found.</p>
+        <p>Tidak ada atau belum ada review.</p>
       ) : (
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           {reviews.map((review) => (

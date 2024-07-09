@@ -1,10 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { FiX, FiHome, FiShoppingCart, FiList } from "react-icons/fi";
-import { FaShippingFast, FaRegUser, FaUser , FaRegAddressCard  } from "react-icons/fa";
-import { CgWebsite } from "react-icons/cg";
-import { BiCategory } from "react-icons/bi";
-import { CiShop, CiShoppingCart } from "react-icons/ci";
+import { FiX, FiHome,  FiList } from "react-icons/fi";
+import { FaRegUser, FaUser , FaRegAddressCard  } from "react-icons/fa";
 import { MdOutlineRateReview, MdOutlineShoppingCartCheckout  } from "react-icons/md";
 import { Button } from "../../ui/Button";
 import MenuItem from "./MenuItem";
@@ -26,7 +23,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
           {/* Logo */}
           <div className="flex items-center">
             <img src="/logo.png" alt="Logo" className="w-8 h-8" />
-            <span className="ml-2 text-xl font-bold">Agro</span>
+            <span className="ml-2 text-xl font-bold">Agro Koi</span>
           </div>
           {/* Close Button */}
           <button
@@ -44,9 +41,8 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
               title="Dashboard"
               href="#"
               submenu={[
-                { title: "Submenu Item 1", href: "#", icon: null },
                 {
-                  title: "Review History",
+                  title: "Riwayat Review",
                   href: "/user/review",
                   icon: <MdOutlineRateReview className="h-5 w-5 mr-2" />,
                 },
@@ -54,20 +50,19 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
             />
             <MenuItem
               icon={<FiList className="h-5 w-5 mr-2" />}
-              title="Orders"
+              title="Pesan"
               href="#"
               submenu={[
-                { title: "Checkout History", href: "/user/checkout-history", icon: <MdOutlineShoppingCartCheckout className="h-5 w-5 mr-2" /> },
-                { title: "Submenu Item 2", href: "#", icon: null },
+                { title: "Riwayat Belanja", href: "/user/checkout-history", icon: <MdOutlineShoppingCartCheckout className="h-5 w-5 mr-2" /> },
               ]}
             />
             <MenuItem
             icon={<FaRegUser  className="h-5 w-5 mr-2" />}
-            title={'User Management'}
+            title={'Managemen Akun'}
             href={'#'}
             submenu={[
-              { title: " User Info", href: "/user/user-management", icon: <FaUser className="h-5 w-5 mr-2"/> },
-              { title: "Address", href: "/user/address", icon: <FaRegAddressCard className="h-5 w-5 mr-2"/> },
+              { title: " Informasi Akun", href: "/user/user-management", icon: <FaUser className="h-5 w-5 mr-2"/> },
+              { title: "Alamat", href: "/user/address", icon: <FaRegAddressCard className="h-5 w-5 mr-2"/> },
             ]}
             />
           </ul>
@@ -75,7 +70,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
             <Button
               className="bg-white  hover:bg-gray-100 text-gray-900 font-semibold"
               onClick={handleBackToHome}>
-              Back to Home
+              Kembali ke Beranda
             </Button>
           </div>
         </div>

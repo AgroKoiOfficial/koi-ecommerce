@@ -58,13 +58,13 @@ const CreateAddress = ({ setIsCreating }) => {
   return (
     <>
       <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
-        <h1 className="text-3xl font-bold">Create Address</h1>
+        <h1 className="text-3xl font-bold">Buat Alamat</h1>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
-        <Label htmlFor="street">Street Address</Label>
+        <Label htmlFor="street">Jalan</Label>
         <Input
           name="street"
-          placeholder="Street Address"
+          placeholder="Jalan"
           value={formData.street}
           onChange={handleChange}
           className={errors.street ? "border-red-500" : ""}
@@ -73,7 +73,7 @@ const CreateAddress = ({ setIsCreating }) => {
           <p className="text-red-500 text-xs italic">{errors.street}</p>
         )}
 
-        <Label htmlFor="postalCode">Postal Code</Label>
+        <Label htmlFor="postalCode">Kode Pos</Label>
         <Input
           name="postalCode"
           placeholder="Postal Code"
@@ -85,7 +85,7 @@ const CreateAddress = ({ setIsCreating }) => {
           <p className="text-red-500 text-xs italic">{errors.postalCode}</p>
         )}
 
-        <Label htmlFor="city">City</Label>
+        <Label htmlFor="city">KOta</Label>
         <Input
           name="city"
           placeholder="City"
@@ -97,7 +97,7 @@ const CreateAddress = ({ setIsCreating }) => {
           <p className="text-red-500 text-xs italic">{errors.city}</p>
         )}
 
-        <Label htmlFor="province">Province</Label>
+        <Label htmlFor="province">Provinsi</Label>
         <Input
           name="province"
           placeholder="Province"
@@ -109,7 +109,7 @@ const CreateAddress = ({ setIsCreating }) => {
           <p className="text-red-500 text-xs italic">{errors.province}</p>
         )}
 
-        <Label htmlFor="phone">Phone</Label>
+        <Label htmlFor="phone">No Hp</Label>
         <Input
           name="phone"
           placeholder="Phone"
@@ -124,13 +124,13 @@ const CreateAddress = ({ setIsCreating }) => {
           <Button
             type="submit"
             className="bg-blue-500 hover:bg-blue-600 text-white">
-            Create
+            Buat
           </Button>
           <Button
             type="button"
             className="ml-2 bg-red-500 hover:bg-red-600 text-white"
             onClick={() => setIsCreating(false)}>
-            Cancel
+           Batal
           </Button>
         </div>
       </form>

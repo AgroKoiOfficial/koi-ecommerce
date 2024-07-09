@@ -9,7 +9,7 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
   const router = useRouter();
 
   useEffect(() => {
-    const midtransScriptUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    const midtransScriptUrl = 'https://app.midtrans.com/snap/snap.js';
     const myMidtransClientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
     
     let scriptTag = document.createElement('script');

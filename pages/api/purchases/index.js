@@ -1,7 +1,7 @@
 
 export default async function handler(req, res) {
     const apiKey = "5FLMzVasIGP4zi6At7GWJdK1iefJuAmMY7ZaLVMm";
-    const url = 'https://tripay.co.id/api/payment/instruction?code=BRIVA';
+    const url = 'https://tripay.co.id/api/merchant/payment-channel';
   
     try {
       const response = await fetch(url, {

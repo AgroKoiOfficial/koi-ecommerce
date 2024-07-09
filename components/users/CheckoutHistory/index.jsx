@@ -69,7 +69,7 @@ const CheckoutHistory = () => {
               </div>
               <div className="flex flex-col md:w-2/3 space-y-2">
                 <div>
-                  <p className="text-gray-700 font-semibold">Shipping Info:</p>
+                  <p className="text-gray-700 font-semibold">Informasi Alamat:</p>
                   <p className="text-gray-500">
                     {checkout.shipping
                       ? `${checkout.shipping.city}, ${checkout.shipping.region}, Fee: ${formatRupiah(checkout.shipping.fee)}`
@@ -77,7 +77,7 @@ const CheckoutHistory = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-700 font-semibold">Address:</p>
+                  <p className="text-gray-700 font-semibold">Alamat:</p>
                   <p className="text-gray-500">
                     {checkout.address
                       ? `${checkout.address.street}, ${checkout.address.city}, ${checkout.address.province}, ${checkout.address.postalCode}`
@@ -85,16 +85,16 @@ const CheckoutHistory = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-700 font-semibold">Items:</p>
+                  <p className="text-gray-700 font-semibold">Produk:</p>
                   <div className="flex flex-col space-y-2">
                     {checkout.cart.create.map((item) => (
                       <div key={item.id} className="flex flex-col space-y-2">
                         <p className="font-semibold">{item.product.name}</p>
                         <p className="text-gray-500">
-                          Quantity: {item.quantity}
+                          Kuantitas: {item.quantity}
                         </p>
                         <p className="text-gray-500">
-                          Price: {formatRupiah(item.product.price)}
+                          Harga: {formatRupiah(item.product.price)}
                         </p>
                       </div>
                     ))}
@@ -111,18 +111,18 @@ const CheckoutHistory = () => {
                 <p className="text-gray-700 font-semibold">Total Checkout:</p>
                 <p className="text-gray-900">{formatRupiah(checkout.total)}</p>
               </div>
-              <div className="flex flex-col items-center md:items-end space-y-2 mt-8">
+              {/* <div className="flex flex-col items-center md:items-end space-y-2 mt-8">
                 <Button
                   onClick={() => handleDeleteCheckout(checkout.id)}
                   className="bg-red-500 hover:bg-red-600 text-white">
                   Delete
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
         ))
       ) : (
-        <p className="text-center text-gray-500">No checkouts found.</p>
+        <p className="text-center text-gray-500">Tidak Ada Checkout.</p>
       )}
     </div>
   );

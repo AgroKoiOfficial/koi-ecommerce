@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import MenuLinks from "./MenuLinks";
 import { useNavbar } from "../../hooks/useNavbar";
 import Sidebar from "./Sidebar";
+import { useCart } from "../../hooks/useCart";
 
 const Navbar = () => {
   const router = useRouter();
@@ -15,12 +16,13 @@ const Navbar = () => {
     isSidebarOpen,
     isDropdownOpen,
     dropdownRef,
-    userCart,
     handleLogout,
     toggleSidebar,
     toggleDropdown,
   } = useNavbar();
 
+  const { cartData } = useCart();
+  const cartItemCount = cartData.reduce((total, item) => total + item.quantity, 0);
   return (
     <nav
       className={`fixed w-full z-10 bg-white shadow-md ${
@@ -55,9 +57,9 @@ const Navbar = () => {
                 className="relative text-gray-600 hover:text-gray-700"
                 aria-label="Cart">
                 <FiShoppingCart size={24} />
-                {userCart && userCart.length > 0 && (
+                {cartItemCount > 0 && (
                   <span className="absolute -top-3 -right-3 bg-red-500 text-white text-xs rounded-full px-2 py-1">
-                    {userCart.length}
+                    {cartItemCount}
                   </span>
                 )}
               </Link>

@@ -85,7 +85,7 @@ function Cart() {
                 />
               </div>
             </Link>
-            <div className="flex-1 md:ml-4">
+            <div className="flex-1  md:ml-4 mt-4">
               <p className="text-sm md:text-md lg:text-lg mb-2">
                 {item.product.name}
               </p>
