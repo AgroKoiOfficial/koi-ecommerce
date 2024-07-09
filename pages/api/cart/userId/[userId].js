@@ -1,6 +1,18 @@
 import { prisma } from "@/prisma/prisma";
 import { getToken } from "next-auth/jwt";
 
+const deleteExpiredCartItems = async (userId) => {
+  const now = new Date();
+  await prisma.cart.deleteMany({
+    where: {
+      userId,
+      expiresAt: {
+        lt: now,
+      },
+    },
+  });
+};
+
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).end();
@@ -14,6 +26,8 @@ export default async function handler(req, res) {
 
   try {
     const { userId } = req.query;
+    await deleteExpiredCartItems(userId); // Call to delete expired items
+
     const userWithCart = await prisma.user.findUnique({
       where: {
         id: userId,

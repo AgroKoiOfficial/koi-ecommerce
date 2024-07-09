@@ -45,6 +45,8 @@ export default async function handler(req, res) {
       where: { userId, productId },
     });
 
+    const expiresAt = new Date(Date.now() + 3 * 60 * 60 * 1000); 
+
     if (userCartItem) {
       const updatedCartItem = await prisma.cart.update({
         where: { id: userCartItem.id },
@@ -52,6 +54,7 @@ export default async function handler(req, res) {
           total: userCartItem.total + total,
           quantity: userCartItem.quantity + quantity,
           updatedAt: new Date(),
+          expiresAt: expiresAt,
         },
       });
       return res.status(200).json(updatedCartItem);
@@ -65,7 +68,7 @@ export default async function handler(req, res) {
         quantity,
         createdAt: new Date(),
         updatedAt: new Date(),
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        expiresAt: expiresAt, // Set expiration time
       },
     });
     res.status(200).json(cart);
