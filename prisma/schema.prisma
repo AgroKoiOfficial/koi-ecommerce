@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id         String  @id @default(cuid())
-  name       String
-  email      String  @unique
-  password   String
-  resetToken String?
+  id          String  @id @default(cuid())
+  name        String
+  email       String  @unique
+  password    String
+  resetToken  String?
   deleteToken String?
-  role       Role
+  role        Role
 
   cart      Cart[]
   address   Address[]
@@ -108,21 +108,22 @@ model Review {
 }
 
 model Checkout {
-  id         String        @id @default(cuid())
-  userId     String
-  user       User          @relation(fields: [userId], references: [id])
-  addressId  String
-  address    Address       @relation(fields: [addressId], references: [id])
-  shippingId String
-  shipping   Shipping?     @relation(fields: [shippingId], references: [id])
-  cart       Json
-  total      Int
-  quantity   Int
-  couponId   String?
-  coupon     Coupon?       @relation(fields: [couponId], references: [id])
-  payments   Payment[]
-  status     PaymentStatus
-  createdAt  DateTime      @default(now())
+  id                  String        @id @default(cuid())
+  userId              String
+  user                User          @relation(fields: [userId], references: [id])
+  addressId           String
+  address             Address       @relation(fields: [addressId], references: [id])
+  shippingId          String
+  shipping            Shipping?     @relation(fields: [shippingId], references: [id])
+  cart                Json
+  total               Int
+  quantity            Int
+  couponId            String?
+  coupon              Coupon?       @relation(fields: [couponId], references: [id])
+  adminWhatsAppNumber String?
+  payments            Payment[]
+  status              PaymentStatus
+  createdAt           DateTime      @default(now())
 
   @@map("checkouts")
 }
@@ -223,6 +224,7 @@ model About {
   content   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   @@map("abouts")
 }
 
@@ -250,14 +252,20 @@ model Contact {
 }
 
 model TermCondition {
-  id       String  @id   @default(cuid())
-  title    String
-  content  String  @db.Text
+  id        String   @id @default(cuid())
+  title     String
+  content   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("term_conditions")
 }
+
+model Webhook {
+  id         String   @id
+  receivedAt DateTime
+}
+
 
 enum Role {
   USER
