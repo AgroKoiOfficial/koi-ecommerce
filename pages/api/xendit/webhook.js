@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const xenditCallbackToken = req.headers['x-callback-token'];
   const webhookId = req.headers['webhook-id'];
 
-  if (!xenditCallbackToken || xenditCallbackToken !== process.env.XENDIT_CALLBACK_TOKEN) {
+  if (!xenditCallbackToken || xenditCallbackToken !== process.env.XENDIT_WEBHOOK_TOKEN) {
     return res.status(403).json({ message: "Invalid token" });
   }
 
