@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   const xCallbackToken = req.headers["x-callback-token"];
 
-  if (xCallbackToken !== process.env.XENDIT_CALLBACK_TOKEN) {
+  if (xCallbackToken !== process.env.XENDIT_WEBHOOK_TOKEN) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
