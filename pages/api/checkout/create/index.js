@@ -176,7 +176,8 @@ export default async function handler(req, res) {
       failureRedirectUrl: `${process.env.BASE_URL}/checkout/failure`,
       metadata: {
         store : "Koi Toko",
-      }
+      },
+      webhookUrl: `${process.env.BASE_URL}/api/xendit/webhook`,
     };
 
     // console.log("Request payload:", data);

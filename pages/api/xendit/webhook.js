@@ -5,49 +5,45 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const xenditCallbackToken = req.headers['x-callback-token'];
-  const webhookId = req.headers['webhook-id'];
+  const xCallbackToken = req.headers["x-callback-token"];
 
-  if (!xenditCallbackToken || xenditCallbackToken !== process.env.XENDIT_WEBHOOK_TOKEN) {
-    return res.status(403).json({ message: "Invalid token" });
+  if (xCallbackToken !== process.env.XENDIT_CALLBACK_TOKEN) {
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
-  if (!webhookId) {
-    return res.status(400).json({ message: "Webhook ID is required" });
-  }
+  const { external_id, status } = req.body;
 
-  const event = req.body;
+  console.log("Incoming webhook request:", req.body);
 
   try {
-
-    const existingWebhook = await prisma.webhook.findUnique({
-      where: { id: webhookId },
+    const checkout = await prisma.checkout.findUnique({
+      where: { id: external_id },
     });
 
-    if (existingWebhook) {
-      return res.status(200).json({ message: "Duplicate webhook, ignored" });
+    if (!checkout) {
+      console.error("Checkout not found for id:", external_id);
+      return res.status(404).json({ message: "Checkout not found" });
     }
 
-    await prisma.webhook.create({
-      data: { id: webhookId, receivedAt: new Date() },
-    });
+    let updatedStatus;
+    if (status === "settlement" || status === "capture") {
+      updatedStatus = "PAID";
+    } else if (status === "cancel" || status === "deny" || status === "expire") {
+      updatedStatus = "FAILED";
+    }
 
-    if (event && event.external_id && event.status) {
-      const { external_id, status } = event;
-
-      await prisma.checkout.update({
+    if (updatedStatus) {
+      const updatedCheckout = await prisma.checkout.update({
         where: { id: external_id },
-        data: { status: status.toUpperCase() },
+        data: { status: updatedStatus },
       });
 
-      console.log(`Checkout status updated: ${external_id} -> ${status}`);
-      return res.status(200).json({ message: "Success" });
-    } else {
-      console.error("Invalid event data:", event);
-      return res.status(400).json({ message: "Invalid event data" });
+      return res.status(200).json({ message: "Checkout status updated", checkout: updatedCheckout });
     }
+
+    return res.status(200).json({ message: "No action required" });
   } catch (error) {
-    console.error("Error handling webhook event:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error("Error updating checkout status:", error.message);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 }
