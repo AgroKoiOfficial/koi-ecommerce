@@ -13,19 +13,32 @@ export default async function handler(req, res) {
 
   const { external_id, status } = req.body;
 
+  console.log("Received external_id:", external_id);
+  console.log("Received status:", status);
+
   try {
+    const existingCheckout = await prisma.checkout.findUnique({
+      where: {
+        id: external_id,
+      },
+    });
+
+    if (!existingCheckout) {
+      return res.status(404).json({ message: "Checkout record not found" });
+    }
+
     const checkout = await prisma.checkout.update({
       where: {
         id: external_id,
       },
       data: {
-        status: status === "SETTLED"? "PAID" : "UNPAID",
+        status: status === "SETTLED" ? "PAID" : "UNPAID",
       },
     });
 
-    return res.status(200).json({checkout: checkout, message: "Payment status updated" });
+    return res.status(200).json({ checkout: checkout, message: "Payment status updated" });
   } catch (error) {
-
-    return res.status(500).json({error})
+    console.error("Error updating checkout:", error);
+    return res.status(500).json({ error });
   }
 }
