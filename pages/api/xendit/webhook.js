@@ -13,37 +13,19 @@ export default async function handler(req, res) {
 
   const { external_id, status } = req.body;
 
-  console.log("Incoming webhook request:", req.body);
-
   try {
-    const checkout = await prisma.checkout.findUnique({
-      where: { id: external_id },
+    const checkout = await prisma.checkout.update({
+      where: {
+        id: external_id,
+      },
+      data: {
+        status: status === "SETTLED"? "PAID" : "UNPAID",
+      },
     });
 
-    if (!checkout) {
-      console.error("Checkout not found for id:", external_id);
-      return res.status(404).json({ message: "Checkout not found" });
-    }
-
-    let updatedStatus;
-    if (status === "settlement" || status === "capture") {
-      updatedStatus = "PAID";
-    } else if (status === "cancel" || status === "deny" || status === "expire") {
-      updatedStatus = "FAILED";
-    }
-
-    if (updatedStatus) {
-      const updatedCheckout = await prisma.checkout.update({
-        where: { id: external_id },
-        data: { status: updatedStatus },
-      });
-
-      return res.status(200).json({ message: "Checkout status updated", checkout: updatedCheckout });
-    }
-
-    return res.status(200).json({ message: "No action required" });
+    return res.status(200).json({checkout: checkout, message: "Payment status updated" });
   } catch (error) {
-    console.error("Error updating checkout status:", error.message);
-    return res.status(500).json({ message: "Internal server error", error: error.message });
+
+    return res.status(500).json({error})
   }
 }
