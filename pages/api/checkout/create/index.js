@@ -180,7 +180,6 @@ export default async function handler(req, res) {
       webhookUrl: `${process.env.BASE_URL}/api/xendit/webhook`,
     };
 
-    // console.log("Request payload:", data);
     try {
       const response = await xenditInvoiceClient.createInvoice({ data });
       redirectPaymentUrl= response.invoiceUrl;

@@ -1,55 +1,77 @@
 import { prisma } from "@/prisma/prisma";
+import { sendPaymentConfirmationEmail } from "@/utils/sendPaymentConfirmation.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Metode tidak diizinkan" });
   }
 
-  const xCallbackToken = req.headers["x-callback-token"];
+  const xenditWebhookSecret = process.env.XENDIT_WEBHOOK_TOKEN;
+  const sig = req.headers['x-callback-token'];
 
-  if (xCallbackToken !== process.env.XENDIT_CALLBACK_TOKEN) {
+  if (sig !== xenditWebhookSecret) {
     return res.status(401).json({ message: "Tidak diizinkan" });
   }
 
-  const { external_id, amount, status } = req.body;
 
-  console.log("Incoming webhook request:", req.body);
+  /**
+   * The external_id, status, and paid_amount fields from the Xendit payment gateway.
+   *
+   * @type {string}
+   */
+  const { external_id, status, paid_amount } = req.body;
+
+
+  if (!external_id) {
+    console.error("external_id tidak ditemukan dalam request body.");
+    return res.status(400).json({ message: "external_id tidak ditemukan" });
+  }
 
   try {
-    if (!external_id) {
-      return res.status(400).json({ message: "Invalid payload: missing external_id" });
-    }
-
-    console.log("External ID received from webhook:", external_id);
-
-    const checkout = await prisma.checkout.findUnique({
+    const existingCheckout = await prisma.checkout.findUnique({
       where: { id: external_id },
     });
 
-    if (!checkout) {
-      console.error("Checkout not found for id:", external_id);
-      return res.status(404).json({ message: "Checkout not found" });
+    if (!existingCheckout) {
+      console.error("Checkout record tidak ditemukan untuk id:", external_id);
+      return res.status(404).json({ message: "Checkout record tidak ditemukan" });
     }
 
+    // Update the checkout status
     let updatedStatus;
-    if (status === "settlement" || status === "capture") {
-      updatedStatus = "PAID";
-    } else if (status === "cancel" || status === "deny" || status === "expire") {
-      updatedStatus = "FAILED";
+    switch (status) {
+      case "PAID":
+        updatedStatus = "PAID";
+        break;
+      case "EXPIRED":
+        updatedStatus = "EXPIRED";
+        break;
+      default:
+        updatedStatus = "UNPAID";
     }
 
-    if (updatedStatus) {
-      const updatedCheckout = await prisma.checkout.update({
-        where: { id: external_id },
-        data: { status: updatedStatus, amount: amount },
+    const updatedCheckout = await prisma.checkout.update({
+      where: { id: external_id },
+      data: {
+        status: updatedStatus,
+        total: paid_amount,
+      },
+    });
+
+    if (status === "PAID") {
+      const user = await prisma.user.findUnique({
+        where: { id: updatedCheckout.userId },
+        select: { email: true },
       });
 
-      return res.status(200).json({ message: "Checkout status updated", checkout: updatedCheckout });
+      if (user) {
+        await sendPaymentConfirmationEmail(user.email, updatedCheckout);
+      }
     }
 
-    return res.status(200).json({ message: "No action required" });
+    return res.status(200).json({ message: "Webhook diterima" });
   } catch (error) {
-    console.error("Error updating checkout status:", error.message);
-    return res.status(500).json({ message: "Internal server error", error: error.message });
+    console.error("Kesalahan saat memperbarui status pembayaran:", error.message);
+    return res.status(500).json({ message: "Gagal memperbarui status pembayaran", error: error.message });
   }
 }
