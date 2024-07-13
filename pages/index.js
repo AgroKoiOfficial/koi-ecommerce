@@ -3,6 +3,7 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import Carousel from "@/components/Carousel";
 import LastestProducts from "@/components/product/LastestProducts";
+import { CTA } from "@/components/CTA";
 
 const GoogleAnalytics = dynamic(
   () => import("@next/third-parties/google").then((mod) => mod.GoogleAnalytics),
@@ -77,6 +78,7 @@ export default function Home({ carousels }) {
             <Skeleton />
           )}
         </div>
+        <CTA />
       </main>
       <GoogleAnalytics gaId="G-BKXLWYCWM3" />
     </>

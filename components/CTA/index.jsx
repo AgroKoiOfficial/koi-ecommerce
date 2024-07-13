@@ -3,16 +3,21 @@ import { FaWhatsapp } from "react-icons/fa";
 
 export const CTA = () => {
   const [showCTA, setShowCTA] = useState(false);
-  const [data, setData] = useState(null);
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("/api/cta/getByDevice");
         const result = await response.json();
-        console.log("CTA data:", result);
-        setData(result);
-        setShowCTA(result.active);
+        if (result.active) {
+          setName(result.name);
+          setPhoneNumber(result.phoneNumber);
+          setMessage(result.message);
+          setShowCTA(true);
+        }
       } catch (error) {
         console.error("Error fetching CTA data:", error);
       }
@@ -21,27 +26,35 @@ export const CTA = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const navbarHeight = 64;
+      const showScrollThreshold = navbarHeight + 100;
+
+      if (scrollY > showScrollThreshold) {
+        setShowCTA(true);
+      } else {
+        setShowCTA(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="fixed bottom-0 right-0 m-4">
+    <div className={`fixed bottom-4 right-4 z-50 transition-opacity duration-300 ${showCTA ? 'opacity-100' : 'opacity-0'}`}>
       {showCTA && (
-        <div className="bg-white p-4 rounded-lg shadow-lg">
-          <div className="flex items-center">
-            <FaWhatsapp className="cta-icon w-8 h-8 text-green-500 mr-2" />
-            <span className="text-gray-800">
-              Halo {data?.name}, apakah ada yang bisa dibantu?
-            </span>
-          </div>
-          {data?.message && (
-          
-          <a
-            href={`https://wa.me/+${data?.phoneNumber}?text=${data?.message}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mt-2 rounded-md text-center">
-            Hubungi
-          </a>
-          )}
-        </div>
+        <a
+          href={`https://wa.me/${phoneNumber}?text=Hallo admin, ${name}? ${message}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 lg:py-4 px-2 lg:px-4 rounded-full shadow-lg flex items-center"
+          style={{ width: "fit-content" }}
+        >
+          <FaWhatsapp className="cta-icon w-8 lg:w-8 h-8 lg:h-8" />
+        </a>
       )}
     </div>
   );
