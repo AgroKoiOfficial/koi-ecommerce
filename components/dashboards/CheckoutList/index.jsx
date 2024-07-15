@@ -110,7 +110,7 @@ const CheckoutList = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredCheckouts.map((checkout, index) => (
+            {filteredCheckouts.slice(indexOfFirstItem, indexOfLastItem).map((checkout, index) => (
               <tr key={checkout.id}>
                 <td className="px-4 py-2">{indexOfFirstItem + index + 1}</td>
                 <td className="px-4 py-2">{checkout.total}</td>
@@ -162,7 +162,7 @@ const CheckoutList = () => {
                 Prev
               </button>
             </li>
-            {Array.from({ length: Math.min(totalPages, 10) }, (_, index) => (
+            {Array.from({ length: totalPages }, (_, index) => (
               <li key={index}>
                 <button
                   onClick={() => paginate(index + 1)}
@@ -176,11 +176,6 @@ const CheckoutList = () => {
                 </button>
               </li>
             ))}
-            {totalPages > 10 && (
-              <li>
-                <span className="px-4 py-2 mx-1">...</span>
-              </li>
-            )}
             <li>
               <button
                 onClick={() => paginate(currentPage + 1)}
