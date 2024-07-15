@@ -52,8 +52,9 @@ export const CTA = () => {
           rel="noopener noreferrer"
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 lg:py-4 px-2 lg:px-4 rounded-full shadow-lg flex items-center"
           style={{ width: "fit-content" }}
+          aria-label={`Hubungi kami melalui WhatsApp ${name}`}
         >
-          <FaWhatsapp className="cta-icon w-8 lg:w-8 h-8 lg:h-8" />
+          <FaWhatsapp className="cta-icon w-8 lg:w-8 h-8 lg:h-8" alt="WhatsApp Icon" />
         </a>
       )}
     </div>

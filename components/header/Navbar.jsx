@@ -106,7 +106,7 @@ const Navbar = () => {
           <div className="-mr-2 flex md:hidden">
             <button
               onClick={toggleSidebar}
-              className="bg-white text-gray-900 inline-flex items-center justify-center p-2 rounded-md focus:outline-none"
+              className=" text-gray-900 inline-flex items-center justify-center p-2 rounded-md focus:outline-none"
               aria-haspopup="true"
               aria-expanded={isSidebarOpen}
               aria-label="Menu">
