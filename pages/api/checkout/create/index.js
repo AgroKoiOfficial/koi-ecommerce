@@ -172,7 +172,7 @@ export default async function handler(req, res) {
         invoiceReminder : ['email', 'whatsapp'],
         invoicePaid : ['email', 'whatsapp'],
       },
-      successRedirectUrl: `${process.env.BASE_URL}/`,
+      successRedirectUrl: `${process.env.BASE_URL}/user/checkout-history`,
       failureRedirectUrl: `${process.env.BASE_URL}/checkout/`,
       metadata: {
         store : "Koi Toko",

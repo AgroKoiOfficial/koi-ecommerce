@@ -90,10 +90,6 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
             ? userCartData[0].product.name
             : "Produk Tidak Diketahui";
 
-            const productImage = userCartData.length > 0
-            ? userCartData[0].product.image
-            : "https://via.placeholder.com/150";
-
         const senderAddress = `Jalan: ${address?.street}, Kota: ${address?.city}, Provinsi: ${address?.province}, Kode Pos: ${address?.postalCode}`;
 
         const whatsappMessage =
@@ -102,7 +98,6 @@ const useCheckout = (cart, address, shippingId, selectedCoupon, setCart) => {
           `Total: ${formatRupiah(checkout.total)}\n\n` +
           `*Produk*\n` +
           `${productName}\n\n` +
-          `*Gambar* {{${productImage}}}\n` +
           `*Alamat Penerima*\n` +
           `${senderAddress}\n\n` +
           `*Total*\n` +
