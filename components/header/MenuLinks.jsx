@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import styles from "./Navbar.module.scss";
 
-const MenuLinks = ({ className, itemClassName,  toggleSidebar }) => {
+const MenuLinks = ({ className, itemClassName, toggleSidebar }) => {
   const router = useRouter();
 
   const handleLinkClick = () => {
@@ -10,10 +11,10 @@ const MenuLinks = ({ className, itemClassName,  toggleSidebar }) => {
   };
 
   return (
-    <div className={`flex flex-col justify-center mt-8 lg:mt-0 space-y-12 lg:space-y-0 items-center md:flex-row ${className}`}>
+    <div className={`${styles.menuLinks} ${className}`}>
       <Link href="/" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
+          className={`${styles.menuLink} ${itemClassName} ${
             router.pathname === "/" ? "text-red-500 font-bold" : ""
           }`}>
           Beranda
@@ -21,7 +22,7 @@ const MenuLinks = ({ className, itemClassName,  toggleSidebar }) => {
       </Link>
       <Link href="/products" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
+          className={`${styles.menuLink} ${itemClassName} ${
             router.pathname === "/products" ? "text-red-500 font-bold" : ""
           }`}>
           Produk
@@ -29,7 +30,7 @@ const MenuLinks = ({ className, itemClassName,  toggleSidebar }) => {
       </Link>
       <Link href="/categories" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
+          className={`${styles.menuLink} ${itemClassName} ${
             router.pathname === "/categories" ? "text-red-500 font-bold" : ""
           }`}>
           Kategori
@@ -37,7 +38,7 @@ const MenuLinks = ({ className, itemClassName,  toggleSidebar }) => {
       </Link>
       <Link href="/abouts" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
+          className={`${styles.menuLink} ${itemClassName} ${
             router.pathname === "/abouts" ? "text-red-500 font-bold" : ""
           }`}>
           Tentang Kami
@@ -45,7 +46,7 @@ const MenuLinks = ({ className, itemClassName,  toggleSidebar }) => {
       </Link>
       <Link href="/faqs" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
+          className={`${styles.menuLink} ${itemClassName} ${
             router.pathname === "/faqs" ? "text-red-500 font-bold" : ""
           }`}>
           FAQs

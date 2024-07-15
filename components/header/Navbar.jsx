@@ -7,6 +7,7 @@ import MenuLinks from "./MenuLinks";
 import { useNavbar } from "../../hooks/useNavbar";
 import Sidebar from "./Sidebar";
 import { useCart } from "../../hooks/useCart";
+import styles from './Navbar.module.scss';
 
 const Navbar = () => {
   const router = useRouter();
@@ -23,11 +24,13 @@ const Navbar = () => {
 
   const { cartData } = useCart();
   const cartItemCount = cartData.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <nav
-      className={`fixed w-full z-10 bg-white shadow-md ${
-        isNavbar ? "border-b" : ""
-      }`} role="navigation" aria-label="Main Navigation">
+      className={`fixed w-full z-20 backdrop-blur-2xl border-b ${
+        isNavbar ? styles.navbarScroll : styles.navbar
+      }`} 
+      role="navigation" aria-label="Main Navigation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <div className="flex items-center">
@@ -45,7 +48,7 @@ const Navbar = () => {
           <div className="flex items-center justify-center mx-auto">
             <div className="hidden md:block">
               <MenuLinks
-                className="ml-10 flex items-baseline space-x-4"
+                className={`ml-10 flex items-baseline space-x-4 ${isNavbar ? "navbar-text" : ""}`}
                 itemClassName="p-2"
               />
             </div>
