@@ -3,8 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatRupiah } from "@/utils/currency";
 
+const Skeleton = () => (
+  <div className="bg-gray-200 p-4 rounded-lg shadow-lg animate-pulse">
+    <div className="w-full h-64 lg:h-72 bg-gray-300 rounded"></div>
+    <div className="p-4 flex flex-col items-center">
+      <div className="mb-2 h-4 bg-gray-300 rounded"></div>
+      <div className="h-6 bg-gray-300 rounded"></div>
+    </div>
+  </div>
+);
+
 const LatestProducts = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -14,6 +25,8 @@ const LatestProducts = () => {
         setProducts(data.latestProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -22,9 +35,17 @@ const LatestProducts = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {products.map((product, index) => (
-        <Link href={`/products/${product.slug}`} key={product.id} passHref>
-          <div key={product.id} className="bg-white rounded-lg shadow-lg p-4">
+      {loading ? (
+        // Render skeleton loading when data is still loading
+        Array.from({ length: 8 }).map((_, index) => (
+          <div key={index}>
+            <Skeleton />
+          </div>
+        ))
+      ) : (
+        products.map((product, index) => (
+          <Link href={`/products/${product.slug}`} key={product.id} passHref>
+            <div className="bg-white rounded-lg shadow-lg p-4">
             <div className="w-full h-64 lg:h-72 relative">
               <Image
                 src={product.image}
@@ -37,15 +58,16 @@ const LatestProducts = () => {
                 className="w-full h-full"
               />
             </div>
-            <div className="p-4 flex flex-col items-center">
-              <h3 className="text-md lg:text-lg font-bold">{product.name}</h3>
-              <p className="text-gray-700 text-md">
-                {formatRupiah(product.price)}
-              </p>
+              <div className="p-4 flex flex-col items-center">
+                <h3 className="text-md lg:text-lg font-bold">{product.name}</h3>
+                <p className="text-gray-700 text-md">
+                  {formatRupiah(product.price)}
+                </p>
+              </div>
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))
+      )}
     </div>
   );
 };
