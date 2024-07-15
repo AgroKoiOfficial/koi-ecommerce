@@ -1,30 +1,32 @@
-import React, { useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
-import { getSession } from "next-auth/react";
-import { formatRupiah } from "@/utils/currency";
-import { Button } from "@/components/ui/Button";
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/react';
+import { formatRupiah } from '@/utils/currency';
+import { Button } from '@/components/ui/Button';
+import { useCartStore } from '@/stores/cartStore';
 
 const ProductInfo = ({ product }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const addToCart = useCartStore((state) => state.addToCart);
 
   const handleAddToCart = async () => {
     setLoading(true);
     const session = await getSession();
     if (!session) {
-      toast.error("Kamu harus login terlebih dahulu");
+      toast.error('Kamu harus login terlebih dahulu');
       setLoading(false);
-      return router.push("/login");
+      return router.push('/login');
     }
 
     try {
       const { user } = session;
-      const response = await fetch("/api/cart/create", {
-        method: "POST",
+      const response = await fetch('/api/cart/create', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           userId: user.id,
@@ -35,14 +37,15 @@ const ProductInfo = ({ product }) => {
       });
 
       if (response.ok) {
-        toast.success("Produk ditambahkan ke keranjang");
-        router.push("/cart");
+        addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1 });
+        toast.success('Produk ditambahkan ke keranjang');
+        router.push('/cart');
       } else {
         const errorData = await response.json();
-        toast.error("Gagal menambahkan produk ke keranjang, stok tidak cukup");
+        toast.error('Gagal menambahkan produk ke keranjang, stok tidak cukup');
       }
     } catch (error) {
-      toast.error("Gagal menambahkan produk ke keranjang, stok tidak cukup.");
+      toast.error('Gagal menambahkan produk ke keranjang, stok tidak cukup.');
     } finally {
       setLoading(false);
     }
@@ -73,7 +76,7 @@ const ProductInfo = ({ product }) => {
             onClick={handleAddToCart}
             disabled={loading}
           >
-            {loading ? "Menambahkan..." : "Tambah keranjang"}
+            {loading ? 'Menambahkan...' : 'Tambah keranjang'}
           </Button>
         </div>
       ) : (
