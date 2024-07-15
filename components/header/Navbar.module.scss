@@ -1,12 +1,12 @@
 $backdrop-filter: blur(20px);
 
 .navbar {
-  position: relative; 
+  position: relative;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: $backdrop-filter;
   -webkit-backdrop-filter: $backdrop-filter;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -21,7 +21,7 @@ $backdrop-filter: blur(20px);
   -webkit-backdrop-filter: $backdrop-filter;
   background: rgba(255, 255, 255, 0.3);
   opacity: 0.7;
-  z-index: 0;
+  z-index: -1;
 }
 
 .navbar-scroll {
@@ -44,47 +44,6 @@ $backdrop-filter: blur(20px);
   -webkit-backdrop-filter: $backdrop-filter;
   background: rgba(255, 255, 255, 0.3);
   opacity: 0.7;
-  z-index: 0; 
+  z-index: -1; 
 }
 
-.menu-links {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 8px; 
-  margin-bottom: 0;
-  align-items: center;
-
-  @media (min-width: 768px) {
-    flex-direction: row; 
-    justify-content: flex-start;
-  }
-
-  .menu-link {
-    position: relative;
-    color: rgba(255, 255, 255, 0);
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: rgba(255, 255, 255, 1); 
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      backdrop-filter: $backdrop-filter;
-      background-color: rgba(255, 255, 255, 0.4); 
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    &:hover::before,
-    &.active::before {
-      opacity: 1;
-    }
-  }
-}
