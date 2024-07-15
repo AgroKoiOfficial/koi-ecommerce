@@ -27,7 +27,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full z-20 backdrop-blur-2xl border-b ${
+      className={`fixed w-full z-10 backdrop-blur-2xl border-b ${
         isNavbar ? styles.navbarScroll : styles.navbar
       }`} 
       role="navigation" aria-label="Main Navigation">
