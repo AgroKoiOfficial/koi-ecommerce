@@ -15,7 +15,6 @@ export default async function handler(req, res) {
   const userId = session.user.id;
 
   try {
-    console.log("Fetching checkouts for user:", userId);
 
     const userCheckouts = await prisma.checkout.findMany({
       where: {
@@ -30,8 +29,6 @@ export default async function handler(req, res) {
         payments: true,
       }
     });
-
-    // console.log("User checkouts found:", userCheckouts);
 
     const checkoutsWithRelations = userCheckouts.map(checkout => ({
       ...checkout,
@@ -57,11 +54,9 @@ export default async function handler(req, res) {
         : null
     }));
 
-    console.log("Checkouts with relations:", checkoutsWithRelations);
-
     return res.status(200).json({ checkouts: checkoutsWithRelations });
   } catch (error) {
-    console.error("Error getting user checkouts:", error);
+
     return res.status(500).json({ message: "Failed to get user checkouts" });
   }
 }

@@ -16,7 +16,8 @@ const AdminCarousel = () => {
           throw new Error("Failed to fetch carousels");
         }
         const data = await response.json();
-        setCarousels(data);
+        const validCarousels = data.filter(carousel => carousel.image);
+        setCarousels(validCarousels);
       } catch (error) {
         console.error("Error fetching carousels:", error);
       }
@@ -41,7 +42,9 @@ const AdminCarousel = () => {
       }
 
       const newCarousel = await response.json();
-      setCarousels([...carousels, newCarousel]);
+      if (newCarousel.image) {
+        setCarousels([...carousels, newCarousel]);
+      }
       setTitleInput("");
     } catch (error) {
       console.error("Error adding carousel:", error);

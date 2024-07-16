@@ -111,7 +111,7 @@ const Checkout = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 grid gap-4 grid-cols-1 md:grid-cols-2 pt-20">
+    <div className="container mx-auto p-4 grid gap-4 grid-cols-1 md:grid-cols-2 pt-8">
       <div className="md:col-span-1 mt-4">
         <div className="mb-4">
           <h2 className="text-xl font-semibold mb-4">Pulau</h2>
@@ -244,7 +244,7 @@ const Checkout = () => {
               />
               <div>
                 <h3 className="font-semibold">{item.product.name}</h3>
-                <p className="text-gray-600">{item.quantity} x {formatRupiah(item.product.price)}</p>
+                <p className="font-light">{item.quantity} x {formatRupiah(item.product.price)}</p>
               </div>
             </div>
             <p className="font-semibold">

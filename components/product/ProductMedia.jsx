@@ -1,11 +1,14 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { MdPlayArrow, MdPause, MdReplay } from "react-icons/md";
+import { useTheme } from "next-themes";
 
 const ProductMedia = ({ product }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+
+  const { theme } = useTheme();
 
   const handlePlayPause = () => {
     if (videoRef.current.paused || videoRef.current.ended) {
@@ -40,7 +43,7 @@ const ProductMedia = ({ product }) => {
       )}
       {product.video && (
         <div className="relative mt-8 lg:mt-12 rounded-lg overflow-hidden">
-          <h2 className="text-xl md:text-xl font-bold mb-2 text-center text-gray-800">Video</h2>
+          <h2 className={`text-xl ${theme === "dark" ? "text-gray-300" : "text-gray-800"} md:text-xl font-bold mb-2 text-center`}>Video</h2>
           <div className="relative">
             <div className="absolute inset-0 bg-black opacity-25"></div>
           </div>

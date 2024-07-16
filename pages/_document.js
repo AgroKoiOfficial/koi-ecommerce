@@ -30,11 +30,11 @@ export default function Document() {
           content="Kami menjual Ikan Koi Berkualitas"
         />
         <meta name="twitter:image" content="/logo.png" />
-        <meta httpEquiv="Content-Security-Policy" content={csp} />
+        {/* <meta httpEquiv="Content-Security-Policy" content={csp} /> */}
       </Head>
       <body>
         <Main />
-        <NextScript nonce={nonce}></NextScript>
+        <NextScript></NextScript>
       </body>
     </Html>
   );

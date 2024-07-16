@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { useCart } from "../../hooks/useCart";
 import Link from "next/link";
 import { useSession } from 'next-auth/react';
+import { useTheme } from 'next-themes';
 
 function Cart() {
   const router = useRouter();
@@ -19,6 +20,8 @@ function Cart() {
     calculateTotalQuantity,
     calculateTotalPrice,
   } = useCart();
+
+  const { theme } = useTheme();
 
   const handleCheckout = async () => {
     if (session) {
@@ -65,15 +68,15 @@ function Cart() {
         <meta name="theme-color" content="#ffffff" />
         <meta name="description" content="cart" />
       </Head>
-      <main className="pt-20 lg:pt-24 overflow-y-auto mx-auto mb-56 scrollbar-hide">
+      <main className={`pt-8 overflow-y-auto mx-auto scrollbar-hide ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}>
         {cartData.map((item) => (
           <div
             key={item.id}
-            className="flex flex-col md:flex-row items-center mt-8 mb-4 mx-4 relative bg-white rounded-lg shadow-md p-4">
+            className={`flex flex-col md:flex-row items-center mt-8 mb-4 mx-4 relative ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"} rounded-lg shadow-md p-4`}>
             <Link
               href={`/products/${item.product.slug}`}
               key={item.id}
-              className=" inset-0">
+              className="inset-0">
               <div className="flex justify-center md:justify-start items-center md:mr-4">
                 <Image
                   src={item.product.image}
@@ -95,7 +98,7 @@ function Cart() {
               <div className="flex items-center mt-2 md:mt-4 w-8 ">
                 <Button
                   onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-                  className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 mr-2">
+                  className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 mr-2">
                   <FaMinus className="text-gray-600" />
                 </Button>
                 <p className="px-4 py-1 bg-gray-100 text-gray-800">
@@ -103,7 +106,7 @@ function Cart() {
                 </p>
                 <Button
                   onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-                  className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 ml-2">
+                  className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 ml-2">
                   <FaPlus className="text-gray-600" />
                 </Button>
               </div>
@@ -114,7 +117,7 @@ function Cart() {
               )}
             </div>
             <div className="ml-auto mt-4 md:mt-0">
-              <Button onClick={() => handleDeleteItem(item.id)}>
+              <Button onClick={() => handleDeleteItem(item.id)} className='bg-transparent'>
                 <FaTrash className="text-red-600 hover:text-red-800 w-6 h-6" />
               </Button>
             </div>
@@ -135,13 +138,13 @@ function Cart() {
           </div>
         )}
         {cartData.length === 0 && (
-          <div className="mt-8 mx-4 border-t border-gray-200 pt-4">
-            <p className="text-center mt-16 text-gray-900 text-3xl font-bold">
+          <div className="min-h-screen mt-8 mx-4 border-t border-gray-200 pt-4">
+            <p className="text-center mt-16 text-3xl font-bold">
               Keranjang Anda Kosong
             </p>
             <div className="flex justify-center w-48 items-center mx-auto">
               <Button
-                className="mx-auto mt-8 bg-gradient-to-r from-red-700 to-red-500 text-white"
+                className="w-full mx-auto mt-8 bg-gradient-to-r from-red-700 to-red-500 text-white"
                 onClick={() => router.push("/products")}>
                 Lanjut Belanja
               </Button>
@@ -150,7 +153,7 @@ function Cart() {
         )}
         {cartData.length > 0 && (
           <div className="flex items-center justify-center mx-auto mt-8 p-4 md:px-16 lg:px-96">
-            <Button onClick={handleCheckout} className="bg-blue-500 text-white hover:bg-blue-600">
+            <Button onClick={handleCheckout} className="w-full bg-blue-500 text-white hover:bg-blue-600">
               Checkout
             </Button>
           </div>

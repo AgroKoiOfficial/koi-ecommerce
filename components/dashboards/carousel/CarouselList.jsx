@@ -15,7 +15,7 @@ const CarouselList = ({ carousels, onDeleteCarousel }) => {
         <p className="text-red-500">Carousel not found.</p>
       ) : (
         carousels.map((carousel) => {
-          if (!carousel.image || !carousel.title) {
+          if (!carousel.image) {
             console.error("Invalid carousel data", carousel);
             return null;
           }
@@ -23,15 +23,15 @@ const CarouselList = ({ carousels, onDeleteCarousel }) => {
             <div key={carousel.id} className="p-4 border rounded shadow-md">
               <Image
                 src={carousel.image}
-                alt={carousel.title}
+                alt={carousel.title || "No Title"}
                 priority={true}
-                width={100}
-                height={100}
+                width={1920}
+                height={1080}
                 style={{ width: "50%", height: "100%", margin: "0 auto" }}
               />
               <div className="flex justify-between items-center">
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold">{carousel.title}</h3>
+                  <h3 className="text-lg font-bold">{carousel.title || "Untitled"}</h3>
                 </div>
                 <div className="flex space-x-2">
                   <Button

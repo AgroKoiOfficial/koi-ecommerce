@@ -4,6 +4,7 @@ import Head from "next/head";
 import ProductCard from "../../components/product/ProductCard";
 import { CTA } from "@/components/CTA";
 import dynamic from "next/dynamic";
+import { useTheme } from 'next-themes';
 
 const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
 
@@ -13,6 +14,9 @@ export default function Products({ products, totalProducts }) {
   const [allProducts, setAllProducts] = useState(products);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     setIsLoadingData(false);
@@ -38,7 +42,7 @@ export default function Products({ products, totalProducts }) {
     setLoading(true);
     const nextPage = page + 1;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}?page=${nextPage}`
+      `${process.env.NEXT_PUBLIC_API_URL}?page=${nextPage}&search=${searchTerm}`
     );
 
     if (response.ok) {
@@ -49,11 +53,42 @@ export default function Products({ products, totalProducts }) {
         setHasMore(false);
       }
     } else {
-      console.error("Failed to load more products");
       setHasMore(false); 
     }
     
     setLoading(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const { value } = e.target;
+    setSearchTerm(value);
+
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+
+    setSearchTimeout(setTimeout(() => {
+      if (value.trim() === '') {
+        setSearchTerm('');
+        // Reset products to initial state
+        setAllProducts(products);
+        setHasMore(true);
+        setPage(1);
+      } else {
+        // Perform search
+        performSearch(value);
+      }
+    }, 500));
+  };
+
+  const performSearch = async (term) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}?search=${term}&page=1`);
+
+    if (response.ok) {
+      const searchData = await response.json();
+      setAllProducts(searchData);
+      setHasMore(false);
+    }
   };
 
   return (
@@ -66,10 +101,19 @@ export default function Products({ products, totalProducts }) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="pt-16 lg:pt-20 mb-16 lg:mb-20">
-        <h1 className="text-3xl lg:text-4xl font-bold mb-8 text-center my-4">
+      <main className="pt-8 mb-16 lg:mb-20">
+        <h1 className={`text-3xl lg:text-4xl font-bold mb-8 text-center my-4 ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>
           Produk
         </h1>
+        <div className="flex justify-center mb-4">
+          <input
+            type="text"
+            placeholder="Cari produk..."
+            className="px-4 py-2 w-1/2 md:w-1/3 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           {allProducts.map((product, index) => (
             <Link href={`/products/${product.slug}`} key={index}>

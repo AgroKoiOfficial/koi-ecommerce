@@ -3,18 +3,19 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/Button";
 
-
 const AddCarouselForm = ({ onAddCarousel }) => {
   const [selectedColor, setSelectedColor] = useState("#000000");
   const [titleInput, setTitleInput] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
+    setErrorMessage("");
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-       console.log(reader.result);
+        console.log(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -29,18 +30,22 @@ const AddCarouselForm = ({ onAddCarousel }) => {
   };
 
   const handleAddClick = () => {
-    const formData = new FormData();
-    if (fileInputRef.current.files[0]) {
-      formData.append("image", fileInputRef.current.files[0]);
+    if (!fileInputRef.current.files[0]) {
+      setErrorMessage("Image is required.");
+      return;
     }
+    
+    const formData = new FormData();
+    formData.append("image", fileInputRef.current.files[0]);
     if (titleInput) {
       formData.append("title", titleInput);
     }
-    if (selectedColor) {
-      formData.append("color", selectedColor);
-    }
+    formData.append("color", selectedColor);
+
     onAddCarousel(formData);
     setTitleInput("");
+    setErrorMessage("");
+    fileInputRef.current.value = null;
   };
 
   return (
@@ -48,7 +53,7 @@ const AddCarouselForm = ({ onAddCarousel }) => {
       <h3 className="text-lg font-bold mb-2">Add Carousel</h3>
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col">
-        <Label htmlFor="imageFile">Image</Label>
+          <Label htmlFor="imageFile">Image</Label>
           <Input
             id="imageFile"
             type="file"
@@ -56,6 +61,7 @@ const AddCarouselForm = ({ onAddCarousel }) => {
             accept="image/*"
             onChange={handleFileChange}
           />
+          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         </div>
         <div className="flex flex-col">
           <Label htmlFor="title">Title</Label>
@@ -72,7 +78,7 @@ const AddCarouselForm = ({ onAddCarousel }) => {
             id="colorPicker"
             type="color"
             value={selectedColor}
-            className="w-[64px] rounded-md "
+            className="w-[64px] rounded-md"
             onChange={handleColorChange}
           />
         </div>

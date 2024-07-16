@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 
 const CheckoutHistory = () => {
   const [checkouts, setCheckouts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     getSession().then((session) => {
@@ -43,13 +45,28 @@ const CheckoutHistory = () => {
     return <div>Loading...</div>;
   }
 
+  // Menghitung indeks awal dan akhir untuk data yang ditampilkan
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentCheckouts = checkouts.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Fungsi untuk mengubah halaman
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Array untuk menyimpan nomor halaman
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(checkouts.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className="flex flex-col p-4 space-y-4">
-      {checkouts.length > 0 ? (
-        checkouts.map((checkout) => (
+      {currentCheckouts.length > 0 ? (
+        currentCheckouts.map((checkout) => (
           <div
             key={checkout.id}
-            className="flex flex-col md:flex-row justify-between border-b-2 border-gray-300 p-4 rounded-lg shadow-md bg-white space-y-4 md:space-y-0 md:space-x-4">
+            className="flex flex-col md:flex-row justify-between border-b-2 border-gray-300 p-4 rounded-lg shadow-md bg-white space-y-4 md:space-y-0 md:space-x-4"
+          >
             <div className="flex flex-col md:flex-row md:w-2/3 space-y-2 md:space-y-0 md:space-x-4">
               <div className="w-full md:w-1/3 flex-shrink-0">
                 <Image
@@ -114,7 +131,8 @@ const CheckoutHistory = () => {
               {/* <div className="flex flex-col items-center md:items-end space-y-2 mt-8">
                 <Button
                   onClick={() => handleDeleteCheckout(checkout.id)}
-                  className="bg-red-500 hover:bg-red-600 text-white">
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                >
                   Delete
                 </Button>
               </div> */}
@@ -124,6 +142,24 @@ const CheckoutHistory = () => {
       ) : (
         <p className="text-center text-gray-500">Tidak Ada Checkout.</p>
       )}
+
+      {/* Pagination */}
+      <div className="mt-4 flex justify-center">
+        <ul className="flex space-x-2">
+          {pageNumbers.map((number) => (
+            <li key={number}>
+              <button
+                onClick={() => paginate(number)}
+                className={`px-4 py-2 ${
+                  number === currentPage ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"
+                } rounded-md`}
+              >
+                {number}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

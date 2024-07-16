@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTheme } from 'next-themes';
 import { formatRupiah } from "@/utils/currency";
 
 export async function getServerSideProps() {
@@ -36,6 +37,7 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (displayedCategories.length > 0) {
@@ -67,30 +69,27 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
         />
       </Head>
 
-      <main className="container min-h-screen mx-auto py-8 pt-20">
-        <h1 className="text-3xl text-center font-bold mt-8 mb-4">Categories</h1>
-
+      <main className="container min-h-screen mx-auto py-8 pt-8">
         <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-8 gap-4">
           {displayedCategories.length > 0 ? (
             displayedCategories.map((category) => (
               <div
                 key={category}
-                className={`bg-white p-2 rounded-md shadow-md cursor-pointer ${
-                  selectedCategory === category ? "border-2 border-red-500" : ""
-                }`}
-                onClick={() => handleCategorySelect(category)}>
+                className={` p-2 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
+                onClick={() => handleCategorySelect(category)}
+              >
                 <h2 className="text-sm lg:text-lg text-center font-semibold">
                   {category}
                 </h2>
               </div>
             ))
           ) : (
-            <p>No categories found.</p>
+            <p className={`text-center ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>No categories found.</p>
           )}
         </div>
         {selectedCategory && (
           <div className="mt-8">
-            <h2 className="text-2xl text-center font-bold mb-4">
+            <h2 className={`text-2xl text-center font-bold mb-4 lg:mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>
               Produk {selectedCategory}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -98,7 +97,8 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
                 <Link href={`/products/${product.slug}`} key={product.id}>
                   <div
                     key={product.id}
-                    className="bg-white p-4 rounded-md shadow-md">
+                    className={` p-4 rounded-md shadow-md ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}
+                  >
                     <Image
                       src={product.image}
                       alt={product.name}

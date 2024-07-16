@@ -1,9 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTheme } from "next-themes";
 
-const MenuLinks = ({ className, itemClassName,  toggleSidebar }) => {
+const MenuLinks = ({ className, itemClassName, toggleSidebar }) => {
   const router = useRouter();
+  const { theme } = useTheme();
+
+  const textStyles = theme === 'dark' ? 'text-white hover:text-gray-400' : 'text-gray-800 hover:text-red-500';
 
   const handleLinkClick = () => {
     if (toggleSidebar) toggleSidebar();
@@ -13,40 +17,40 @@ const MenuLinks = ({ className, itemClassName,  toggleSidebar }) => {
     <div className={`flex flex-col justify-center mt-8 lg:mt-0 space-y-12 lg:space-y-0 items-center md:flex-row ${className}`}>
       <Link href="/" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
-            router.pathname === "/" ? "text-red-500 font-bold" : ""
+          className={`${textStyles} ${itemClassName} ${
+            router.pathname === "/" ? "font-bold" : ""
           }`}>
           Beranda
         </span>
       </Link>
       <Link href="/products" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
-            router.pathname === "/products" ? "text-red-500 font-bold" : ""
+          className={`${textStyles} ${itemClassName} ${
+            router.pathname === "/products" ? "font-bold" : ""
           }`}>
           Produk
         </span>
       </Link>
       <Link href="/categories" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
-            router.pathname === "/categories" ? "text-red-500 font-bold" : ""
+          className={`${textStyles} ${itemClassName} ${
+            router.pathname === "/categories" ? "font-bold" : ""
           }`}>
           Kategori
         </span>
       </Link>
       <Link href="/abouts" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
-            router.pathname === "/abouts" ? "text-red-500 font-bold" : ""
+          className={`${textStyles} ${itemClassName} ${
+            router.pathname === "/abouts" ? "font-bold" : ""
           }`}>
           Tentang Kami
         </span>
       </Link>
       <Link href="/faqs" passHref onClick={handleLinkClick}>
         <span
-          className={`text-gray-800 hover:text-red-500 ${itemClassName} ${
-            router.pathname === "/faqs" ? "text-red-500 font-bold" : ""
+          className={`${textStyles} ${itemClassName} ${
+            router.pathname === "/faqs" ? "font-bold" : ""
           }`}>
           FAQs
         </span>

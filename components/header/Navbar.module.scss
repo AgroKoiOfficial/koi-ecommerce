@@ -47,3 +47,56 @@ $backdrop-filter: blur(20px);
   z-index: -1; 
 }
 
+.lightIcon {
+  color: #2d3748; 
+}
+
+.darkIcon {
+  color: #ffffff; 
+}
+
+.hoverLightIcon:hover {
+  color: #4a5568; 
+}
+
+.hoverDarkIcon:hover {
+  color: #a0aec0; 
+}
+
+
+/* background sidebar */
+
+.darkSidebar {
+  background-color: #2d3748;
+  color: white;
+
+  &hover {
+    color: #f56565;
+  }
+}
+
+
+.lightSidebar {
+  background-color: #f7fafc;
+  color: #1a202c;
+}
+
+/* text menulink */
+
+.lightText {
+  color: #2d3748;
+  &:hover {
+    color: #f56565;
+  }
+}
+
+.darkText {
+  color: #ffffff;
+  &:hover {
+    color:  #f56565; 
+  }
+}
+
+.fontBold {
+  font-weight: bold;
+}

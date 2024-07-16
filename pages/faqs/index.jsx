@@ -4,6 +4,7 @@ import { Search } from "@/components/ui/Search";
 import { Pagination } from "@/components/ui/Pagination";
 import FaqCard from "@/components/FaqCard";
 import dynamic from "next/dynamic";
+import { useTheme } from 'next-themes';
 
 const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
 
@@ -57,6 +58,7 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
   const [filteredFaqs, setFilteredFaqs] = useState(initialFaqs || []);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const { theme } = useTheme();
 
   useEffect(() => {
     setFilteredFaqs(initialFaqs || []);
@@ -168,7 +170,7 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
         <meta name="theme-color" content="#ffffff" />
         <link rel="icon" href="/logo.png" />
       </Head>
-      <main className="pt-16 lg:pt-20 mb-16 lg:mb-20">
+      <main className={`pt-16 lg:pt-20 mb-16 lg:mb-20 ${theme === "dark" ? "bg-gray-800 text-gray-300" : "bg-white text-gray-800"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl lg:text-4xl font-bold mb-8 text-center my-4">
             FAQs

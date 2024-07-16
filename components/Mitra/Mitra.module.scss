@@ -1,0 +1,14 @@
+.embla__container {
+    display: flex;
+  }
+  
+  .embla__slide {
+    flex: 0 0 20%;
+    padding: 10px;
+
+    @media screen and (max-width: 768px) {
+        flex: 0 0 30%;
+        
+    }
+  }
+  
