@@ -5,9 +5,11 @@ import { getSession, signOut } from "next-auth/react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
+import { useTheme } from 'next-themes';
 
 const UserInfo = () => {
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -143,19 +145,19 @@ const UserInfo = () => {
       <h1 className="text-2xl font-bold mb-4 text-center">Managemen Akun</h1>
       {user ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4 lg:mb-8">Detail Akun</h2>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-4 lg:mb-8 text-gray-900 dark:text-gray-100">Detail Akun</h2>
             <div className="mb-4">
               <Label>Nama:</Label>
-              <p className="text-gray-900">{user.name}</p>
+              <p className="text-gray-900 dark:text-gray-100">{user.name}</p>
             </div>
             <div className="mb-4">
               <Label>Email:</Label>
-              <p className="text-gray-900">{user.email}</p>
+              <p className="text-gray-900 dark:text-gray-100">{user.email}</p>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4">Update Akun</h2>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Update Akun</h2>
             <div className="mb-4">
               <Label>Nama</Label>
               <Input
@@ -164,6 +166,7 @@ const UserInfo = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
+                className="dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
             <div className="mb-4">
@@ -174,6 +177,7 @@ const UserInfo = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
+                className="dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
             <div className="mb-4">
@@ -185,25 +189,26 @@ const UserInfo = () => {
                   setFormData({ ...formData, password: e.target.value })
                 }
                 placeholder="Biarkan kosong agar tetap sama"
+                className="dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
             <div className="mb-4 flex space-x-8 lg:space-x-2 justify-between items-center">
               <Button
-                className="bg-blue-500 text-white"
+                className="bg-blue-500 text-white dark:bg-blue-700"
                 onClick={handleUpdate}
               >
                 Update
               </Button>
               <Button
-                className="bg-red-500 text-white"
+                className="bg-red-500 text-white dark:bg-red-700"
                 onClick={handleDeleteRequest}
               >
-                Request Delete
+                Request Hapus
               </Button>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4">Hapus Akun</h2>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Hapus Akun</h2>
             <div className="mb-4">
               <Label>Token</Label>
               <Input
@@ -213,10 +218,11 @@ const UserInfo = () => {
                   setDeleteToken(e.target.value)
                 }
                 placeholder="Masukkan token yang dikirim ke email Anda"
+                className="dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
             <Button
-              className="bg-red-500 text-white"
+              className="bg-red-500 text-white dark:bg-red-700"
               onClick={handleDelete}
             >
               Hapus
@@ -224,7 +230,7 @@ const UserInfo = () => {
           </div>
         </div>
       ) : (
-        <p className="text-center">Akun tidak ditemukan</p>
+        <p className="text-center text-gray-900 dark:text-gray-100">Akun tidak ditemukan</p>
       )}
     </div>
   );

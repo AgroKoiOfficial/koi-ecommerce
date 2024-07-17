@@ -1,11 +1,13 @@
-import React from "react";
-import { Table } from "@/components/ui/Table";
-import { FiEdit, FiTrash } from "react-icons/fi";
+import * as React from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/Button";
+import { FiEdit, FiTrash } from "react-icons/fi";
 import { EditUser } from "@/components/dashboards/user/EditUser";
 import { useUserTable } from "@/hooks/dashboard/useUserTable";
 import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
+import { useTheme } from 'next-themes';
 
 export const UserTable = () => {
   const {
@@ -21,7 +23,15 @@ export const UserTable = () => {
     handleSearch,
   } = useUserTable();
 
-  const columns = ["No", "Name", "Email", "Role", "Action"];
+  const { theme } = useTheme();
+
+  const columns = [
+    { header: "No", accessorKey: "No" },
+    { header: "Name", accessorKey: "Name" },
+    { header: "Email", accessorKey: "Email" },
+    { header: "Role", accessorKey: "Role" },
+    { header: "Action", accessorKey: "Action" },
+  ];
 
   const data =
     Array.isArray(users) &&
@@ -32,18 +42,19 @@ export const UserTable = () => {
         Email: user.email,
         Role: user.role,
         Action: (
-          <div className="flex max-w-[25%] items-center justify-center space-x-1 mx-auto">
-            <Button
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-              icon={<FiEdit />}
-              onClick={() => handleEdit(user)}
-            />
-            <Button
-              className="bg-red-500 hover:bg-red-600 text-white"
-              icon={<FiTrash />}
-              onClick={() => handleDelete(user.id)}
-            />
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button className="bg-gray-200 text-gray-700">Actions</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="right">
+              <DropdownMenuItem onClick={() => handleEdit(user)}>
+                <FiEdit className="mr-2" /> Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDelete(user.id)}>
+                <FiTrash className="mr-2" /> Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ),
       };
     });
@@ -53,24 +64,58 @@ export const UserTable = () => {
   };
 
   return (
-    <div className="container mx-auto overflow-auto scrollbar-hide">
-      <div className="flex flex-col md:flex-row justify-between items-center my-2 px-4 sm:px-6 lg:px-8">
-        <div className="flex w-3/4 items-center space-x-2">
-          <Search onSearch={handleSearch} />
-        </div>
+    <div className="space-y-4">
+      <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0 md:space-x-4">
+        <Search onSearch={handleSearch} />
       </div>
-      {editModalOpen && editUser && (
-        <EditUser onClose={handleCloseEditModal} user={editUser} />
-      )}
 
-      <div className="container overflow-auto scrollbar-hide">
-        <Table columns={columns} data={data} />
+      <div className="overflow-x-auto">
+        <Table className="min-w-full">
+          <TableHeader>
+            <TableRow>
+              {columns.map((column) => (
+                <TableHead
+                  key={column.accessorKey}
+                  className={`px-4 py-2 text-left text-sm font-medium ${
+                    theme === "dark" ? "text-white" : "text-gray-600"
+                  }`}
+                >
+                  {column.header}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data?.map((row, index) => (
+              <TableRow
+                key={index}
+                className={`hover:${theme === "dark" ? "bg-gray-700" : "bg-gray-50"}`}
+              >
+                {Object.values(row).map((cell, idx) => (
+                  <TableCell
+                    key={idx}
+                    className={`px-4 py-2 text-sm ${
+                      theme === "dark" ? "text-gray-300" : "text-gray-800"
+                    }`}
+                  >
+                    {cell}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
+
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={handlePageChange}
+        setCurrentPage={handlePageChange}
       />
+
+      {editModalOpen && editUser && (
+        <EditUser onClose={handleCloseEditModal} user={editUser} />
+      )}
     </div>
   );
 };

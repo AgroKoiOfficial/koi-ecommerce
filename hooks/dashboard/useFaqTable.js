@@ -51,6 +51,7 @@ export const useFaqTable = () => {
 
   const handleCloseModal = () => {
     setModalOpen(false);
+
   };
 
   const handleEdit = (category) => {

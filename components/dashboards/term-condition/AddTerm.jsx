@@ -5,12 +5,15 @@ import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { TextArea } from "@/components/ui/TextArea";
+import { useTheme } from "next-themes";
 
 const AddTerm = ({ onClose, onTermAdded }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -91,7 +94,7 @@ const AddTerm = ({ onClose, onTermAdded }) => {
           </div>
           <div className="flex items-center justify-center">
             <Button
-              className="bg-blue-500 hover:bg-blue-700 text-white"
+              className="bg-blue-500 hover:bg-blue-700 text-white w-full"
               type="submit"
               disabled={isSubmitting}
             >

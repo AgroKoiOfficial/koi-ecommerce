@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { useTheme } from 'next-themes';
 import { getSession } from 'next-auth/react';
 import { getCoupons, createCoupon, updateCoupon, deleteCoupon } from "../api";
 import CouponList from "../CouponList";
@@ -10,6 +11,7 @@ export const Coupon = () => {
   const [session, setSession] = useState(null);
   const [editCoupon, setEditCoupon] = useState(null);
   const [showCouponForm, setShowCouponForm] = useState(false);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -61,13 +63,18 @@ export const Coupon = () => {
     setEditCoupon(null);
   };
 
+  const textColor = resolvedTheme === "dark" ? "text-white" : "text-gray-800";
+  const buttonBgColor = resolvedTheme === "dark" ? "bg-gray-700" : "bg-blue-500";
+  const buttonHoverBgColor = resolvedTheme === "dark" ? "bg-gray-600" : "bg-blue-600";
+  const containerBgColor = resolvedTheme === "dark" ? "bg-gray-800" : "bg-white";
+
   return (
-    <div className="container mx-auto p-8">
-      <h1 className="text-4xl font-bold text-center mb-6">Manage Coupons</h1>
+    <div className={`container mx-auto p-8 ${containerBgColor}`}>
+      <h1 className={`text-4xl font-bold text-center mb-6 ${textColor}`}>Manage Coupons</h1>
       {session && session.user.role === 'ADMIN' && (
         <>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600"
+            className={`${buttonBgColor} text-white px-4 py-2 rounded-md shadow hover:${buttonHoverBgColor}`}
             onClick={toggleCouponForm}
           >
             Add Coupon

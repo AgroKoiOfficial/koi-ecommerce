@@ -4,10 +4,14 @@ import Link from "next/link";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { toast } from "react-toastify";
+import { useTheme } from "next-themes";
+
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+
+  const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,12 +42,12 @@ export default function ForgotPassword() {
         <meta name="description" content="Forgot Password" />
       </Head>
 
-      <main className="flex justify-center items-center h-screen bg-gray-100">
-        <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+      <main className={`flex justify-center items-center h-screen ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}>
+        <div className={`w-full max-w-md ${theme === "dark" ? "bg-gray-700" : "bg-gray-50"} rounded-lg shadow-md p-8`}>
           <h1 className=" text-2xl lg:text-4xl font-bold mb-6 text-center">
             Lupa Kata Sandi
           </h1>
-          <p className=" text-md text-center lg:text-lg text-gray-700 mb-8">
+          <p className=" text-md text-center lg:text-lg mb-8">
             Masukan email anda dan kami akan mengirimkan token lupa kata sandi
           </p>
 
@@ -61,14 +65,14 @@ export default function ForgotPassword() {
 
             <Button
               type="submit"
-              className=" bg-blue-500 text-white hover:bg-blue-600">
+              className=" bg-blue-500 text-white hover:bg-blue-600 w-full">
               Reset Password
             </Button>
           </form>
 
           {message && <p className="text-green-500 mt-4">{message}</p>}
 
-          <p className="mt-8 text-gray-900 mb-8 text-center">
+          <p className="mt-8 mb-8 text-center">
             Ingat kata sandi?{" "}
             <Link href="/login" className="text-blue-500">
               Login

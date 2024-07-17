@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { FiEdit, FiTrash } from "react-icons/fi";
+import { FiEdit, FiTrash, FiMoreVertical } from "react-icons/fi";
 import { getSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/Button";
 import EditAddress from "@/components/users/address/EditAddress";
 import CreateAddress from "@/components/users/address/CreateAddress";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const AddressInfo = () => {
+  const { theme } = useTheme();
   const [addresses, setAddresses] = useState([]);
   const [isEditing, setIsEditing] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -45,7 +53,7 @@ const AddressInfo = () => {
         toast.success("Menghapus Alamat Berhasil");
         setAddresses(updatedAddresses);
       } else {
-        toast.error("Gagal Menghapus Alamat");  
+        toast.error("Gagal Menghapus Alamat");
         console.error("Failed to delete address:", response.statusText);
       }
     } catch (error) {
@@ -60,26 +68,24 @@ const AddressInfo = () => {
   const handleCreate = () => setIsCreating(true);
 
   return (
-    <div className="flex flex-col gap-4 p-4 w-full mx-auto">
+    <div className={`flex flex-col gap-4 p-4 w-full mx-auto ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
       <h1 className="text-3xl font-bold text-center">Informasi Alamat</h1>
       <div className="flex flex-col lg:flex-row gap-4">
         {addresses.length > 0 ? (
           addresses.map((address) => (
             <div
               key={address.id}
-              className="w-full p-4 border rounded-lg shadow-md h-3/4">
+              className={`w-full p-4 border rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
               <h2 className="text-2xl font-bold mb-4 text-center">Alamat</h2>
               <div className="flex flex-col gap-2">
                 <div className="mb-2">
-                  <p className="text-lg ">
-                    <span className="font-semibold">Jalan:</span>{" "}
-                    {address.street}
+                  <p className="text-lg">
+                    <span className="font-semibold">Jalan:</span> {address.street}
                   </p>
                 </div>
                 <div className="mb-2">
                   <p className="text-lg">
-                    <span className="font-semibold">Kode Pos: </span>
-                    {""} {address.postalCode}
+                    <span className="font-semibold">Kode Pos: </span> {address.postalCode}
                   </p>
                 </div>
                 <div className="mb-2">
@@ -99,16 +105,19 @@ const AddressInfo = () => {
                 </div>
               </div>
               <div className="flex justify-end mt-3">
-                <Button
-                  onClick={() => handleEdit(address)}
-                  className={`bg-blue-500 hover:bg-blue-700 text-white`}
-                  icon={<FiEdit />}
-                  />
-                <Button
-                  onClick={() => handleDelete(address.id)}
-                  className={`ml-2 bg-red-500 hover:bg-red-700 text-white`}
-                  icon={<FiTrash />}
-                  />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button className={`bg-gray-500 hover:bg-gray-700 text-white`} icon={<FiMoreVertical />} > <FiMoreVertical /></Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onSelect={() => handleEdit(address)}>
+                      <FiEdit className="mr-2" /> Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleDelete(address.id)}>
+                      <FiTrash className="mr-2" /> Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           ))
@@ -119,7 +128,7 @@ const AddressInfo = () => {
       <Button
         onClick={handleCreate}
         className={`bg-blue-500 hover:bg-blue-700 text-white`}>
-       Alamat Baru
+        Alamat Baru
       </Button>
       {isEditing && (
         <EditAddress address={isEditing} setIsEditing={setIsEditing} />

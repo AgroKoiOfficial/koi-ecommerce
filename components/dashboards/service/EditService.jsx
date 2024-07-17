@@ -6,11 +6,14 @@ import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
 import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
+import { useTheme } from "next-themes";
 
 export const EditService = ({ service, onClose }) => {
   const [title, setTitle] = useState(service.title);
   const [content, setContent] = useState(service.content);
   const [session, setSession] = useState(null);
+
+  const { theme } = useTheme();
 
   const router = useRouter();
 
@@ -57,9 +60,9 @@ export const EditService = ({ service, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
       <div className="relative w-auto max-w-4xl">
-        <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
-          <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-            <h3 className="text-3xl font-semibold">Edit Service</h3>
+        <div className={`relative flex flex-col w-full ${theme === "dark" ? "bg-gray-900" : "bg-white"} border-0 rounded-lg shadow-lg outline-none focus:outline-none`}>
+          <div className="flex items-start justify-between p-5 ">
+            <h3 className="text-3xl font-semibold">Edit Konten Layanan</h3>
           </div>
           <div className="relative p-6 flex-auto">
             <form onSubmit={handleSubmit}>
@@ -84,7 +87,7 @@ export const EditService = ({ service, onClose }) => {
                   required
                 />
               </div>
-              <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+              <div className="flex items-center justify-center space-x-4 p-3 ">
                 <Button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-600 text-white">

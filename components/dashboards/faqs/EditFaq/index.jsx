@@ -6,6 +6,8 @@ import { TextArea } from "@/components/ui/TextArea";
 import { getSession } from "next-auth/react";
 import { FiSave, FiXCircle } from "react-icons/fi";
 import slug from "slug";
+import { useTheme } from 'next-themes';
+
 
 export const EditFaq = ({ faq, onClose }) => {
   const [slugValue, setSlugValue] = useState(faq.slug);
@@ -15,6 +17,8 @@ export const EditFaq = ({ faq, onClose }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [session, setSession] = useState(null);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -67,14 +71,14 @@ export const EditFaq = ({ faq, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
       <div className="relative w-auto max-w-3xl">
-        <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+        <div className={`relative flex flex-col w-full ${theme === "dark" ? "bg-gray-900" : "bg-white"} border-0 rounded-lg shadow-lg outline-none focus:outline-none`}>
           <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
             <h3 className="text-3xl font-semibold">Edit Faq</h3>
           </div>
           <div className="relative p-6 flex-auto">
             <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="mb-4">
-                <Label htmlFor="slug">Slug</Label>
+                <Label htmlFor="slug" className={`${theme === "dark" ? "text-gray-50" : "text-gray-600"} mb-4 ml-1`}>Slug</Label>
                 <Input
                   label="Slug"
                   value={slugValue}
@@ -82,7 +86,7 @@ export const EditFaq = ({ faq, onClose }) => {
                 />
               </div>
               <div className="mb-4">
-                <Label htmlFor="question">Question</Label>
+                <Label htmlFor="question" className={`${theme === "dark" ? "text-gray-50" : "text-gray-600"} mb-4 ml-1`}>Question</Label>
                 <Input
                   label="Question"
                   value={question}
@@ -90,7 +94,7 @@ export const EditFaq = ({ faq, onClose }) => {
                 />
               </div>
               <div className="mb-4 col-span-1 sm:col-span-2">
-                <Label htmlFor="answer">Answer</Label>
+                <Label htmlFor="answer" className={`${theme === "dark" ? "text-gray-50" : "text-gray-600"} mb-4 ml-1`}>Answer</Label>
                 <TextArea
                   label="Answer"
                   value={answer}
@@ -98,7 +102,7 @@ export const EditFaq = ({ faq, onClose }) => {
                 />
               </div>
               <div className="mb-4">
-                <Label htmlFor="category">Category</Label>
+                <Label htmlFor="category" className={`${theme === "dark" ? "text-gray-50" : "text-gray-600"} mb-4 ml-1`}>Category</Label>
                 <Input
                   label="Category"
                   value={category}
@@ -115,7 +119,8 @@ export const EditFaq = ({ faq, onClose }) => {
                   <p className="text-green-500">{success}</p>
                 </div>
               )}
-              <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b col-span-1 sm:col-span-2">
+              <div className=" w-full space-x-4 flex items-center justify-center p-6 
+               border-slate-200 rounded-b col-span-1 sm:col-span-2">
                 <Button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-600 text-white"

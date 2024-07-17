@@ -6,12 +6,15 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
 import { TextArea } from "@/components/ui/TextArea";
+import { useTheme } from "next-themes";
 
 const CtaComponent = () => {
   const [ctaList, setCtaList] = useState([]);
   const [session, setSession] = useState(null);
   const [editCta, setEditCta] = useState(null);
   const [showCtaForm, setShowCtaForm] = useState(false);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,7 +82,7 @@ const CtaComponent = () => {
         </Button>
       </div>
       {showCtaForm && (
-        <div className="p-4 bg-white shadow-lg rounded-lg mt-8">
+        <div className={`p-4 ${theme === "dark" ? "bg-gray-900" : "bg-white"} shadow-lg rounded-lg mt-8`}>
           <h1 className="text-3xl font-bold mb-4">Create Cta</h1>
           <form
             onSubmit={(e) => {
@@ -142,7 +145,7 @@ const CtaComponent = () => {
       )}
       <div>
         {ctaList.map((cta) => (
-          <div key={cta.id} className="p-4 bg-white shadow-lg rounded-lg mt-8">
+          <div key={cta.id} className={`p-4 ${theme === "dark" ? "bg-gray-900" : "bg-white"} shadow-lg rounded-lg mt-8`}>
             <h1 className="text-3xl font-bold mb-4">Customer Service</h1>
             <p className="text-lg mb-4">
               <span className="font-semibold">Name:</span> {cta.name}

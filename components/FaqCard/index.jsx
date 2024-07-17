@@ -16,14 +16,14 @@ function FaqCard({ faq }) {
       <div className="flex justify-between items-center cursor-pointer" onClick={toggleAnswer}>
         <h2 className="text-lg font-bold mb-2">{faq.question}</h2>
         {showFullAnswer ? (
-          <BsChevronUp className="text-gray-600" />
+          <BsChevronUp className="font-semibold" />
         ) : (
-          <BsChevronDown className="text-gray-600" />
+          <BsChevronDown className="font-semibold" />
         )}
       </div>
       {showFullAnswer && (
         <div className="mt-2">
-          <p className="text-gray-600">{faq.answer}</p>
+          <p className="font-semibold">{faq.answer}</p>
           <div className="mt-2">
             <Link href={`/faqs/${faq.slug}`}>
               <button className="text-blue-500 hover:text-blue-600">Baca selengkapnya</button>

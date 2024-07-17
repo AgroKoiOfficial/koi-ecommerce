@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
 import { getSession } from "next-auth/react";
 import slug from "slug";
+import { useTheme } from 'next-themes';
 
 export const EditProduct = ({ product, onClose }) => {
   const [name, setName] = useState(product.name);
@@ -20,6 +21,8 @@ export const EditProduct = ({ product, onClose }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [slugName, setSlugName] = useState("");
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -103,15 +106,12 @@ export const EditProduct = ({ product, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
       <div className="relative w-auto max-w-3xl">
-        <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
-          <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-            <h3 className="text-3xl font-semibold">Edit Product</h3>
-          </div>
+        <div className={`relative flex flex-col w-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} border-0 rounded-lg shadow-lg outline-none focus:outline-none`}>
           <div className="relative p-6 flex-auto">
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Name
                   </label>
                   <Input
@@ -121,18 +121,18 @@ export const EditProduct = ({ product, onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Slug
                   </label>
                   <Input
                     type="text"
                     value={slugName}
                     readOnly
-                    className="bg-gray-100"
+                    className={`w-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Price
                   </label>
                   <Input
@@ -142,7 +142,7 @@ export const EditProduct = ({ product, onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Stock
                   </label>
                   <Input
@@ -152,7 +152,7 @@ export const EditProduct = ({ product, onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Category
                   </label>
                   <select
@@ -175,7 +175,7 @@ export const EditProduct = ({ product, onClose }) => {
                   </select>
                 </div>
                 <div className="mb-4 col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Description
                   </label>
                   <TextArea
@@ -184,7 +184,7 @@ export const EditProduct = ({ product, onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Image
                   </label>
                   <Input
@@ -193,7 +193,7 @@ export const EditProduct = ({ product, onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Video
                   </label>
                   <Input

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { useTheme } from "next-themes";
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -12,6 +13,8 @@ export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,8 +48,8 @@ export default function ResetPassword() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex justify-center items-center h-screen bg-gray-100">
-        <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+      <main className={`flex justify-center items-center h-screen ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}>
+        <div className={`w-full max-w-md ${theme === "dark" ? "bg-gray-700" : "bg-gray-50"} rounded-lg shadow-md p-8`}>
           <h1 className="text-3xl font-bold mb-4">Reset Password</h1>
           <p className="text-gray-600 mb-8">
             Masukan email, token, dan kata sandi baru
@@ -82,14 +85,14 @@ export default function ResetPassword() {
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="absolute inset-y-0 top-0 right-0 px-3 py-2 flex items-center text-gray-600">
+                className="absolute inset-y-0 top-0 right-0 px-3 py-2 flex items-center">
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
 
             <Button
               type="submit"
-              className="bg-blue-500 text-white hover:bg-blue-600">
+              className="bg-blue-500 text-white hover:bg-blue-600 w-full">
               Reset Password
             </Button>
           </form>

@@ -85,9 +85,9 @@ const EditTerm = ({ termId, initialTitle, initialContent, onClose, onTermUpdated
             onChange={(e) => setContent(e.target.value)}
           />
         </div>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center space-x-4">
           <Button
-            className="bg-blue-500 hover:bg-blue-700 text-white"
+            className="bg-blue-500 hover:bg-blue-700 text-white w-full"
             type="submit"
             disabled={isSubmitting}
           >

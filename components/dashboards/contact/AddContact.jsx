@@ -4,8 +4,10 @@ import { getSession } from "next-auth/react";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/Button";
+import { useTheme } from "next-themes";
 
 const AddContact = ({ setModal, setContact, contact }) => {
+  const { theme } = useTheme();
   const [currentContact, setCurrentContact] = useState({
     address: "",
     phone: "",
@@ -53,7 +55,7 @@ const AddContact = ({ setModal, setContact, contact }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
+      <div className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} p-6 rounded-lg shadow-lg`}>
         <h2 className="text-xl font-bold mb-4">Add Contact</h2>
         <form onSubmit={handleAdd} className="flex flex-col gap-4">
           <Label htmlFor="address">Address</Label>
@@ -83,7 +85,7 @@ const AddContact = ({ setModal, setContact, contact }) => {
               setCurrentContact({ ...currentContact, email: e.target.value })
             }
           />
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-center space-x-4 gap-2">
             <Button
               type="button"
               className="bg-gray-300 text-gray-700"

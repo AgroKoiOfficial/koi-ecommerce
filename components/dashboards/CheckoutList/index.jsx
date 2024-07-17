@@ -1,21 +1,40 @@
 import { useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
-import useCheckoutStore from "@/stores/checkoutStore";
 import { FiTrash } from "react-icons/fi";
+import useCheckoutStore from "@/stores/checkoutStore";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/Table";
+import { Pagination } from "@/components/ui/Pagination";
+import { Search } from "@/components/ui/Search";
+import { Button } from "@/components/ui/Button";
+import { useTheme } from "next-themes";
 
 const CheckoutList = () => {
-  const { checkouts, currentPage, itemsPerPage, setCheckouts, setCurrentPage } =
-    useCheckoutStore((state) => ({
-      checkouts: state.checkouts,
-      currentPage: state.currentPage,
-      itemsPerPage: state.itemsPerPage,
-      setCheckouts: state.setCheckouts,
-      setCurrentPage: state.setCurrentPage,
-    }));
+  const { theme } = useTheme();
+  const {
+    checkouts,
+    currentPage,
+    itemsPerPage,
+    setCheckouts,
+    setCurrentPage,
+  } = useCheckoutStore((state) => ({
+    checkouts: state.checkouts,
+    currentPage: state.currentPage,
+    itemsPerPage: state.itemsPerPage,
+    setCheckouts: state.setCheckouts,
+    setCurrentPage: state.setCurrentPage,
+  }));
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,6 +63,7 @@ const CheckoutList = () => {
   }, [setCheckouts]);
 
   const handleDelete = async (id) => {
+    setDeleteLoading(true);
     try {
       const response = await fetch(`/api/checkout/delete/${id}`, {
         method: "DELETE",
@@ -59,12 +79,19 @@ const CheckoutList = () => {
     } catch (err) {
       setError("Failed to delete checkout");
     }
+    setDeleteLoading(false);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentCheckouts = checkouts.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(checkouts.length / itemsPerPage);
+
+  const currentCheckouts = Array.isArray(checkouts)
+    ? checkouts.slice(indexOfFirstItem, indexOfLastItem)
+    : [];
+
+  const totalPages = Array.isArray(checkouts)
+    ? Math.ceil(checkouts.length / itemsPerPage)
+    : 0;
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -74,12 +101,56 @@ const CheckoutList = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredCheckouts = checkouts.filter((checkout) =>
-    checkout.user.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredCheckouts = Array.isArray(checkouts)
+    ? checkouts.filter((checkout) =>
+        checkout.user.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
-  if (loading) return <p className="text-gray-500">Loading...</p>;
+  if (loading) return <p className="font-bold">Loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
+
+  const columns = [
+    { header: "No", accessorKey: "no" },
+    { header: "Total", accessorKey: "total" },
+    { header: "Quantity", accessorKey: "quantity" },
+    { header: "Status", accessorKey: "status" },
+    { header: "User", accessorKey: "user" },
+    { header: "Products", accessorKey: "products" },
+    { header: "Address", accessorKey: "address" },
+    { header: "Shipping", accessorKey: "shipping" },
+    { header: "Coupon", accessorKey: "coupon" },
+    { header: "Actions", accessorKey: "actions" },
+  ];
+
+  const data = filteredCheckouts
+    .slice(indexOfFirstItem, indexOfLastItem)
+    .map((checkout, index) => ({
+      no: indexOfFirstItem + index + 1,
+      total: checkout.total,
+      quantity: checkout.quantity,
+      status: checkout.status,
+      user: `${checkout.user.name} (${checkout.user.email})`,
+      products: checkout.cart.map((item) => (
+        <div key={item.id}>
+          {item.product.name} (Qty: {item.quantity})
+        </div>
+      )),
+      address: `${checkout.address.city}, ${checkout.address.province}, ${checkout.address.phone}`,
+      shipping: `${checkout.shipping.city}, ${checkout.shipping.region}, ${checkout.shipping.fee}`,
+      coupon: checkout.coupon
+        ? `${checkout.coupon.code} (${checkout.coupon.discountType})`
+        : "N/A",
+      actions: (
+        <Button
+          onClick={() => handleDelete(checkout.id)}
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          disabled={deleteLoading}
+        >
+          <FiTrash />
+        </Button>
+      ),
+    }));
 
   return (
     <div className="container mx-auto p-4">
@@ -95,99 +166,41 @@ const CheckoutList = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100  text-md">
-              <th className="px-4 py-2 border-b text-md">No</th>
-              <th className="px-4 py-2 border-b text-md">Total</th>
-              <th className="px-4 py-2 border-b text-md">Quantity</th>
-              <th className="px-4 py-2 border-b text-md">Status</th>
-              <th className="px-4 py-2 border-b text-md">User</th>
-              <th className="px-4 py-2 border-b text-md">Products</th>
-              <th className="px-4 py-2 border-b text-md">Address</th>
-              <th className="px-4 py-2 border-b text-md">Shipping</th>
-              <th className="px-4 py-2 border-b text-md">Coupon</th>
-              <th className="px-4 py-2 border-b text-md">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredCheckouts.slice(indexOfFirstItem, indexOfLastItem).map((checkout, index) => (
-              <tr key={checkout.id}>
-                <td className="px-2 py-1 text-sm">{indexOfFirstItem + index + 1}</td>
-                <td className="px-2 py-1 text-sm">{checkout.total}</td>
-                <td className="px-2 py-1 text-sm">{checkout.quantity}</td>
-                <td className="px-2 py-1 text-sm">{checkout.status}</td>
-                <td className="px-2 py-1 text-sm">
-                  {checkout.user.name} ({checkout.user.email})
-                </td>
-                <td className="px-2 py-1 text-sm">
-                  {checkout.cart.map((item) => (
-                    <div key={item.id}>
-                      {item.product.name} (Qty: {item.quantity})
-                    </div>
-                  ))}
-                </td>
-                <td className="px-2 py-1 text-sm">
-                  {checkout.address.city}, {checkout.address.province}, {checkout.address.phone}
-                </td>
-                <td className="px-2 py-1 text-sm">
-                  {checkout.shipping.city}, {checkout.shipping.region}, {checkout.shipping.fee}
-                </td>
-                <td className="px-2 py-1 text-sm">
-                  {checkout.coupon ? `${checkout.coupon.code} (${checkout.coupon.discountType})` : 'N/A'}
-                </td>
-                <td className="px-2 py-1 text-sm">
-                  <button
-                    onClick={() => handleDelete(checkout.id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    <FiTrash />
-                  </button>
-                </td>
-              </tr>
+        <Table className={`min-w-full ${theme === "dark" ? "bg-gray-800" : "bg-white"} border border-gray-200`}>
+          <TableHeader>
+            <TableRow>
+              {columns.map((column) => (
+                <TableHead
+                  key={column.accessorKey}
+                  className={`px-4 py-2 text-left text-sm font-medium ${
+                    theme === "dark" ? "text-white" : "text-gray-600"
+                  }`}
+                >
+                  {column.header}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.map((row, index) => (
+              <TableRow key={index} className={`hover:${theme === "dark" ? "bg-gray-700" : "bg-gray-50"}`}>
+                {Object.values(row).map((cell, idx) => (
+                  <TableCell key={idx} className={`px-4 py-2 text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>
+                    {cell}
+                  </TableCell>
+                ))}
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
-      {/* Pagination */}
       <div className="flex justify-center mt-4">
-        <nav>
-          <ul className="flex">
-            <li>
-              <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-2 py-1 text-sm mx-1 rounded-lg bg-blue-500 hover:bg-blue-400 text-white focus:outline-none"
-              >
-                Prev
-              </button>
-            </li>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <li key={index}>
-                <button
-                  onClick={() => paginate(index + 1)}
-                  className={`${
-                    currentPage === index + 1
-                      ? "bg-blue-500 text-white"
-                      : "text-blue-500 hover:bg-blue-400"
-                  } px-2 py-1 text-sm mx-1 rounded-lg focus:outline-none`}
-                >
-                  {index + 1}
-                </button>
-              </li>
-            ))}
-            <li>
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-2 py-1 text-sm mx-1 rounded-lg bg-blue-500 hover:bg-blue-400 text-white focus:outline-none"
-              >
-                Next
-              </button>
-            </li>
-          </ul>
-        </nav>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={paginate}
+        />
       </div>
     </div>
   );

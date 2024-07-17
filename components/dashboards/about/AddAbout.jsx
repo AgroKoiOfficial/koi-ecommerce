@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { TextArea } from "@/components/ui/TextArea";
 import { Button } from "@/components/ui/Button";
+import { useTheme } from "next-themes";
 
 const AddAbout = ({ setModal, setAbout, about }) => {
+  const { theme } = useTheme();
   const [currentAbout, setCurrentAbout] = useState({
     title: "",
     content: "",
@@ -51,7 +53,7 @@ const AddAbout = ({ setModal, setAbout, about }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
+      <div className={`${theme === "dark" ? "bg-gray-900" : "bg-white"} p-6 rounded-lg shadow-lg`}>
         <h2 className="text-xl font-bold mb-4">Add About</h2>
         <form onSubmit={handleAdd} className="flex flex-col gap-4">
           <Label htmlFor="title">Title</Label>
@@ -80,7 +82,7 @@ const AddAbout = ({ setModal, setAbout, about }) => {
               setCurrentAbout({ ...currentAbout, content: e.target.value })
             }
           />
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-center space-x-4 gap-2">
             <Button
               type="button"
               className="bg-gray-300 text-gray-700"

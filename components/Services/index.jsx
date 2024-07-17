@@ -35,7 +35,7 @@ const Services = () => {
               <GrServices className="text-xl lg:text-2xl" />
             </div>
             <h2 className="text-xl text-center font-bold mb-2 lg:mb-4">{service.title}</h2>
-            <p className="text-gray-700">{service.content}</p>
+            <p className="font-semibold">{service.content}</p>
           </div>
         ))}
       </div>

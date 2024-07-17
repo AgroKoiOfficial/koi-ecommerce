@@ -31,24 +31,25 @@ function AdminDashboard({ children, title }) {
     setIsSidebar(false);
   };
 
-  const handleLogout = () => {
-    signOut();
+  const handleLogout = async () => {
+    await signOut();
   };
 
   return (
-    <main className="flex overflow-auto scrollbar-hide ">
+    <div className="flex h-screen overflow-hidden">
       <Sidebar isSidebar={isSidebar} toggleCloseSidebar={toggleCloseSidebar} />
-
-      <div className="flex-1 pl-0 md:pl-32 lg:pl-64">
+      <div className="flex flex-col flex-1 w-0 md:pl-32 lg:pl-64 overflow-hidden">
         <Navbar
           isNavbar={isNavbar}
           toggleSidebar={toggleSidebar}
           handleLogout={handleLogout}
           title={title}
         />
-        <main className="p-4 mt-2">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+          {children}
+        </main>
       </div>
-    </main>
+    </div>
   );
 }
 

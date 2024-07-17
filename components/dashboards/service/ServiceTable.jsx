@@ -4,8 +4,10 @@ import { toast } from "react-toastify";
 import { FiEdit, FiTrash, FiPlusCircle } from "react-icons/fi";
 import { AddService } from "./AddService";
 import { EditService } from "./EditService";
-import { Table } from "@/components/ui/Table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { useTheme } from 'next-themes';
 
 const ServiceTable = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -13,6 +15,7 @@ const ServiceTable = () => {
   const [editService, setEditService] = useState(null);
   const [modal, setModal] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -26,38 +29,12 @@ const ServiceTable = () => {
     fetchServices();
   }, []);
 
-  const columns = ["No", "Title", "Content", "Action"];
-
-  const data =
-    Array.isArray(services) &&
-    services.map((service, index) => {
-      return {
-        No: index + 1,
-        Title: service.title,
-        Content: service.content,
-        Action: (
-          <div className="flex max-w-[25%] items-center justify-center space-x-1 mx-auto">
-            <Button
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-              icon={<FiEdit />}
-              onClick={() => handleEdit(service)}
-            />
-            <Button
-              className="bg-red-500 hover:bg-red-600 text-white"
-              icon={<FiTrash />}
-              onClick={() => handleDelete(service.id)}
-            />
-          </div>
-        ),
-      };
-    });
-
-    const handleCloseModal = () => {
-      setModal(false);
-    }
+  const handleCloseModal = () => {
+    setModal(false);
+  }
 
   const handleEdit = (service) => {
-    setEditService(service)
+    setEditService(service);
     setModalEdit(true);
   };
 
@@ -91,21 +68,77 @@ const ServiceTable = () => {
     setModal(true);
   };
 
+  const columns = [
+    { header: "No", accessorKey: "No" },
+    { header: "Title", accessorKey: "Title" },
+    { header: "Content", accessorKey: "Content" },
+    { header: "Actions", accessorKey: "Actions" },
+  ];
+
+  const data = Array.isArray(services) && services.map((service, index) => ({
+    No: index + 1,
+    Title: service.title,
+    Content: service.content,
+    Actions: (
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button className="bg-gray-200 text-gray-700">Actions</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="right">
+          <DropdownMenuItem onClick={() => handleEdit(service)}>
+            <FiEdit className="mr-2" /> Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleDelete(service.id)}>
+            <FiTrash className="mr-2" /> Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ),
+  }));
+
   return (
     <div className="container mx-auto overflow-auto scrollbar-hide">
-        <div className="flex items-center space-x-2 mt-2 md:mt-0">
-          <Button
-            onClick={handleAdd}
-            className="bg-blue-500 hover:bg-blue-600 text-white"
-            icon={<FiPlusCircle />}
-          />
-        </div>
-        {modal && <AddService onClose={handleCloseModal} />}
-        {modalEdit && editService &&  <EditService onClose={handleCloseEdit} service={editService} /> }
-        <div className="container overflow-auto scrollbar-hide">
-          <Table columns={columns} data={data} />
-        </div>
+      <div className="flex items-center space-x-2 mt-2 md:mt-0">
+        <Button
+          onClick={handleAdd}
+          className="bg-blue-500 hover:bg-blue-600 text-white"
+          icon={<FiPlusCircle />}
+        >
+          <FiPlusCircle />
+        </Button>
       </div>
+      {modal && <AddService onClose={handleCloseModal} />}
+      {modalEdit && editService && <EditService onClose={handleCloseEdit} service={editService} />}
+      <div className="container overflow-auto scrollbar-hide">
+        <Table className="min-w-full">
+          <TableHeader>
+            <TableRow>
+              {columns.map((column) => (
+                <TableHead
+                  key={column.accessorKey}
+                  className={`px-4 py-2 text-left text-sm font-medium ${
+                    theme === "dark" ? "text-white" : "text-gray-600"
+                  }`}
+                >
+                  {column.header}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.map((row, index) => (
+              <TableRow key={index} className={`hover:${theme === "dark" ? "bg-gray-700" : "bg-gray-50"}`}>
+                {Object.values(row).map((cell, idx) => (
+                  <TableCell key={idx} className={`px-4 py-2 text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>
+                    {cell}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 };
 

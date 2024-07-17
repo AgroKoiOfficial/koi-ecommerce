@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Button } from "@/components/ui/Button";
 import AddAbout from "./AddAbout";
 import EditAbout from "./EditAbout";
+import { useTheme } from "next-themes";
 
 const AdminAbout = () => {
   const [about, setAbout] = useState([]);
@@ -15,6 +16,8 @@ const AdminAbout = () => {
     content: "",
     image: "",
   });
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     getSession().then((session) => {
@@ -66,11 +69,11 @@ const AdminAbout = () => {
         {about?.map((item) => (
           <div
             key={item.id}
-            className="flex flex-col gap-3 p-4 bg-white rounded-lg shadow-md"
+            className={`flex flex-col gap-3 p-4 ${theme === "dark" ? "bg-gray-900" : "bg-white"} rounded-lg shadow-md`}
           >
             <h2 className="text-xl lg:text-3xl text-center font-bold mb-4 lg:mb-8">{item.title}</h2>
             <img src={item.image} alt={item.title} className="rounded-md" />
-            <p className="text-gray-700 mt-4">{item.content}</p>
+            <p className=" mt-4">{item.content}</p>
             <div className="flex justify-end gap-2 w-1/5">
               <Button
                 className="text-blue-500 hover:text-blue-700"

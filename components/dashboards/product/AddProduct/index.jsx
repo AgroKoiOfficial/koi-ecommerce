@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
 import { getSession } from "next-auth/react";
 import slug from "slug";
+import { useTheme } from 'next-themes';
 
 export const AddProduct = ({ onClose }) => {
   const [name, setName] = useState("");
@@ -19,6 +20,8 @@ export const AddProduct = ({ onClose }) => {
   const [session, setSession] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -49,7 +52,6 @@ export const AddProduct = ({ onClose }) => {
     return slug(productName, { lower: true });
   };
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -107,28 +109,25 @@ export const AddProduct = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
-      <div className="relative w-auto max-w-3xl">
-        <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
-          <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-            <h3 className="text-3xl font-semibold">Tambahkan Produk</h3>
-          </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none bg-black bg-opacity-50">
+      <div className="relative w-full max-w-3xl mx-auto">
+        <div className={`relative flex flex-col w-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} rounded-lg shadow-lg outline-none focus:outline-none`}>
           <div className="relative p-6 flex-auto">
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Slug
                   </label>
                   <Input
                     type="text"
                     value={generateSlug(name)}
                     readOnly
-                    className="bg-gray-100"
+                    className={`w-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Name
                   </label>
                   <Input
@@ -138,7 +137,7 @@ export const AddProduct = ({ onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Price
                   </label>
                   <Input
@@ -149,7 +148,7 @@ export const AddProduct = ({ onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Stock
                   </label>
                   <Input
@@ -159,7 +158,7 @@ export const AddProduct = ({ onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Category
                   </label>
                   <select
@@ -182,7 +181,7 @@ export const AddProduct = ({ onClose }) => {
                   </select>
                 </div>
                 <div className="mb-4 col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Description
                   </label>
                   <TextArea
@@ -191,23 +190,25 @@ export const AddProduct = ({ onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Image
                   </label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => setImage(e.target.files[0])}
+                    className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     Video
                   </label>
                   <input
                     type="file"
                     accept="video/*"
                     onChange={(e) => setVideo(e.target.files[0])}
+                    className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
               </div>
@@ -225,8 +226,8 @@ export const AddProduct = ({ onClose }) => {
                   Cancel
                 </Button>
               </div>
-              {error && <p className="text-red-500">{error}</p>}
-              {success && <p className="text-green-500">{success}</p>}
+              {error && <p className="text-red-500 mt-2">{error}</p>}
+              {success && <p className="text-green-500 mt-2">{success}</p>}
             </form>
           </div>
         </div>

@@ -6,8 +6,10 @@ import { Pagination } from "../ui/Pagination";
 import { Button } from "../ui/Button";
 import { useRouter } from "next/router";
 import useReviewComponent from "./useReviewComponent";
+import { useTheme } from "next-themes";
 
 const ReviewComponent = () => {
+  const { theme } = useTheme();
   const router = useRouter();
   const {
     reviews,
@@ -71,8 +73,8 @@ const ReviewComponent = () => {
                       <div className="w-8 h-8">
                         <Button
                           onClick={() => handleDeleteReview(review.id)}
-                          className="focus:outline-none bg-red-500 hover:bg-red-600 text-white rounded-md"
-                          icon={<FiTrash />}
+                          className="focus:outline-none bg-red-500 hover:bg-red-600  rounded-md"
+                          icon={<FiTrash className={`${theme === "dark" ? "text-white" : "text-black"}`} size={20} />}
                         />
                       </div>
                     )}

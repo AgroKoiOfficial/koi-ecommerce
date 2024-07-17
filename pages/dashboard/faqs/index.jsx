@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import AdminDashboard from "@/layouts/AdminDashboard";
-import { FaqTable } from "@/components/dashboards/faqs/FaqTable";
+import { FaqTable } from "@/components/dashboards/faqs/faq-table";
 
 export default function Faqs() {
   const title = "Faqs";

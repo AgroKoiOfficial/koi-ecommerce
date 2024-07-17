@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Chart, registerables } from "chart.js";
+import { useTheme } from "next-themes";
 
 const GoogleAnalytics = () => {
   const [pageViews, setPageViews] = useState([]);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,19 +38,37 @@ const GoogleAnalytics = () => {
             {
               label: "Page Views",
               data: pageViews.map((item) => item.count),
-              backgroundColor: "rgba(54, 162, 235, 0.2)",
-              borderColor: "rgba(54, 162, 235, 1)",
+              backgroundColor:
+                resolvedTheme === "dark"
+                  ? "rgba(54, 162, 235, 0.2)"
+                  : "rgba(255, 159, 64, 0.2)",
+              borderColor:
+                resolvedTheme === "dark"
+                  ? "rgba(54, 162, 235, 1)"
+                  : "rgba(255, 159, 64, 1)",
               borderWidth: 1,
               fill: false,
               tension: 0.4,
               pointRadius: 5,
               pointHitRadius: 10,
-              pointBackgroundColor: "rgba(54, 162, 235, 1)",
-              pointBorderColor: "rgba(54, 162, 235, 1)",
+              pointBackgroundColor:
+                resolvedTheme === "dark"
+                  ? "rgba(54, 162, 235, 1)"
+                  : "rgba(255, 159, 64, 1)",
+              pointBorderColor:
+                resolvedTheme === "dark"
+                  ? "rgba(54, 162, 235, 1)"
+                  : "rgba(255, 159, 64, 1)",
               pointBorderWidth: 2,
               pointHoverRadius: 7,
-              pointHoverBackgroundColor: "rgba(54, 162, 235, 1)",
-              pointHoverBorderColor: "rgba(54, 162, 235, 1)",
+              pointHoverBackgroundColor:
+                resolvedTheme === "dark"
+                  ? "rgba(54, 162, 235, 1)"
+                  : "rgba(255, 159, 64, 1)",
+              pointHoverBorderColor:
+                resolvedTheme === "dark"
+                  ? "rgba(54, 162, 235, 1)"
+                  : "rgba(255, 159, 64, 1)",
               pointHoverBorderWidth: 2,
               pointHitRadius: 10,
             },
@@ -60,20 +80,25 @@ const GoogleAnalytics = () => {
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Page Views'
-              }
+                text: 'Page Views',
+                color: resolvedTheme === "dark" ? "white" : "black",
+              },
+              ticks: {
+                color: resolvedTheme === "dark" ? "white" : "black",
+              },
             },
             x: {
               title: {
                 display: true,
-                text: 'Date'
+                text: 'Date',
+                color: resolvedTheme === "dark" ? "white" : "black",
               },
               grid: {
                 display: true,
+                color: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)",
               },
               ticks: {
-                display: true,
-                color: "rgba(0, 0, 0, 0.6)",
+                color: resolvedTheme === "dark" ? "white" : "black",
                 font: {
                   size: 12,
                 },
@@ -84,6 +109,13 @@ const GoogleAnalytics = () => {
           },
           responsive: true,
           maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: resolvedTheme === "dark" ? "white" : "black",
+              },
+            },
+          },
         },
       });
 
@@ -91,7 +123,7 @@ const GoogleAnalytics = () => {
         myChart.destroy();
       };
     }
-  }, [pageViews]);
+  }, [pageViews, resolvedTheme]);
 
   return (
     <div className="w-full h-full">

@@ -2,7 +2,7 @@ import { prisma } from "@/prisma/prisma";
 import { getToken } from "next-auth/jwt";
 import { sendCheckoutEmail } from "@/utils/sendCheckout.js";
 import { sendCheckoutToAdmin } from "@/utils/sendCheckoutToAdmin.js";
-import { xendit, xenditInvoiceClient } from "@/lib/xendit";
+import { xenditInvoiceClient } from "@/lib/xendit";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {

@@ -1,12 +1,14 @@
-import React from "react";
-import { Table } from "@/components/ui/Table";
-import { FiEdit, FiTrash, FiPlusCircle } from "react-icons/fi";
+import * as React from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/Button";
+import { FiEdit, FiTrash, FiPlusCircle } from "react-icons/fi";
 import { AddCategory } from "@/components/dashboards/category/AddCategory";
 import { EditCategory } from "@/components/dashboards/category/EditCategory";
-import { useCategoryTable } from "@/hooks/dashboard/useCategoryTable";
 import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
+import { useCategoryTable } from "@/hooks/dashboard/useCategoryTable";
+import { useTheme } from 'next-themes';
 
 export const CategoryTable = () => {
   const {
@@ -25,26 +27,34 @@ export const CategoryTable = () => {
     handleSearch,
   } = useCategoryTable();
 
-  const columns = ["No", "Name", "Action"];
+  const { theme } = useTheme();
 
-  const data = Array.isArray(categories) &&
+  const columns = [
+    { header: "No", accessorKey: "No" },
+    { header: "Name", accessorKey: "Name" },
+    { header: "Actions", accessorKey: "Actions" },
+  ];
+
+  const data =
+    Array.isArray(categories) &&
     categories.map((category, index) => {
       return {
         No: index + 1 + (currentPage - 1) * 10,
         Name: category.name,
-        Action: (
-          <div className="flex max-w-[25%] items-center justify-center space-x-1 mx-auto">
-            <Button
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-              icon={<FiEdit />}
-              onClick={() => handleEdit(category)}
-            />
-            <Button
-              className="bg-red-500 hover:bg-red-600 text-white"
-              icon={<FiTrash />}
-              onClick={() => handleDelete(category.id)}
-            />
-          </div>
+        Actions: (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button className="bg-gray-200 text-gray-700">Actions</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="right">
+              <DropdownMenuItem onClick={() => handleEdit(category)}>
+                <FiEdit className="mr-2" /> Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDelete(category.id)}>
+                <FiTrash className="mr-2" /> Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ),
       };
     });
@@ -54,25 +64,66 @@ export const CategoryTable = () => {
   };
 
   return (
-    <div className="container mx-auto overflow-auto scrollbar-hide">
-      <div className="flex flex-col md:flex-row justify-between items-center my-2 px-4 sm:px-6 lg:px-8">
-        <div className="flex w-3/4 items-center space-x-2">
-          <Search onSearch={handleSearch} />
-        </div>
-        <div className="flex items-center space-x-2 mt-2 md:mt-0">
-          <Button
-            onClick={handleAdd}
-            className="bg-blue-500 hover:bg-blue-600 text-white"
-            icon={<FiPlusCircle />}
-          />
-        </div>
+    <div className="space-y-4">
+      <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0 md:space-x-4">
+        <Search onSearch={handleSearch} />
+        <Button
+          className="bg-blue-500 hover:bg-blue-600 text-white"
+          onClick={handleAdd}
+        >
+          <FiPlusCircle className="mr-2" /> Add Category
+        </Button>
       </div>
+
+      <div className="overflow-x-auto">
+        <Table className="min-w-full">
+          <TableHeader>
+            <TableRow>
+              {columns.map((column) => (
+                <TableHead
+                  key={column.accessorKey}
+                  className={`px-4 py-2 text-left text-sm font-medium ${
+                    theme === "dark" ? "text-white" : "text-gray-600"
+                  }`}
+                >
+                  {column.header}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data?.map((row, index) => (
+              <TableRow
+                key={index}
+                className={`hover:${theme === "dark" ? "bg-gray-700" : "bg-gray-50"}`}
+              >
+                {Object.values(row).map((cell, idx) => (
+                  <TableCell
+                    key={idx}
+                    className={`px-4 py-2 text-sm ${
+                      theme === "dark" ? "text-gray-300" : "text-gray-800"
+                    }`}
+                  >
+                    {cell}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        setCurrentPage={handlePageChange}
+      />
+
       {modalOpen && <AddCategory onClose={handleCloseModal} />}
-      {editModalOpen && editCategory && <EditCategory onClose={handleCloseEditModal} category={editCategory} />}
-      <div className="container overflow-auto scrollbar-hide">
-        <Table columns={columns} data={data} />
-      </div>
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+
+      {editModalOpen && editCategory && (
+        <EditCategory onClose={handleCloseEditModal} category={editCategory} />
+      )}
     </div>
   );
 };

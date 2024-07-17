@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
 import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
+import { useTheme } from "next-themes";
 
 export const AddService = ({ onClose }) => {
+  const { theme } = useTheme();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [session, setSession] = useState(null);
@@ -57,13 +59,13 @@ export const AddService = ({ onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
       <div className="relative w-auto max-w-4xl">
-        <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+        <div className={`relative flex flex-col w-full ${theme === "dark" ? "bg-gray-900" : "bg-white"} border-0 rounded-lg shadow-lg outline-none focus:outline-none`}>
           <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
             <h3 className="text-3xl font-semibold">Tambahkan Service Konten</h3>
           </div>
           <div className="relative">
             <form
-              className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+              className={`${theme === "dark" ? "bg-gray-900" : "bg-white"} shadow-md rounded px-8 pt-6 pb-8 mb-4`}
               onSubmit={handleSubmit}>
               <div className="mb-4">
                 <Label htmlFor="title">Title</Label>
@@ -84,7 +86,7 @@ export const AddService = ({ onClose }) => {
                   required
                 />
               </div>
-              <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+              <div className="flex items-center justify-center space-x-4 p-4">
                 <Button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white ">

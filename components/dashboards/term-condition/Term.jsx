@@ -5,6 +5,7 @@ import { FiX, FiEdit, FiTrash2, FiPlus} from "react-icons/fi";
 import AddTerm from "./AddTerm";
 import EditTerm from "./EditTerm";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import { useTheme } from 'next-themes';
 
 const Term = () => {
   const [terms, setTerms] = useState([]);
@@ -14,6 +15,8 @@ const Term = () => {
   const [editTermContent, setEditTermContent] = useState("");
   const [deleteTermId, setDeleteTermId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     fetchTerms();
@@ -85,14 +88,14 @@ const Term = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center py-8 relative bg-gray-100">
+    <div className={`flex flex-col justify-center py-8 relative ${theme === "dark" ? "bg-gray-900" : ""}`}>
       <h1 className="text-4xl text-center mb-8 font-bold">Terms & Services</h1>
       <div className="flex flex-col items-center justify-center w-full px-4">
         {terms.length > 0 ? (
           terms.map((term) => (
             <div
               key={term.id}
-              className="mb-8 p-6 bg-white rounded-lg shadow-md w-full max-w-2xl"
+              className={`mb-8 p-6 ${theme === "dark" ? "bg-gray-800" : "bg-white"} rounded-lg shadow-md w-full max-w-2xl`}
             >
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-bold">{term.title}</h2>

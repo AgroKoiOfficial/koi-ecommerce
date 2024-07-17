@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { getSession } from "next-auth/react";
 import { formatRupiah } from "@/utils/currency";
-import { Button } from "@/components/ui/Button";
+import { useTheme } from "next-themes";
 
 const CheckoutHistory = () => {
   const [checkouts, setCheckouts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     getSession().then((session) => {
@@ -18,7 +19,6 @@ const CheckoutHistory = () => {
       const fetchCheckouts = async () => {
         const response = await fetch(`/api/checkout/userId/${session.user.id}`);
         const data = await response.json();
-        console.log("Checkouts:", data.checkouts);
         setCheckouts(data.checkouts);
       };
 
@@ -26,38 +26,29 @@ const CheckoutHistory = () => {
     });
   }, []);
 
-  const handleDeleteCheckout = async (checkoutId) => {
-    const response = await fetch(`/api/checkout/delete/${checkoutId}`, {
-      method: "DELETE",
-    });
-
-    if (response.ok) {
-      setCheckouts((prevCheckouts) =>
-        prevCheckouts.filter((checkout) => checkout.id !== checkoutId)
-      );
-    }
-
-    const data = await response.json();
-    console.log("Checkout deleted:", data);
-  };
-
   if (!checkouts) {
     return <div>Loading...</div>;
   }
 
-  // Menghitung indeks awal dan akhir untuk data yang ditampilkan
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentCheckouts = checkouts.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Fungsi untuk mengubah halaman
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Array untuk menyimpan nomor halaman
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(checkouts.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
+
+  const containerBgColor = resolvedTheme === "dark" ? "bg-gray-800" : "bg-white";
+  const borderColor = resolvedTheme === "dark" ? "border-gray-600" : "border-gray-300";
+  const textColor = resolvedTheme === "dark" ? "text-gray-200" : "text-gray-700";
+  const subTextColor = resolvedTheme === "dark" ? "text-gray-400" : "text-gray-500";
+  const statusTextColor = resolvedTheme === "dark" ? "text-gray-100" : "text-gray-900";
+  const buttonBgColor = resolvedTheme === "dark" ? "bg-gray-600" : "bg-gray-300";
+  const buttonTextColor = resolvedTheme === "dark" ? "text-gray-200" : "text-gray-700";
+  const activeButtonBgColor = resolvedTheme === "dark" ? "bg-blue-600" : "bg-blue-500";
 
   return (
     <div className="flex flex-col p-4 space-y-4">
@@ -65,8 +56,7 @@ const CheckoutHistory = () => {
         currentCheckouts.map((checkout) => (
           <div
             key={checkout.id}
-            className="flex flex-col md:flex-row justify-between border-b-2 border-gray-300 p-4 rounded-lg shadow-md bg-white space-y-4 md:space-y-0 md:space-x-4"
-          >
+            className={`flex flex-col md:flex-row justify-between border-b-2 ${borderColor} p-4 rounded-lg shadow-md ${containerBgColor} space-y-4 md:space-y-0 md:space-x-4`}>
             <div className="flex flex-col md:flex-row md:w-2/3 space-y-2 md:space-y-0 md:space-x-4">
               <div className="w-full md:w-1/3 flex-shrink-0">
                 <Image
@@ -86,33 +76,29 @@ const CheckoutHistory = () => {
               </div>
               <div className="flex flex-col md:w-2/3 space-y-2">
                 <div>
-                  <p className="text-gray-700 font-semibold">Informasi Alamat:</p>
-                  <p className="text-gray-500">
+                  <p className={`font-semibold ${textColor}`}>Informasi Alamat:</p>
+                  <p className={subTextColor}>
                     {checkout.shipping
                       ? `${checkout.shipping.city}, ${checkout.shipping.region}, Fee: ${formatRupiah(checkout.shipping.fee)}`
                       : "N/A"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-700 font-semibold">Alamat:</p>
-                  <p className="text-gray-500">
+                  <p className={`font-semibold ${textColor}`}>Alamat:</p>
+                  <p className={subTextColor}>
                     {checkout.address
                       ? `${checkout.address.street}, ${checkout.address.city}, ${checkout.address.province}, ${checkout.address.postalCode}`
                       : "N/A"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-700 font-semibold">Produk:</p>
+                  <p className={`font-semibold ${textColor}`}>Produk:</p>
                   <div className="flex flex-col space-y-2">
                     {checkout.cart.create.map((item) => (
                       <div key={item.id} className="flex flex-col space-y-2">
-                        <p className="font-semibold">{item.product.name}</p>
-                        <p className="text-gray-500">
-                          Kuantitas: {item.quantity}
-                        </p>
-                        <p className="text-gray-500">
-                          Harga: {formatRupiah(item.product.price)}
-                        </p>
+                        <p className={`font-semibold ${textColor}`}>{item.product.name}</p>
+                        <p className={subTextColor}>Kuantitas: {item.quantity}</p>
+                        <p className={subTextColor}>Harga: {formatRupiah(item.product.price)}</p>
                       </div>
                     ))}
                   </div>
@@ -121,21 +107,13 @@ const CheckoutHistory = () => {
             </div>
             <div className="flex flex-col items-start lg:items-end justify-center w-full md:w-1/3 space-y-2 md:space-y-0">
               <div className="flex flex-col items-center md:items-end">
-                <p className="text-gray-700 font-semibold">Status:</p>
-                <p className="text-gray-900">{checkout.status}</p>
+                <p className={`font-semibold ${textColor}`}>Status:</p>
+                <p className={statusTextColor}>{checkout.status}</p>
               </div>
               <div className="flex flex-col items-center md:items-end">
-                <p className="text-gray-700 font-semibold">Total Checkout:</p>
-                <p className="text-gray-900">{formatRupiah(checkout.total)}</p>
+                <p className={`font-semibold ${textColor}`}>Total Checkout:</p>
+                <p className={statusTextColor}>{formatRupiah(checkout.total)}</p>
               </div>
-              {/* <div className="flex flex-col items-center md:items-end space-y-2 mt-8">
-                <Button
-                  onClick={() => handleDeleteCheckout(checkout.id)}
-                  className="bg-red-500 hover:bg-red-600 text-white"
-                >
-                  Delete
-                </Button>
-              </div> */}
             </div>
           </div>
         ))
@@ -151,7 +129,9 @@ const CheckoutHistory = () => {
               <button
                 onClick={() => paginate(number)}
                 className={`px-4 py-2 ${
-                  number === currentPage ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"
+                  number === currentPage
+                    ? `${activeButtonBgColor} text-white`
+                    : `${buttonBgColor} ${buttonTextColor}`
                 } rounded-md`}
               >
                 {number}

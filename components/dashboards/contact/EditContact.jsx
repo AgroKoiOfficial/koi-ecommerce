@@ -4,14 +4,16 @@ import { getSession } from "next-auth/react";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/Button";
+import { useTheme } from "next-themes";
 
 const EditContact = ({
   setModalEdit,
-  setContact,
   contact,
   currentContact,
   setCurrentContact,
 }) => {
+  const { theme } = useTheme();
+
   const handleEdit = async (e) => {
     e.preventDefault();
 
@@ -25,10 +27,13 @@ const EditContact = ({
     formData.append("phone", currentContact.phone);
     formData.append("email", currentContact.email);
 
-    const response = await fetch(`/api/company_contacts/update/${currentContact.id}`, {
-      method: "PUT",
-      body: formData,
-    });
+    const response = await fetch(
+      `/api/company_contacts/update/${currentContact.id}`,
+      {
+        method: "PUT",
+        body: formData,
+      }
+    );
 
     if (response.ok) {
       toast.success("Contact updated successfully");
@@ -36,7 +41,7 @@ const EditContact = ({
       const updatedContacts = contact.map((item) =>
         item.id === currentContact.id ? updatedContact : item
       );
-      setContact(updatedContacts);
+      // setContact(updatedContacts); // Uncomment if needed
       setModalEdit(false);
     } else {
       toast.error("Failed to update contact");
@@ -45,7 +50,7 @@ const EditContact = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
+      <div className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} p-6 rounded-lg shadow-lg`}>
         <h2 className="text-xl font-bold mb-4">Edit Contact</h2>
         <form onSubmit={handleEdit} className="flex flex-col gap-4">
           <Label htmlFor="address">Address</Label>
@@ -91,7 +96,5 @@ const EditContact = ({
     </div>
   );
 };
-
-
 
 export default EditContact;

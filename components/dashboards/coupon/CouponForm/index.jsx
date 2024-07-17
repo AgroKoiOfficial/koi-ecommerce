@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { useTheme } from "next-themes";
 import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -18,6 +19,8 @@ const CouponForm = ({ onSubmit, coupon = {}, onCancel }) => {
       ? new Date(coupon.expiration).toISOString().slice(0, 16)
       : ""
   );
+
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (coupon) {
@@ -38,12 +41,12 @@ const CouponForm = ({ onSubmit, coupon = {}, onCancel }) => {
     e.preventDefault();
 
     if (discountType === "PERCENT" && decimalValue) {
-      toast.info("Decimal value should be null when discount type is PERCENT");
+      toast.info("Nilai desimal harus nol ketika jenis diskon adalah PERSEN");
       return;
     }
 
     if (discountType === "DECIMAL" && percentValue) {
-      toast.info("Percent value should be null when discount type is DECIMAL");
+      toast.info("Nilai persen harus nol ketika jenis diskon adalah DESIMAL");
       return;
     }
 
@@ -57,12 +60,19 @@ const CouponForm = ({ onSubmit, coupon = {}, onCancel }) => {
     });
   };
 
+  const containerBgColor = resolvedTheme === "dark" ? "bg-gray-800" : "bg-white";
+  const textColor = resolvedTheme === "dark" ? "text-white" : "text-gray-800";
+  const buttonCancelBgColor = resolvedTheme === "dark" ? "bg-gray-700" : "bg-gray-500";
+  const buttonCancelHoverBgColor = resolvedTheme === "dark" ? "bg-gray-600" : "bg-gray-600";
+  const buttonSubmitBgColor = resolvedTheme === "dark" ? "bg-blue-700" : "bg-blue-500";
+  const buttonSubmitHoverBgColor = resolvedTheme === "dark" ? "bg-blue-600" : "bg-blue-600";
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-6 shadow-md rounded-lg mb-6">
+      className={`${containerBgColor} p-6 shadow-md rounded-lg mb-6`}>
       <div className="mb-4">
-        <Label>Code</Label>
+        <Label className={textColor}>Kode</Label>
         <Input
           type="text"
           value={code}
@@ -71,7 +81,7 @@ const CouponForm = ({ onSubmit, coupon = {}, onCancel }) => {
         />
       </div>
       <div className="mb-4">
-        <Label>Minimum Price</Label>
+        <Label className={textColor}>Harga Minimum</Label>
         <Input
           type="number"
           value={minimumPrice}
@@ -79,7 +89,7 @@ const CouponForm = ({ onSubmit, coupon = {}, onCancel }) => {
         />
       </div>
       <div className="mb-4">
-        <Label>Price Value</Label>
+        <Label className={textColor}>Nilai Desimal</Label>
         <Input
           type="number"
           value={decimalValue}
@@ -87,7 +97,7 @@ const CouponForm = ({ onSubmit, coupon = {}, onCancel }) => {
         />
       </div>
       <div className="mb-4">
-        <Label>Percent Value</Label>
+        <Label className={textColor}>Nilai Persen</Label>
         <Input
           type="number"
           value={percentValue}
@@ -95,18 +105,18 @@ const CouponForm = ({ onSubmit, coupon = {}, onCancel }) => {
         />
       </div>
       <div className="mb-4">
-        <Label>Discount Type</Label>
+        <Label className={textColor}>Jenis Diskon</Label>
         <Select
           options={[
-            { value: "DECIMAL", label: "Decimal" },
-            { value: "PERCENT", label: "Percent" },
+            { value: "DECIMAL", label: "Desimal" },
+            { value: "PERCENT", label: "Persen" },
           ]}
           value={discountType}
           onChange={(value) => setDiscountType(value)}
         />
       </div>
       <div className="mb-4">
-        <Label>Expiration</Label>
+        <Label className={textColor}>Kadaluarsa</Label>
         <Input
           type="datetime-local"
           value={expiration}
@@ -119,14 +129,14 @@ const CouponForm = ({ onSubmit, coupon = {}, onCancel }) => {
           <Button
             type="button"
             onClick={onCancel}
-            className="bg-gray-500 text-white hover:bg-gray-600">
-            Cancel
+            className={`${buttonCancelBgColor} text-white hover:${buttonCancelHoverBgColor}`}>
+            Batal
           </Button>
         )}
         <Button
           type="submit"
-          className="bg-blue-500 text-white hover:bg-blue-600">
-          {coupon?.id ? "Update" : "Create"}
+          className={`${buttonSubmitBgColor} text-white hover:${buttonSubmitHoverBgColor}`}>
+          {coupon?.id ? "Perbarui" : "Buat"}
         </Button>
       </div>
     </form>

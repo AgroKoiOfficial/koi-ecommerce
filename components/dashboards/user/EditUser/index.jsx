@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { getSession } from "next-auth/react";
+import { useTheme } from 'next-themes';
 
 export const EditUser = ({ user, onClose }) => {
   const [name, setName] = useState(user?.name || "");
@@ -13,10 +14,11 @@ export const EditUser = ({ user, onClose }) => {
   const [success, setSuccess] = useState(null);
   const [session, setSession] = useState(null);
 
+  const { theme } = useTheme();
+
   useEffect(() => {
     const fetchSession = async () => {
       const session = await getSession();
-    //   console.log("Session:", session); 
       setSession(session);
     };
 
@@ -69,16 +71,16 @@ export const EditUser = ({ user, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
       <div className="relative w-auto max-w-3xl">
-        <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
-          <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-            <h3 className="text-3xl font-semibold">Edit User</h3>
+        <div className={`relative flex flex-col w-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} border-0 rounded-lg shadow-lg outline-none focus:outline-none`}>
+          <div className="flex items-center justify-between p-3 ">
+            <h3 className="text-xl font-semibold">Edit User</h3>
           </div>
           <div className="relative p-6 flex-auto">
             <form onSubmit={handleSubmit}>
               <div className="flex flex-wrap">
                 <div className="w-full md:w-1/2 p-2">
                   <div className="mb-4">
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="name" className={`${theme === 'dark' ? 'text-white' : ''}`}>Name</Label>
                     <Input
                       label="Name"
                       value={name}
@@ -86,7 +88,7 @@ export const EditUser = ({ user, onClose }) => {
                     />
                   </div>
                   <div className="mb-4">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email" className={`${theme === 'dark' ? 'text-white' : ''}`}>Email</Label>
                     <Input
                       label="Email"
                       value={email}
@@ -96,7 +98,7 @@ export const EditUser = ({ user, onClose }) => {
                 </div>
                 <div className="w-full md:w-1/2 p-2">
                   <div className="mb-4">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password" className={`${theme === 'dark' ? 'text-white' : ''}`}>Password</Label>
                     <Input
                       label="Password"
                       type="password"
@@ -105,7 +107,7 @@ export const EditUser = ({ user, onClose }) => {
                     />
                   </div>
                   <div className="mb-4">
-                    <Label htmlFor="role">Role</Label>
+                    <Label htmlFor="role" className={`${theme === 'dark' ? 'text-white' : ''}`}>Role</Label>
                     <Input
                       label="Role"
                       value={role}
@@ -114,7 +116,7 @@ export const EditUser = ({ user, onClose }) => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+              <div className="flex items-center justify-center p-3 space-x-4">
                 <Button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-600 text-white"

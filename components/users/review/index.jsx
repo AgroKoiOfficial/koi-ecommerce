@@ -4,9 +4,12 @@ import { FiTrash } from "react-icons/fi";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { getSession } from "next-auth/react";
 import { Button } from "@/components/ui/Button";
+import { useTheme } from "next-themes";
 
 const Review = () => {
   const [reviews, setReviews] = useState([]);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -72,7 +75,7 @@ const Review = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className={`container ${theme === "dark" ? "bg-gray-800" : "bg-white"} mx-auto px-4 py-8`}>
       <h1 className="text-2xl font-bold mb-4">Review</h1>
       {reviews.length === 0 ? (
         <p>Tidak ada atau belum ada review.</p>
@@ -104,8 +107,8 @@ const Review = () => {
                   <div className="flex items-center mb-2">
                     {renderStars(review.rating)}
                   </div>
-                  <p className="text-gray-700 mb-2">Review: {review.comment}</p>
-                  <p className="text-gray-900 text-sm font-semibold mb-2">
+                  <p className="text-md mb-2">Review: {review.comment}</p>
+                  <p className=" text-sm font-semibold mb-2">
                     - {review.user.name}
                   </p>
                 </div>
@@ -114,7 +117,9 @@ const Review = () => {
                     onClick={() => handleDelete(review.id)}
                     className="bg-red-500 hover:bg-red-700 text-white "
                     icon={<FiTrash />}
-                  />
+                  >
+                   <FiTrash />
+                  </Button>
                 </div>
               </div>
             </li>

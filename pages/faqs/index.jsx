@@ -25,8 +25,6 @@ export async function getServerSideProps() {
     const res = await fetch(`${process.env.BASE_URL}/api/faqs`);
     const data = await res.json();
 
-    console.log("Data from API:", data);
-
     if (!data || !Array.isArray(data)) {
       throw new Error("Failed to fetch FAQs");
     }
@@ -92,7 +90,6 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
       setFilteredFaqs((prevFaqs) => [...prevFaqs, ...newData]);
       setPage(nextPage);
     } catch (error) {
-      console.error("Error loading more FAQs:", error);
     } finally {
       setLoading(false);
     }
@@ -170,7 +167,7 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
         <meta name="theme-color" content="#ffffff" />
         <link rel="icon" href="/logo.png" />
       </Head>
-      <main className={`pt-16 lg:pt-20 mb-16 lg:mb-20 ${theme === "dark" ? "bg-gray-800 text-gray-300" : "bg-white text-gray-800"}`}>
+      <main className={`pt-8 min-h-screen ${theme === "dark" ? "bg-gray-800 text-gray-300" : "bg-white text-gray-800"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl lg:text-4xl font-bold mb-8 text-center my-4">
             FAQs
@@ -178,7 +175,7 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
           <div className="flex justify-center mb-6">
             <Search placeholder="Cari pertanyaanmu" onSearch={handleSearch} />
             <select
-              className="ml-4 p-2 border border-gray-300 rounded"
+              className={`ml-4 p-2 border ${theme === "dark" ? "border-gray-600" : "border-gray-300"} rounded`}
               value={selectedCategory}
               onChange={handleCategoryChange}
             >

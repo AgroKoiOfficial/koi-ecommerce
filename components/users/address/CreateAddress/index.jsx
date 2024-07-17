@@ -4,8 +4,10 @@ import { getSession } from "next-auth/react";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/Button";
+import { useTheme } from "next-themes";
 
 const CreateAddress = ({ setIsCreating }) => {
+  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     street: "",
     postalCode: "",
@@ -57,17 +59,17 @@ const CreateAddress = ({ setIsCreating }) => {
 
   return (
     <>
-      <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
+      <div className={`flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
         <h1 className="text-3xl font-bold">Buat Alamat</h1>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
+      <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-6 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
         <Label htmlFor="street">Jalan</Label>
         <Input
           name="street"
           placeholder="Jalan"
           value={formData.street}
           onChange={handleChange}
-          className={errors.street ? "border-red-500" : ""}
+          className={`border ${errors.street ? "border-red-500" : theme === 'dark' ? 'border-gray-600 text-white' : 'border-gray-300'}`}
         />
         {errors.street && (
           <p className="text-red-500 text-xs italic">{errors.street}</p>
@@ -79,19 +81,19 @@ const CreateAddress = ({ setIsCreating }) => {
           placeholder="Postal Code"
           value={formData.postalCode}
           onChange={handleChange}
-          className={errors.postalCode ? "border-red-500" : ""}
+          className={`border ${errors.postalCode ? "border-red-500" : theme === 'dark' ? 'border-gray-600 text-white' : 'border-gray-300'}`}
         />
         {errors.postalCode && (
           <p className="text-red-500 text-xs italic">{errors.postalCode}</p>
         )}
 
-        <Label htmlFor="city">KOta</Label>
+        <Label htmlFor="city">Kota</Label>
         <Input
           name="city"
           placeholder="City"
           value={formData.city}
           onChange={handleChange}
-          className={errors.city ? "border-red-500" : ""}
+          className={`border ${errors.city ? "border-red-500" : theme === 'dark' ? 'border-gray-600 text-white' : 'border-gray-300'}`}
         />
         {errors.city && (
           <p className="text-red-500 text-xs italic">{errors.city}</p>
@@ -103,7 +105,7 @@ const CreateAddress = ({ setIsCreating }) => {
           placeholder="Province"
           value={formData.province}
           onChange={handleChange}
-          className={errors.province ? "border-red-500" : ""}
+          className={`border ${errors.province ? "border-red-500" : theme === 'dark' ? 'border-gray-600 text-white' : 'border-gray-300'}`}
         />
         {errors.province && (
           <p className="text-red-500 text-xs italic">{errors.province}</p>
@@ -115,7 +117,7 @@ const CreateAddress = ({ setIsCreating }) => {
           placeholder="Phone"
           value={formData.phone}
           onChange={handleChange}
-          className={errors.phone ? "border-red-500" : ""}
+          className={`border ${errors.phone ? "border-red-500" : theme === 'dark' ? 'border-gray-600 text-white' : 'border-gray-300'}`}
         />
         {errors.phone && (
           <p className="text-red-500 text-xs italic">{errors.phone}</p>
@@ -123,12 +125,12 @@ const CreateAddress = ({ setIsCreating }) => {
         <div className="flex justify-end mt-4">
           <Button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white">
+            className={`bg-blue-500 hover:bg-blue-600 text-white ${theme === 'dark' ? 'border-gray-600' : 'border-blue-500'}`}>
             Buat
           </Button>
           <Button
             type="button"
-            className="ml-2 bg-red-500 hover:bg-red-600 text-white"
+            className={`ml-2 bg-red-500 hover:bg-red-600 text-white ${theme === 'dark' ? 'border-gray-600' : 'border-red-500'}`}
             onClick={() => setIsCreating(false)}>
            Batal
           </Button>

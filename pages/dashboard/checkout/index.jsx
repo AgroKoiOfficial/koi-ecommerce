@@ -3,9 +3,11 @@ import Head from "next/head";
 import { Chart, registerables } from "chart.js";
 import AdminDashboard from "@/layouts/AdminDashboard";
 import { subDays, format } from "date-fns";
+import { useTheme } from "next-themes";
 
 export default function Checkouts() {
   const [checkouts, setCheckouts] = useState([]);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,15 +56,15 @@ export default function Checkouts() {
             {
               label: "PAID",
               data: paidData,
-              backgroundColor: "rgba(54, 162, 235, 0.2)",
-              borderColor: "rgba(54, 162, 235, 1)",
+              backgroundColor: resolvedTheme === "dark" ? "rgba(54, 162, 235, 0.2)" : "rgba(75, 192, 192, 0.2)",
+              borderColor: resolvedTheme === "dark" ? "rgba(54, 162, 235, 1)" : "rgba(75, 192, 192, 1)",
               borderWidth: 1,
             },
             {
               label: "UNPAID",
               data: unpaidData,
-              backgroundColor: "rgba(255, 99, 132, 0.2)",
-              borderColor: "rgba(255, 99, 132, 1)",
+              backgroundColor: resolvedTheme === "dark" ? "rgba(255, 99, 132, 0.2)" : "rgba(255, 159, 64, 0.2)",
+              borderColor: resolvedTheme === "dark" ? "rgba(255, 99, 132, 1)" : "rgba(255, 159, 64, 1)",
               borderWidth: 1,
             },
           ],
@@ -71,6 +73,31 @@ export default function Checkouts() {
           scales: {
             y: {
               beginAtZero: true,
+              ticks: {
+                color: resolvedTheme === "dark" ? "white" : "black",
+              },
+              title: {
+                display: true,
+                text: 'Count',
+                color: resolvedTheme === "dark" ? "white" : "black",
+              },
+            },
+            x: {
+              ticks: {
+                color: resolvedTheme === "dark" ? "white" : "black",
+              },
+              title: {
+                display: true,
+                text: 'Date',
+                color: resolvedTheme === "dark" ? "white" : "black",
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: resolvedTheme === "dark" ? "white" : "black",
+              },
             },
           },
         },
@@ -80,7 +107,7 @@ export default function Checkouts() {
         myChart.destroy();
       };
     }
-  }, [checkouts]);
+  }, [checkouts, resolvedTheme]);
 
   const title = "Checkouts";
   return (

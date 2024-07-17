@@ -1,6 +1,7 @@
 import { prisma } from "@/prisma/prisma";
 import jwt from "jsonwebtoken";
 import * as argon2 from "argon2";
+import validator from "validator";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -10,29 +11,42 @@ export default async function handler(req, res) {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res.status(400).json({ message: "Semua kolom harus diisi" });
+  }
+
+  const sanitizedName = validator.escape(name);
+  const sanitizedEmail = validator.normalizeEmail(email);
+  const sanitizedPassword = validator.escape(password);
+
+  if (!validator.isEmail(sanitizedEmail)) {
+    return res.status(400).json({ message: "Format email tidak valid" });
+  }
+
+ 
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  if (!passwordRegex.test(sanitizedPassword)) {
+    return res.status(400).json({ message: "Password harus terdiri dari minimal 8 karakter dan terdapat minimal 1 angka" });
   }
 
   const existingUser = await prisma.user.findFirst({
     where: {
-      email,
+      email: sanitizedEmail,
     },
   });
-  
 
   if (existingUser) {
-    return res.status(409).json({ message: "User already exists" });
+    return res.status(409).json({ message: "Email sudah terdaftar" });
   }
 
-  const isAdminEmail = email.endsWith("admin@example.com");
+  const isAdminEmail = sanitizedEmail.endsWith(`${process.env.EMAIL_ADMIN}`);
   const role = isAdminEmail ? "ADMIN" : "USER";
 
-  const hashedPassword = await argon2.hash(password);
+  const hashedPassword = await argon2.hash(sanitizedPassword);
 
   const user = await prisma.user.create({
     data: {
-      name,
-      email,
+      name : sanitizedName,
+      email: sanitizedEmail,
       password: hashedPassword,
       role,
     },
