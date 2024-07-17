@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Button } from "@/components/ui/Button";
 import AddContact from "./AddContact";
 import EditContact from "./EditContact";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
 
