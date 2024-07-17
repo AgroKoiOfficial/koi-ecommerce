@@ -28,15 +28,6 @@ export const CategoryTable = () => {
 
   const { theme } = useTheme();
 
-  const itemsPerPage = 10; // Jumlah item per halaman
-
-  // Menggunakan slice untuk memotong data yang sesuai dengan halaman saat ini
-  const paginatedData = React.useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return categories.slice(startIndex, endIndex);
-  }, [categories, currentPage]);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -81,7 +72,7 @@ export const CategoryTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedData.map((category, index) => (
+            {categories.map((category, index) => (
               <TableRow
                 key={index}
                 className={`hover:${
@@ -93,7 +84,7 @@ export const CategoryTable = () => {
                     theme === "dark" ? "text-gray-300" : "text-gray-800"
                   }`}
                 >
-                  {index + 1 + (currentPage - 1) * itemsPerPage}
+                  {index + 1 + (currentPage - 1) * 10}
                 </TableCell>
                 <TableCell
                   className={`px-4 py-2 text-sm ${
