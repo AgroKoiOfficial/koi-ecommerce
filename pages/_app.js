@@ -14,9 +14,20 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
     <SessionProvider session={session}>
       <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
+            // themes={["light", "dark"]}
+            storageKey="theme"
+            storageType="local"
+            onChange={(theme) => {
+              if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+              } else {
+                document.documentElement.classList.remove("dark");
+              }
+            }}
+             getTheme={theme => theme === "dark" ? "dark" : "light"}
           >
       <Provider>
         <Component {...pageProps} />
