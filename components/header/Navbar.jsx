@@ -10,7 +10,7 @@ import Sidebar from "./Sidebar";
 import { useCart } from "../../hooks/useCart";
 import styles from "./Navbar.module.scss";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,

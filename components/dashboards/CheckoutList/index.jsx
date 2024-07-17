@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/Table";
+} from "@/components/ui/table";
 import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
 import { Button } from "@/components/ui/Button";

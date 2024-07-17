@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { FiEdit, FiTrash, FiPlusCircle } from "react-icons/fi";
 import { AddService } from "./AddService";
 import { EditService } from "./EditService";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/Button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useTheme } from 'next-themes';
