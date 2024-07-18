@@ -117,19 +117,20 @@ export const ProductTable = () => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    prepareRow,
     page,
-    state: { pageIndex, pageSize },
+    prepareRow,
     gotoPage,
     nextPage,
     previousPage,
     canPreviousPage,
     canNextPage,
+    state: { pageIndex },
   } = useTable(
     {
       columns,
       data,
       initialState: { pageIndex: currentPage - 1 },
+      manualPagination: true,
       pageCount: totalPages,
     },
     usePagination
@@ -153,7 +154,7 @@ export const ProductTable = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table {...getTableProps()} className="min-w-full">
+        <Table {...getTableProps()} className="min-w-full">
           <TableHeader>
             {headerGroups.map(headerGroup => (
               <TableRow {...headerGroup.getHeaderGroupProps()}>
@@ -196,7 +197,7 @@ export const ProductTable = () => {
               );
             })}
           </TableBody>
-        </table>
+        </Table>
       </div>
 
       <div className="flex justify-center items-center space-x-6">
