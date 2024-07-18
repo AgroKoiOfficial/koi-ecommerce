@@ -13,9 +13,6 @@ export default async function handler(req, res) {
     return res.status(401).json({ message: "Tidak diizinkan" });
   }
 
-  /**
-   * The external_id, status, and paid_amount fields from the Xendit payment gateway.
-   */
   const { external_id, status, paid_amount } = req.body;
 
   if (!external_id) {
@@ -26,7 +23,6 @@ export default async function handler(req, res) {
   try {
     const existingCheckout = await prisma.checkout.findUnique({
       where: { id: external_id },
-      include: { cart: { include: { product: true } } }, // Include products in cart
     });
 
     if (!existingCheckout) {
@@ -53,7 +49,6 @@ export default async function handler(req, res) {
         status: updatedStatus,
         total: paid_amount,
       },
-      include: { cart: { include: { product: true } } }, // Include products in cart for updates
     });
 
     if (status === "PAID") {
@@ -66,17 +61,24 @@ export default async function handler(req, res) {
         await sendPaymentConfirmationEmail(user.email, updatedCheckout);
       }
 
-      // Reduce stock and delete items from cart
-      for (const cartItem of updatedCheckout.cart) {
-        await prisma.product.update({
-          where: { id: cartItem.product.id },
-          data: { stock: { decrement: cartItem.quantity } },
-        });
+      // Process cart items if `cart` is a JSON field
+      if (existingCheckout.cart) {
+        const cartItems = JSON.parse(existingCheckout.cart);
 
-        await prisma.cart.delete({
-          where: { id: cartItem.id },
-        });
+        for (const cartItem of cartItems) {
+          // Assuming `cartItem.product.id` and `cartItem.quantity` are accessible
+          await prisma.product.update({
+            where: { id: cartItem.product.id },
+            data: { stock: { decrement: cartItem.quantity } },
+          });
+        }
       }
+
+      // Clear cart data after processing
+      await prisma.checkout.update({
+        where: { id: external_id },
+        data: { cart: null }, // Clear cart field after processing
+      });
     }
 
     return res.status(200).json({ message: "Webhook diterima" });
