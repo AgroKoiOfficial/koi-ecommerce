@@ -70,11 +70,8 @@ export default async function handler(req, res) {
       });
 
       if (!coupon) {
-        console.error("Kupon tidak ditemukan untuk id:", couponId);
         return res.status(404).json({ message: "Kupon tidak ditemukan" });
       }
-
-      console.log("Kupon ditemukan:", coupon);
 
       if (coupon.discountType === "PERCENT") {
         discount = total * (coupon.percentValue / 100);
@@ -88,7 +85,6 @@ export default async function handler(req, res) {
         total = 0;
       }
 
-      console.log("Total setelah diskon:", total);
     }
 
     const shipping = await prisma.shipping.findUnique({
@@ -99,8 +95,6 @@ export default async function handler(req, res) {
       console.error("Pengiriman tidak ditemukan untuk id:", shippingId);
       return res.status(404).json({ message: "Pengiriman tidak ditemukan" });
     }
-
-    console.log("Pengiriman ditemukan:", shipping);
 
     const shippingFee = parseInt(shipping.fee);
     total += shippingFee;
@@ -130,17 +124,6 @@ export default async function handler(req, res) {
         status: defaultStatus,
         cart: { create: cart },
       },
-    });
-
-    for (const cartItem of cart) {
-      await prisma.product.update({
-        where: { id: cartItem.product.id },
-        data: { stock: { decrement: cartItem.quantity } },
-      });
-    }
-
-    await prisma.cart.deleteMany({
-      where: { userId: userId },
     });
 
     let redirectPaymentUrl = "/";
@@ -186,6 +169,27 @@ export default async function handler(req, res) {
       console.log("Response dari Xendit:", response);
       sendCheckoutEmail(user.email, cart, discount, shippingFee, total);
       sendCheckoutToAdmin(user, address, cart, discount, shippingFee, total);
+
+      /**
+       * If the checkout status changes to "PAID", reduce the product stock and delete items from the cart.
+       *
+       * @param {string} newCheckout.status - The status of the new checkout.
+       * @param {Array} cart - The array of cart items.
+       * @param {string} userId - The ID of the user.
+       **/
+      if (newCheckout.status === "PAID") {
+        for (const cartItem of cart) {
+          await prisma.product.update({
+            where: { id: cartItem.product.id },
+            data: { stock: { decrement: cartItem.quantity } },
+          });
+        }
+
+        await prisma.cart.deleteMany({
+          where: { userId: userId },
+        });
+      }
+
       return res
         .status(200)
         .json({ checkout: newCheckout, paymentRequests: response, redirect: redirectPaymentUrl });

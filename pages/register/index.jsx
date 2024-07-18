@@ -55,7 +55,7 @@ export default function Register() {
         <title>Register</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-    <main className={`flex justify-center items-center h-screen ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}>
+    <main className={`flex justify-center items-center h-screen ${theme === "dark" ? "bg-gray-900" : "bg-white"} `}>
       <div className={`w-full max-w-md ${theme === "dark" ? "bg-gray-700" : "bg-gray-50"} rounded-lg shadow-md p-8`}>
         <h1 className="text-3xl font-bold mb-8 text-center">Register</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
