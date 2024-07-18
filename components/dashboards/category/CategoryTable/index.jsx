@@ -34,10 +34,10 @@ export const CategoryTable = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col md:flex-row justify-between items-center space-y-1 md:space-y-0 md:space-x-4">
+      <div className="flex justify-between items-center">
         <Search onSearch={handleSearch} />
         <Button
-          className="bg-blue-500 hover:bg-blue-600 text-white  w-1/4"
+          className="bg-blue-500 hover:bg-blue-600 text-white"
           onClick={handleAdd}
         >
           <FiPlusCircle />

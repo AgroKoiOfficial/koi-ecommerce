@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/Button";
 import { AddFaq } from "@/components/dashboards/faqs/AddFaq";
 import { EditFaq } from "@/components/dashboards/faqs/EditFaq";
 import { useFaqTable } from "@/hooks/dashboard/useFaqTable";
-import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
 
 export const FaqTable = () => {
@@ -82,11 +81,29 @@ export const FaqTable = () => {
         <EditFaq onClose={handleCloseEditModal} faq={editCategory} />
       )}
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      <div className="flex justify-center items-center space-x-6">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="mr-2"
+        >
+          Previous
+        </Button>
+
+        <div>
+          Page{" "}
+          <strong>
+            {currentPage} of {totalPages}
+          </strong>
+        </div>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="mr-2"
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 };

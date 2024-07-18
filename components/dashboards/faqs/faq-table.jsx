@@ -18,10 +18,8 @@ import { EditFaq } from "@/components/dashboards/faqs/EditFaq";
 import { AddFaq } from "@/components/dashboards/faqs/AddFaq";
 import { useFaqTable } from "@/hooks/dashboard/useFaqTable";
 import { FiEdit, FiTrash } from "react-icons/fi";
-import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
 import { columns } from "./columns";
-import { toast } from "react-toastify";
 
 export const FaqTable = () => {
   const {
@@ -54,9 +52,7 @@ export const FaqTable = () => {
         Action: (
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Button className="bg-gray-200 text-gray-700">
-                Actions
-              </Button>
+              <Button className="bg-gray-200 text-gray-700">Actions</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="right">
               <DropdownMenuItem onClick={() => handleEdit(faq)}>
@@ -79,7 +75,6 @@ export const FaqTable = () => {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <Search onSearch={handleSearch} />
-
         <Button
           className="bg-green-500 hover:bg-green-600 text-white"
           onClick={handleAdd}
@@ -113,14 +108,32 @@ export const FaqTable = () => {
         </Table>
       </div>
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setCurrentPage={handlePageChange}
-      />
+      <div className="flex justify-center items-center space-x-6 mt-4">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="mr-2"
+        >
+          Previous
+        </Button>
+
+        <div>
+          Page{" "}
+          <strong>
+            {currentPage} of {totalPages}
+          </strong>
+        </div>
+
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="mr-2"
+        >
+          Next
+        </Button>
+      </div>
 
       {modalOpen && <AddFaq onClose={handleCloseModal} />}
-
       {editModalOpen && editCategory && (
         <EditFaq onClose={handleCloseEditModal} faq={editCategory} />
       )}
