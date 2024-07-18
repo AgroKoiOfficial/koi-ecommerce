@@ -63,22 +63,35 @@ export default async function handler(req, res) {
 
       // Process cart items if `cart` is a JSON field
       if (existingCheckout.cart) {
-        const cartItems = JSON.parse(existingCheckout.cart);
+        try {
+          const cartItems = JSON.parse(existingCheckout.cart);
 
-        for (const cartItem of cartItems) {
-          // Assuming `cartItem.product.id` and `cartItem.quantity` are accessible
-          await prisma.product.update({
-            where: { id: cartItem.product.id },
-            data: { stock: { decrement: cartItem.quantity } },
+          for (const cartItem of cartItems) {
+            const product = await prisma.product.findUnique({
+              where: { id: cartItem.product.id },
+            });
+
+            if (!product) {
+              console.error("Produk tidak ditemukan untuk id:", cartItem.product.id);
+              continue;
+            }
+
+            await prisma.product.update({
+              where: { id: cartItem.product.id },
+              data: { stock: { decrement: cartItem.quantity } },
+            });
+          }
+
+          // Clear cart data after processing
+          await prisma.checkout.update({
+            where: { id: external_id },
+            data: { cart: null }, // Clear cart field after processing
           });
+
+        } catch (error) {
+          console.error("Kesalahan saat memproses item keranjang:", error.message);
         }
       }
-
-      // Clear cart data after processing
-      await prisma.checkout.update({
-        where: { id: external_id },
-        data: { cart: null }, // Clear cart field after processing
-      });
     }
 
     return res.status(200).json({ message: "Webhook diterima" });
