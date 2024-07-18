@@ -8,9 +8,9 @@ import EditAddress from "@/components/users/address/EditAddress";
 import CreateAddress from "@/components/users/address/CreateAddress";
 import {
   DropdownMenu,
+  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 const AddressInfo = () => {
@@ -107,7 +107,9 @@ const AddressInfo = () => {
               <div className="flex justify-end mt-3">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button className={`bg-gray-500 hover:bg-gray-700 text-white`} icon={<FiMoreVertical />} > <FiMoreVertical /></Button>
+                    <Button className="bg-gray-500 hover:bg-gray-700 text-white">
+                      <FiMoreVertical />
+                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem onSelect={() => handleEdit(address)}>
@@ -127,7 +129,7 @@ const AddressInfo = () => {
       </div>
       <Button
         onClick={handleCreate}
-        className={`bg-blue-500 hover:bg-blue-700 text-white`}>
+        className="bg-blue-500 hover:bg-blue-700 text-white">
         Alamat Baru
       </Button>
       {isEditing && (
