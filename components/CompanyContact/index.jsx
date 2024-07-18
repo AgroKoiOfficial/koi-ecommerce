@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FaMapMarkedAlt, FaPhone } from "react-icons/fa";
 import { MdMarkEmailUnread } from "react-icons/md";
+import { useTheme } from "next-themes";
 
 const CompanyContact = () => {
   const [contacts, setContacts] = useState([]);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -70,12 +73,12 @@ const CompanyContact = () => {
         {Array.isArray(contacts) &&
           contacts.map((contact) =>
             renderContactInfo(contact).map((info, index) => (
-              <div key={`${contact.id}-${info.type}-${index}`} className="bg-white rounded-lg shadow-lg p-8">
+              <div key={`${contact.id}-${info.type}-${index}`} className={`bg-${theme === "dark" ? "gray-800" : "white"} rounded-lg shadow-lg p-8`}>
                 <div className="flex items-center justify-center mb-4">
                   {getIcon(info.type)}
                 </div>
                 <p className="text-xl text-center font-bold mb-2 lg:mb-4">{getTitle(info.type)}</p>
-                <p className="text-gray-700 text-center">{info.content}</p>
+                <p className=" text-center">{info.content}</p>
               </div>
             ))
           )}
