@@ -11,16 +11,6 @@ import { Label } from "@/components/ui/Label";
 import { useTheme } from "next-themes";
 import { createCsrfToken } from "@edge-csrf/nextjs";
 
-export const getServerSideProps = async ({ req, res }) => {
-  const csrfToken = await createCsrfToken(req, res);
-  return {
-    props: {
-      csrfToken,
-    },
-  };
-};
-
-
 const Login = ({ csrfToken }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -54,7 +44,7 @@ const Login = ({ csrfToken }) => {
         redirect: false,
         email: data.email,
         password: data.password,
-        csrfToken, // Tambahkan CSRF token di sini
+        csrfToken,
       });
 
       if (response.error) {
@@ -85,7 +75,7 @@ const Login = ({ csrfToken }) => {
           <h1 className="text-3xl font-bold mb-8 text-center">Login</h1>
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <form onSubmit={handleSubmit(onSubmit)}>
-            <input type="hidden" name="csrfToken" value={csrfToken} />
+            <input type="hidden" name="csrfToken" value={csrfToken} /> {/* Input untuk CSRF Token */}
             <div className="mb-6">
               <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>Email</Label>
               <Input
