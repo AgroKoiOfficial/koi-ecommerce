@@ -106,8 +106,8 @@ const AddressInfo = () => {
               </div>
               <div className="flex justify-end mt-3">
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button className="bg-gray-500 hover:bg-gray-700 text-white w-1/8">
+                  <DropdownMenuTrigger>
+                    <Button className="flex justify-end bg-gray-500 hover:bg-gray-700 text-white w-1/8">
                       <FiMoreVertical />
                     </Button>
                   </DropdownMenuTrigger>
