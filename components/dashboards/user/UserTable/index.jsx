@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/Button";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import { EditUser } from "@/components/dashboards/user/EditUser";
 import { useUserTable } from "@/hooks/dashboard/useUserTable";
-import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
 import { useTheme } from 'next-themes';
 
@@ -35,32 +34,30 @@ export const UserTable = () => {
 
   const data =
     Array.isArray(users) &&
-    users.map((user, index) => {
-      return {
-        No: index + 1 + (currentPage - 1) * 10,
-        Name: user.name,
-        Email: user.email,
-        Role: user.role,
-        Action: (
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button className="bg-gray-200 text-gray-700">Actions</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="right">
-              <DropdownMenuItem onClick={() => handleEdit(user)}>
-                <FiEdit className="mr-2" /> Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDelete(user.id)}>
-                <FiTrash className="mr-2" /> Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ),
-      };
-    });
+    users.map((user, index) => ({
+      No: index + 1 + (currentPage - 1) * 10,
+      Name: user.name,
+      Email: user.email,
+      Role: user.role,
+      Action: (
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button className="bg-gray-200 text-gray-700">Actions</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="right">
+            <DropdownMenuItem onClick={() => handleEdit(user)}>
+              <FiEdit className="mr-2" /> Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDelete(user.id)}>
+              <FiTrash className="mr-2" /> Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    }));
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -89,7 +86,9 @@ export const UserTable = () => {
             {data?.map((row, index) => (
               <TableRow
                 key={index}
-                className={`hover:${theme === "dark" ? "bg-gray-700" : "bg-gray-50"}`}
+                className={`hover:${
+                  theme === "dark" ? "bg-gray-700" : "bg-gray-50"
+                }`}
               >
                 {Object.values(row).map((cell, idx) => (
                   <TableCell
@@ -107,11 +106,29 @@ export const UserTable = () => {
         </Table>
       </div>
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setCurrentPage={handlePageChange}
-      />
+      <div className="flex justify-center items-center space-x-6">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="mr-2"
+        >
+          Previous
+        </Button>
+
+        <div>
+          Page{" "}
+          <strong>
+            {currentPage} of {totalPages}
+          </strong>
+        </div>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="mr-2"
+        >
+          Next
+        </Button>
+      </div>
 
       {editModalOpen && editUser && (
         <EditUser onClose={handleCloseEditModal} user={editUser} />
