@@ -13,14 +13,10 @@ export default async function handler(req, res) {
     return res.status(401).json({ message: "Tidak diizinkan" });
   }
 
-
   /**
    * The external_id, status, and paid_amount fields from the Xendit payment gateway.
-   *
-   * @type {string}
    */
   const { external_id, status, paid_amount } = req.body;
-
 
   if (!external_id) {
     console.error("external_id tidak ditemukan dalam request body.");
@@ -30,6 +26,7 @@ export default async function handler(req, res) {
   try {
     const existingCheckout = await prisma.checkout.findUnique({
       where: { id: external_id },
+      include: { cart: { include: { product: true } } }, // Include products in cart
     });
 
     if (!existingCheckout) {
@@ -56,6 +53,7 @@ export default async function handler(req, res) {
         status: updatedStatus,
         total: paid_amount,
       },
+      include: { cart: { include: { product: true } } }, // Include products in cart for updates
     });
 
     if (status === "PAID") {
@@ -66,6 +64,18 @@ export default async function handler(req, res) {
 
       if (user) {
         await sendPaymentConfirmationEmail(user.email, updatedCheckout);
+      }
+
+      // Reduce stock and delete items from cart
+      for (const cartItem of updatedCheckout.cart) {
+        await prisma.product.update({
+          where: { id: cartItem.product.id },
+          data: { stock: { decrement: cartItem.quantity } },
+        });
+
+        await prisma.cart.delete({
+          where: { id: cartItem.id },
+        });
       }
     }
 

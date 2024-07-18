@@ -19,7 +19,6 @@ export default async function handler(req, res) {
 
   try {
     if (!userId || !addressId || !shippingId || !cart || cart.length === 0) {
-      console.error("Data input tidak valid:", req.body);
       return res.status(400).json({ message: "Keranjang kosong" });
     }
 
@@ -29,7 +28,6 @@ export default async function handler(req, res) {
     });
 
     if (!user) {
-      console.error("Pengguna tidak ditemukan untuk id:", userId);
       return res.status(404).json({ message: "Pengguna tidak ditemukan" });
     }
 
@@ -38,7 +36,6 @@ export default async function handler(req, res) {
     });
 
     if (!address) {
-      console.error("Alamat tidak ditemukan untuk id:", addressId);
       return res.status(404).json({ message: "Alamat tidak ditemukan" });
     }
 
@@ -53,7 +50,6 @@ export default async function handler(req, res) {
         !cartItem.product.price ||
         !cartItem.quantity
       ) {
-        console.error("Item keranjang tidak valid:", cartItem);
         return res.status(400).json({ message: "Item keranjang tidak valid" });
       }
 
@@ -61,15 +57,13 @@ export default async function handler(req, res) {
       quantity += parseInt(cartItem.quantity);
     }
 
-    console.log("Total sebelum diskon:", total);
-    console.log("Kuantitas:", quantity);
-
     if (couponId) {
       const coupon = await prisma.coupon.findUnique({
         where: { id: couponId },
       });
 
       if (!coupon) {
+        console.error("Kupon tidak ditemukan untuk id:", couponId);
         return res.status(404).json({ message: "Kupon tidak ditemukan" });
       }
 
@@ -92,7 +86,6 @@ export default async function handler(req, res) {
     });
 
     if (!shipping) {
-      console.error("Pengiriman tidak ditemukan untuk id:", shippingId);
       return res.status(404).json({ message: "Pengiriman tidak ditemukan" });
     }
 
@@ -125,6 +118,17 @@ export default async function handler(req, res) {
         cart: { create: cart },
       },
     });
+
+    // for (const cartItem of cart) {
+    //   await prisma.product.update({
+    //     where: { id: cartItem.product.id },
+    //     data: { stock: { decrement: cartItem.quantity } },
+    //   });
+    // }
+
+    // await prisma.cart.deleteMany({
+    //   where: { userId: userId },
+    // });
 
     let redirectPaymentUrl = "/";
 
@@ -166,46 +170,18 @@ export default async function handler(req, res) {
     try {
       const response = await xenditInvoiceClient.createInvoice({ data });
       redirectPaymentUrl= response.invoiceUrl;
-      console.log("Response dari Xendit:", response);
       sendCheckoutEmail(user.email, cart, discount, shippingFee, total);
       sendCheckoutToAdmin(user, address, cart, discount, shippingFee, total);
-
-      /**
-       * If the checkout status changes to "PAID", reduce the product stock and delete items from the cart.
-       *
-       * @param {string} newCheckout.status - The status of the new checkout.
-       * @param {Array} cart - The array of cart items.
-       * @param {string} userId - The ID of the user.
-       **/
-      if (newCheckout.status === "PAID") {
-        for (const cartItem of cart) {
-          await prisma.product.update({
-            where: { id: cartItem.product.id },
-            data: { stock: { decrement: cartItem.quantity } },
-          });
-        }
-
-        await prisma.cart.deleteMany({
-          where: { userId: userId },
-        });
-      }
-
       return res
         .status(200)
         .json({ checkout: newCheckout, paymentRequests: response, redirect: redirectPaymentUrl });
     } catch (error) {
-      console.error(
-        "Kesalahan saat membuat invoice:",
-        error.response ? error.response.data : error.message
-      );
       return res.status(500).json({
         message: "Gagal membuat invoice",
         error: error.response ? error.response.data : error.message,
       });
     }
   } catch (error) {
-    console.error("Kesalahan saat membuat invoice:", error.message);
-    console.error("Stack trace:", error.stack);
     return res
       .status(500)
       .json({ message: "Gagal membuat invoice", error: error.message });
