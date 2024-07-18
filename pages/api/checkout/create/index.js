@@ -119,16 +119,16 @@ export default async function handler(req, res) {
       },
     });
 
-    // for (const cartItem of cart) {
-    //   await prisma.product.update({
-    //     where: { id: cartItem.product.id },
-    //     data: { stock: { decrement: cartItem.quantity } },
-    //   });
-    // }
+    for (const cartItem of cart) {
+      await prisma.product.update({
+        where: { id: cartItem.product.id },
+        data: { stock: { decrement: cartItem.quantity } },
+      });
+    }
 
-    // await prisma.cart.deleteMany({
-    //   where: { userId: userId },
-    // });
+    await prisma.cart.deleteMany({
+      where: { userId: userId },
+    });
 
     let redirectPaymentUrl = "/";
 

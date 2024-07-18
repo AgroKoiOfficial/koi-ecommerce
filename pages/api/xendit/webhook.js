@@ -13,7 +13,14 @@ export default async function handler(req, res) {
     return res.status(401).json({ message: "Tidak diizinkan" });
   }
 
+
+  /**
+   * The external_id, status, and paid_amount fields from the Xendit payment gateway.
+   *
+   * @type {string}
+   */
   const { external_id, status, paid_amount } = req.body;
+
 
   if (!external_id) {
     console.error("external_id tidak ditemukan dalam request body.");
@@ -59,38 +66,6 @@ export default async function handler(req, res) {
 
       if (user) {
         await sendPaymentConfirmationEmail(user.email, updatedCheckout);
-      }
-
-      // Process cart items if `cart` is a JSON field
-      if (existingCheckout.cart) {
-        try {
-          const cartItems = JSON.parse(existingCheckout.cart);
-
-          for (const cartItem of cartItems) {
-            const product = await prisma.product.findUnique({
-              where: { id: cartItem.product.id },
-            });
-
-            if (!product) {
-              console.error("Produk tidak ditemukan untuk id:", cartItem.product.id);
-              continue;
-            }
-
-            await prisma.product.update({
-              where: { id: cartItem.product.id },
-              data: { stock: { decrement: cartItem.quantity } },
-            });
-          }
-
-          // Clear cart data after processing
-          await prisma.checkout.update({
-            where: { id: external_id },
-            data: { cart: null }, // Clear cart field after processing
-          });
-
-        } catch (error) {
-          console.error("Kesalahan saat memproses item keranjang:", error.message);
-        }
       }
     }
 
