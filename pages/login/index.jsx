@@ -9,8 +9,19 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
 import { useTheme } from "next-themes";
+import { createCsrfToken } from "@edge-csrf/nextjs";
 
-export default function Login() {
+export const getServerSideProps = async ({ req, res }) => {
+  const csrfToken = await createCsrfToken(req, res);
+  return {
+    props: {
+      csrfToken,
+    },
+  };
+};
+
+
+const Login = ({ csrfToken }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { register, handleSubmit } = useForm();
@@ -43,6 +54,7 @@ export default function Login() {
         redirect: false,
         email: data.email,
         password: data.password,
+        csrfToken, // Tambahkan CSRF token di sini
       });
 
       if (response.error) {
@@ -68,11 +80,12 @@ export default function Login() {
         <link rel="icon" href="/logo.png" />
         <meta name="description" content="Login" />
       </Head>
-      <main className={`flex justify-center items-center h-screen ${theme === "dark" ? "bg-gray-900" : "bg-white"}`}>
+      <main className={`flex justify-center items-center h-screen ${theme === "dark" ? "bg-gray-900" : "bg-gray-100"}`}>
         <div className={`w-full max-w-md ${theme === "dark" ? "bg-gray-700" : "bg-gray-50"} rounded-lg shadow-md p-8`}>
           <h1 className="text-3xl font-bold mb-8 text-center">Login</h1>
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <form onSubmit={handleSubmit(onSubmit)}>
+            <input type="hidden" name="csrfToken" value={csrfToken} />
             <div className="mb-6">
               <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>Email</Label>
               <Input
@@ -123,3 +136,5 @@ export default function Login() {
     </>
   );
 }
+
+export default Login;

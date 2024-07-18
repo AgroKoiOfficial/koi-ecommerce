@@ -89,6 +89,9 @@ export default NextAuth({
       });
       return true;
     },
+    async redirect({ url, baseUrl }) {
+      return url.startsWith("/") ? `${baseUrl}${url}` : url;
+    }
   },
   pages: {
     signIn: "/login",

@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { createCsrfMiddleware } from '@edge-csrf/nextjs';
+
+const csrfMiddleware = createCsrfMiddleware({
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+  }
+});
 
 export async function middleware(req) {
   const url = req.nextUrl.clone();
@@ -15,6 +22,12 @@ export async function middleware(req) {
     "/forgot-password",
     "/reset-password",
   ];
+
+  // Apply CSRF middleware to relevant routes
+  const csrfResponse = await csrfMiddleware(req);
+  if (csrfResponse) {
+    return csrfResponse;
+  }
 
   if (guestRoutes.some((route) => pathname.startsWith(route)) && token) {
     url.pathname = "/";
@@ -32,7 +45,9 @@ export async function middleware(req) {
   ) {
     url.pathname = "/";
     return NextResponse.redirect(url);
-  } 
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
