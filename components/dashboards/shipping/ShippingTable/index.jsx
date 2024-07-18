@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/Button";
 import { FiEdit, FiTrash, FiPlusCircle } from "react-icons/fi";
 import { AddShipping } from "@/components/dashboards/shipping/AddShipping";
 import { EditShipping } from "@/components/dashboards/shipping/EditShipping";
-import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
 import { useShippingTable } from "@/hooks/dashboard/useShippingTable";
 import { useTheme } from 'next-themes';
@@ -43,9 +42,9 @@ const ShippingTable = () => {
     shippings.map((shipping, index) => {
       return {
         No: index + 1 + (currentPage - 1) * 10,
-        City: shipping.city,
-        Region: shipping.region,
-        Fee: formatRupiah(shipping.fee),
+        Kota: shipping.city,
+        Pulau: shipping.region,
+        Biaya: formatRupiah(shipping.fee),
         Actions: (
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -64,8 +63,8 @@ const ShippingTable = () => {
       };
     });
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -100,7 +99,9 @@ const ShippingTable = () => {
             {data?.map((row, index) => (
               <TableRow
                 key={index}
-                className={`hover:${theme === "dark" ? "bg-gray-700" : "bg-gray-50"}`}
+                className={`hover:${
+                  theme === "dark" ? "bg-gray-700" : "bg-gray-50"
+                }`}
               >
                 {Object.values(row).map((cell, idx) => (
                   <TableCell
@@ -118,11 +119,29 @@ const ShippingTable = () => {
         </Table>
       </div>
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setCurrentPage={handlePageChange}
-      />
+      <div className="flex justify-center items-center space-x-6">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="mr-2"
+        >
+          Previous
+        </Button>
+
+        <div>
+          Page{" "}
+          <strong>
+            {currentPage} of {totalPages}
+          </strong>
+        </div>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="mr-2"
+        >
+          Next
+        </Button>
+      </div>
 
       {modalOpen && <AddShipping onClose={handleCloseModal} />}
 
