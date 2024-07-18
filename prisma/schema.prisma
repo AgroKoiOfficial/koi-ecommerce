@@ -14,6 +14,7 @@ model User {
   password    String
   resetToken  String?
   deleteToken String?
+  refreshToken String?
   role        Role
 
   cart      Cart[]

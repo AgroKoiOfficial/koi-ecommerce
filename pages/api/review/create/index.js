@@ -1,5 +1,6 @@
 import { prisma } from "@/prisma/prisma";
 import { getToken } from "next-auth/jwt";
+import validator from "validator";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -12,6 +13,8 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
+  const sanitizedComment = validator.escape(req.body.comment);
+
   try {
     const { userId, productId, rating, comment } = req.body;
     const review = await prisma.review.create({
@@ -19,7 +22,7 @@ export default async function handler(req, res) {
         userId,
         productId,
         rating,
-        comment,
+        comment: sanitizedComment,
       },
     });
 

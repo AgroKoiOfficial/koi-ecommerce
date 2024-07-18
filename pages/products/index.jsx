@@ -70,12 +70,10 @@ export default function Products({ products, totalProducts }) {
     setSearchTimeout(setTimeout(() => {
       if (value.trim() === '') {
         setSearchTerm('');
-        // Reset products to initial state
         setAllProducts(products);
         setHasMore(true);
         setPage(1);
       } else {
-        // Perform search
         performSearch(value);
       }
     }, 500));
@@ -109,7 +107,7 @@ export default function Products({ products, totalProducts }) {
           <input
             type="text"
             placeholder="Cari produk..."
-            className="px-4 py-2 w-1/2 md:w-1/3 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className={`px-4 py-2 w-1/2  rounded-md ${theme === "dark" ? "bg-gray-700 text-gray-300" : "bg-gray-200 text-gray-800"} shadow-sm focus:border-blue-500 focus:ring-blue-500`}
             value={searchTerm}
             onChange={handleSearchChange}
           />

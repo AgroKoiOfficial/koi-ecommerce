@@ -33,8 +33,8 @@ export const CreateReview = ({ productId }) => {
         const response = await fetch(`/api/checkout/userId/${userId}`);
         if (response.ok) {
           const { checkouts } = await response.json();
-          const hasCheckedOut = Array.isArray(checkouts) && checkouts.length > 0;
-          setCanReview(hasCheckedOut);
+          const hasPaidCheckout = Array.isArray(checkouts) && checkouts.some(checkout => checkout.status === 'PAID');
+          setCanReview(hasPaidCheckout);
         } else {
           setCanReview(false);
         }
@@ -123,7 +123,7 @@ export const CreateReview = ({ productId }) => {
   if (!canReview) {
     return (
       <p className="text-gray-900 font-bold text-center">
-        Kamu tidak diizinkan untuk memberikan ulasan. Silahkan untuk masuk dan checkout
+        Kamu tidak diizinkan untuk memberikan ulasan. Silahkan untuk masuk dan checkout.
       </p>
     );
   }

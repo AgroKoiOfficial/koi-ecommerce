@@ -53,6 +53,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <div className="flex items-center">
             <div className="flex-shrink-0">
+              <Link href="/" className="flex items-center" aria-label="Home">
               <Image
                 src="/logo.ico"
                 alt="Company Logo"
@@ -66,6 +67,7 @@ const Navbar = () => {
                   height: "auto",
                 }}
               />
+              </Link>
             </div>
           </div>
           <div className="flex items-center justify-center mx-auto">

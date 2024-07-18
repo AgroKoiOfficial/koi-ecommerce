@@ -25,7 +25,7 @@ export default function Login() {
     if (status === "authenticated") {
       router.push("/");
     }
-  }, [status]);
+  }, [status, router]);
 
   useEffect(() => {
     if (error) {
@@ -38,13 +38,13 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await signIn("credentials", {
         redirect: false,
         email: data.email,
         password: data.password,
       });
-  
+
       if (response.error) {
         setError(response.error);
       } else {
@@ -52,11 +52,10 @@ export default function Login() {
       }
     } catch (err) {
       setError("Terjadi kesalahan tak terduga. Silakan coba lagi.");
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -69,58 +68,58 @@ export default function Login() {
         <link rel="icon" href="/logo.png" />
         <meta name="description" content="Login" />
       </Head>
-    <main className={`flex justify-center items-center h-screen ${theme === "dark" ? "bg-gray-900" : "bg-white"}`}>
-      <div className={`w-full max-w-md ${theme === "dark" ? "bg-gray-700" : "bg-gray-50"} rounded-lg shadow-md p-8`}>
-        <h1 className="text-3xl font-bold mb-8 text-center">Login</h1>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-6">
-            <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>Email</Label>
-            <Input
-              id="email"
-              type="email"
-              {...register("email", { required: true })}
-            />
-          </div>
-          <div className="mb-6 relative">
-            <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>Password</Label>
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              {...register("password", { required: true })}
-            
-            />
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 top-7 right-0 px-3 py-2 flex items-center"
-            >
-              {showPassword ? <FiEyeOff /> : <FiEye />}
-            </button>
-          </div>
-          <div className="flex items-center justify-center">
-            <Button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white w-full"
-            >
-              {loading ? "Loading..." : "Login"}
-            </Button>
-          </div>
-        </form>
-        <p className="text-center mt-4">
-          Belum punya akun?{" "}
-          <Link href="/register" className="text-blue-500">
-            Daftar
-          </Link>
-        </p>
-        <p className="text-center mt-4">
-          Lupa kata sandi?{" "}
-          <Link href="/forgot-password" className="text-blue-500">
-            Lupa kata sandi
-          </Link>
-        </p>
-      </div>
-    </main>
+      <main className={`flex justify-center items-center h-screen ${theme === "dark" ? "bg-gray-900" : "bg-white"}`}>
+        <div className={`w-full max-w-md ${theme === "dark" ? "bg-gray-700" : "bg-gray-50"} rounded-lg shadow-md p-8`}>
+          <h1 className="text-3xl font-bold mb-8 text-center">Login</h1>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-6">
+              <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>Email</Label>
+              <Input
+                id="email"
+                type="email"
+                {...register("email", { required: true })}
+              />
+            </div>
+            <div className="mb-6 relative">
+              <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>Password</Label>
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                {...register("password", { required: true })}
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 top-7 right-0 px-3 py-2 flex items-center"
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </button>
+            </div>
+            <div className="flex items-center justify-center">
+              <Button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white w-full"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Login"}
+              </Button>
+            </div>
+          </form>
+          <p className="text-center mt-4">
+            Belum punya akun?{" "}
+            <Link href="/register" className="text-blue-500">
+              Daftar
+            </Link>
+          </p>
+          <p className="text-center mt-4">
+            Lupa kata sandi?{" "}
+            <Link href="/forgot-password" className="text-blue-500">
+              Lupa kata sandi
+            </Link>
+          </p>
+        </div>
+      </main>
     </>
   );
 }

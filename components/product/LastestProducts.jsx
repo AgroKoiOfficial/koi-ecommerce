@@ -3,16 +3,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatRupiah } from "@/utils/currency";
 import { useTheme } from "next-themes";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
-const Skeleton = () => (
-  <div className="bg-gray-200 p-4 rounded-lg shadow-lg animate-pulse">
-    <div className="w-full h-64 lg:h-72 bg-gray-300 rounded"></div>
-    <div className="p-4 flex flex-col items-center">
-      <div className="mb-2 h-4 bg-gray-300 rounded"></div>
-      <div className="h-6 bg-gray-300 rounded"></div>
+export function SkeletonCard() {
+  return (
+    <div className="flex flex-col space-y-3">
+      <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-[250px]" />
+        <Skeleton className="h-4 w-[200px]" />
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 const LatestProducts = () => {
   const [products, setProducts] = useState([]);
@@ -42,13 +53,11 @@ const LatestProducts = () => {
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {loading
         ? Array.from({ length: 8 }).map((_, index) => (
-            <div key={index}>
-              <Skeleton />
-            </div>
+            <SkeletonCard key={index} />
           ))
         : products.map((product, index) => (
             <Link href={`/products/${product.slug}`} key={product.id} passHref>
-              <div className={`rounded-lg shadow-lg p-4 ${cardBgClass} ${cardTextClass}`}>
+              <Card className={`rounded-lg shadow-lg p-4 ${cardBgClass} ${cardTextClass}`}>
                 <div className="w-full h-64 lg:h-72 relative">
                   <Image
                     src={product.image}
@@ -61,13 +70,15 @@ const LatestProducts = () => {
                     className="w-full h-full"
                   />
                 </div>
-                <div className="p-4 flex flex-col items-center">
-                  <h3 className="text-md lg:text-lg font-bold">{product.name}</h3>
-                  <p className=" text-md">
+                <CardContent className="p-4 flex flex-col items-center">
+                  <CardHeader>
+                    <CardTitle className="text-md lg:text-lg font-bold">{product.name}</CardTitle>
+                  </CardHeader>
+                  <CardDescription className="text-md">
                     {formatRupiah(product.price)}
-                  </p>
-                </div>
-              </div>
+                  </CardDescription>
+                </CardContent>
+              </Card>
             </Link>
           ))}
     </div>
