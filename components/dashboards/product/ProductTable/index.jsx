@@ -143,13 +143,13 @@ export const ProductTable = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0 md:space-x-4">
+      <div className="flex flex-col md:flex-row justify-between items-center space-y-1 md:space-y-0 md:space-x-4">
         <Search onSearch={handleSearch} />
         <Button
-          className="bg-green-500 hover:bg-green-600 text-white"
+          className="bg-green-500 hover:bg-green-600 text-white w-1/4"
           onClick={handleAdd}
         >
-          <FiPlusCircle className="mr-2" /> Add Product
+          <FiPlusCircle  /> Add Product
         </Button>
       </div>
 

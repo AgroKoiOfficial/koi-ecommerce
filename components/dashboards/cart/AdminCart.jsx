@@ -4,7 +4,6 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { Button } from "@/components/ui/Button";
 import { FiTrash } from "react-icons/fi";
 import { formatRupiah } from "@/utils/currency";
-import { Pagination } from "@/components/ui/Pagination";
 import { Search } from "@/components/ui/Search";
 import { useAdminCart } from "@/hooks/dashboard/useAdminCart";
 import { useTheme } from 'next-themes';
@@ -109,11 +108,29 @@ export const AdminCart = () => {
         </Table>
       </div>
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setCurrentPage={handlePageChange}
-      />
+      <div className="flex justify-center items-center space-x-6">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="mr-2"
+        >
+          Previous
+        </Button>
+
+        <div>
+          Page{" "}
+          <strong>
+            {currentPage} of {totalPages}
+          </strong>
+        </div>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="mr-2"
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 };
