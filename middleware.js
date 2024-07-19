@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { createCsrfMiddleware } from '@edge-csrf/nextjs';
+import { v4 as uuidv4 } from 'uuid';
 
 const csrfMiddleware = createCsrfMiddleware({
   cookie: {
@@ -46,10 +47,28 @@ export async function middleware(req) {
     return NextResponse.redirect(url);
   }
 
-  // Add CSP headers
+  // Generate nonce
+  const nonce = Buffer.from(uuidv4()).toString('base64');
+
+  // Define CSP headers
+  const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    style-src 'self' 'nonce-${nonce}';
+    img-src 'self' blob: data:;
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+  `.replace(/\s{2,}/g, ' ').trim();
+
+  // Set CSP headers
   const response = NextResponse.next();
-  response.headers.set('Content-Security-Policy', ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim());
-  
+  response.headers.set('Content-Security-Policy', cspHeader);
+  response.headers.set('x-nonce', nonce);
+
   return response;
 }
 
