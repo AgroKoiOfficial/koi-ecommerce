@@ -23,7 +23,6 @@ export async function middleware(req) {
     "/reset-password",
   ];
 
-  // Apply CSRF middleware to relevant routes
   const csrfResponse = await csrfMiddleware(req);
   if (csrfResponse) {
     return csrfResponse;
@@ -47,7 +46,11 @@ export async function middleware(req) {
     return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+  // Add CSP headers
+  const response = NextResponse.next();
+  response.headers.set('Content-Security-Policy', ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim());
+  
+  return response;
 }
 
 export const config = {
