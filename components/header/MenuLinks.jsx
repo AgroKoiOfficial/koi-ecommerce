@@ -39,20 +39,20 @@ const MenuLinks = ({ className, itemClassName, toggleSidebar }) => {
           Kategori
         </span>
       </Link>
-      <Link href="/abouts" passHref onClick={handleLinkClick}>
+      <Link href="/about" passHref onClick={handleLinkClick}>
         <span
           className={`${textStyles} ${itemClassName} ${
-            router.pathname === "/abouts" ? "font-bold" : ""
+            router.pathname === "/about" ? "font-bold" : ""
           }`}>
           Tentang Kami
         </span>
       </Link>
-      <Link href="/faqs" passHref onClick={handleLinkClick}>
+      <Link href="/contact" passHref onClick={handleLinkClick}>
         <span
           className={`${textStyles} ${itemClassName} ${
-            router.pathname === "/faqs" ? "font-bold" : ""
+            router.pathname === "/contact" ? "font-bold" : ""
           }`}>
-          FAQs
+          Hubungi Kami
         </span>
       </Link>
     </div>

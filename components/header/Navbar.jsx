@@ -10,7 +10,6 @@ import Sidebar from "./Sidebar";
 import { useCart } from "../../hooks/useCart";
 import styles from "./Navbar.module.scss";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,7 +31,6 @@ const Navbar = () => {
   } = useNavbar();
 
   const { theme, setTheme } = useTheme();
-
   const { cartData } = useCart();
   const cartItemCount = cartData.reduce(
     (total, item) => total + item.quantity,
@@ -54,19 +52,19 @@ const Navbar = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center" aria-label="Home">
-              <Image
-                src="/logo.ico"
-                alt="Company Logo"
-                width={48}
-                height={48}
-                priority={true}
-                style={{
-                  objectFit: "contain",
-                  minWidth: "32px",
-                  maxWidth: "100%",
-                  height: "auto",
-                }}
-              />
+                <Image
+                  src="/logo.ico"
+                  alt="Company Logo"
+                  width={48}
+                  height={48}
+                  priority={true}
+                  style={{
+                    objectFit: "contain",
+                    minWidth: "32px",
+                    maxWidth: "100%",
+                    height: "auto",
+                  }}
+                />
               </Link>
             </div>
           </div>
@@ -84,11 +82,12 @@ const Navbar = () => {
             <div className="mr-4">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <FaSun className="h-[1rem] w-[1rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <FaMoon className="absolute h-[1rem] w-[1rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span className="sr-only">Toggle theme</span>
-                  </Button>
+                  <button
+                    className="flex items-center justify-center p-2 rounded-md focus:outline-none"
+                    aria-label="Toggle theme">
+                    <FaSun className="h-5 w-5 transition-transform transform dark:rotate-90 dark:scale-0" />
+                    <FaMoon className="absolute h-5 w-5 transition-transform transform rotate-90 scale-0 dark:rotate-0 dark:scale-100" />
+                  </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => setTheme("light")}>
@@ -154,14 +153,14 @@ const Navbar = () => {
           <div className="-mr-2 flex md:hidden">
             <button
               onClick={toggleSidebar}
-              className={`text-gray-900 inline-flex items-center justify-center p-2 rounded-md focus:outline-none ${iconClass}`}
+              className={`inline-flex items-center justify-center p-2 rounded-md focus:outline-none ${iconClass}`}
               aria-haspopup="true"
               aria-expanded={isSidebarOpen}
               aria-label="Menu">
               {isSidebarOpen ? (
-                <FiX className="h-6 w-6" />
+                <FiX className={`h-6 w-6 ${iconClass} ${hoverIconClass} focus:outline-none`} />
               ) : (
-                <FiMenu className="h-6 w-6" />
+                <FiMenu className={`h-6 w-6 ${iconClass} ${hoverIconClass} focus:outline-none`} />
               )}
             </button>
           </div>
