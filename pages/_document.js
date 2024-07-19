@@ -1,9 +1,9 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
-    const nonce = ctx.res?.getHeader('X-Nonce');
+    const nonce = ctx.req?.headers['x-nonce'];
     return { ...initialProps, nonce };
   }
 

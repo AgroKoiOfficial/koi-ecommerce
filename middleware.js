@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
+import { NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 import { createCsrfMiddleware } from '@edge-csrf/nextjs';
 import { v4 as uuidv4 } from 'uuid';
 
