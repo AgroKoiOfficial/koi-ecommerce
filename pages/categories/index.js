@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTheme } from 'next-themes';
 import { formatRupiah } from "@/utils/currency";
+import { Input } from "@/components/ui/Input";
 
 export async function getServerSideProps() {
   try {
@@ -37,6 +38,7 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -51,10 +53,26 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
     );
   }, [productsWithUrl, displayedCategories]);
 
+  useEffect(() => {
+    if (selectedCategory) {
+      setFilteredProducts(
+        productsWithUrl.filter(
+          (product) =>
+            product.category === selectedCategory &&
+            product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    }
+  }, [searchQuery, selectedCategory, productsWithUrl]);
+
   const handleCategorySelect = (categoryName) => {
     setSelectedCategory(categoryName);
     setFilteredProducts(
-      productsWithUrl.filter((product) => product.category === categoryName)
+      productsWithUrl.filter(
+        (product) =>
+          product.category === categoryName &&
+          product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
     );
   };
 
@@ -70,17 +88,24 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
       </Head>
 
       <main className="container min-h-screen mx-auto py-8 pt-8">
-        <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-8 gap-4">
+        <Input
+          type="text"
+          placeholder="cari produk ..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
+        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-8 gap-4 mt-4">
           {displayedCategories.length > 0 ? (
             displayedCategories.map((category) => (
               <div
                 key={category}
-                className={` p-2 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
+                className={` p-1 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
                 onClick={() => handleCategorySelect(category)}
               >
-                <h2 className="text-sm lg:text-lg text-center font-semibold">
+                <h4 className="text-sm lg:text-lg text-center">
                   {category}
-                </h2>
+                </h4>
               </div>
             ))
           ) : (

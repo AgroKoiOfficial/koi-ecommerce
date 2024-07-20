@@ -14,7 +14,7 @@ const MenuLinks = ({ className, itemClassName, toggleSidebar }) => {
   };
 
   return (
-    <div className={`flex flex-col justify-center mt-8 lg:mt-0 space-y-12 lg:space-y-0 items-center md:flex-row ${className}`}>
+    <div className={`flex flex-col justify-center mt-8 md:mt-0 lg:mt-0 space-y-12 md:space-y-0 lg:space-y-0 items-center md:flex-row ${className}`}>
       <Link href="/" passHref onClick={handleLinkClick}>
         <span
           className={`${textStyles} ${itemClassName} ${
