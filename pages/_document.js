@@ -1,17 +1,20 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
 
-class MyDocument extends Document {
+class MyDocument extends NextDocument {
   static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx);
-    const nonce = ctx.req?.headers['x-nonce'];
-    return { ...initialProps, nonce };
+    const nonce = ctx.res.getHeader("x-nonce");
+    return {
+      ...(await NextDocument.getInitialProps(ctx)),
+      nonce,
+    };
   }
+
 
   render() {
     const { nonce } = this.props;
     return (
       <Html lang="id">
-        <Head>
+        <Head nonce={nonce}>
           <meta name="theme-color" content="#ffffff" />
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -28,7 +31,6 @@ class MyDocument extends Document {
           <meta name="twitter:title" content="Your Website Title" />
           <meta name="twitter:description" content="Kami menjual Ikan Koi Berkualitas" />
           <meta name="twitter:image" content="/logo.png" />
-          <script nonce={nonce} dangerouslySetInnerHTML={{ __html: `console.log('Nonce added to script');` }} />
         </Head>
         <body>
           <Main />

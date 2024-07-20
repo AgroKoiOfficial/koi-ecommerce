@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { createCsrfMiddleware } from '@edge-csrf/nextjs';
 import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
 
 const csrfMiddleware = createCsrfMiddleware({
   cookie: {
@@ -14,7 +15,7 @@ export async function middleware(req) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   const pathname = url.pathname;
-  const nonce = uuidv4();  // Membuat nonce unik
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
   const authRoutes = ["/cart", "/checkout", "/payment", "/user", "/transaction-result"];
   const adminRoutes = ["/dashboard"];
@@ -48,22 +49,22 @@ export async function middleware(req) {
     return NextResponse.redirect(url);
   }
 
-  // Menambahkan header CSP dengan nonce
   const response = NextResponse.next();
-  const csp = `
+  const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://www.googletagmanager.com https://www.google-analytics.com;
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com;
-    connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com;
-    font-src 'self' data:;
-    frame-src 'self' https://www.google.com https://www.youtube.com;
-    frame-ancestors 'self';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    style-src 'self' 'nonce-${nonce}';
+    img-src 'self' blob: data:;
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
     form-action 'self';
+    frame-ancestors 'none';
+    block-all-mixed-content;
+    upgrade-insecure-requests;
   `.replace(/\n/g, ' ').replace(/\s\s+/g, ' ');
-  response.headers.set('Content-Security-Policy', csp.trim());
 
-  // Menyimpan nonce di header agar dapat diakses di halaman
+  response.headers.set('Content-Security-Policy', cspHeader.trim());
   response.headers.set('X-Nonce', nonce);
 
   return response;
