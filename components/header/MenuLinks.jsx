@@ -39,7 +39,7 @@ const MenuLinks = ({ className, itemClassName, toggleSidebar }) => {
           Kategori
         </span>
       </Link>
-      <Link href="/about" passHref onClick={handleLinkClick}>
+      <Link href="/abouts" passHref onClick={handleLinkClick}>
         <span
           className={`${textStyles} ${itemClassName} ${
             router.pathname === "/about" ? "font-bold" : ""
@@ -47,12 +47,12 @@ const MenuLinks = ({ className, itemClassName, toggleSidebar }) => {
           Tentang Kami
         </span>
       </Link>
-      <Link href="/contact" passHref onClick={handleLinkClick}>
+      <Link href="/faqs" passHref onClick={handleLinkClick}>
         <span
           className={`${textStyles} ${itemClassName} ${
-            router.pathname === "/contact" ? "font-bold" : ""
+            router.pathname === "/faqs" ? "font-bold" : ""
           }`}>
-          Hubungi Kami
+          Faqs
         </span>
       </Link>
     </div>
