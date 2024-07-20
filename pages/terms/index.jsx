@@ -2,6 +2,7 @@ import React from "react";
 import Head from "next/head";
 import { FiCheckCircle } from "react-icons/fi";
 import { useTheme } from "next-themes";
+import dynamic from "next/dynamic";
 
 const GoogleAnalytics = dynamic(
   () => import("@next/third-parties/google").then((mod) => mod.GoogleAnalytics),
