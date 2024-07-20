@@ -13,7 +13,7 @@ export default function Products({ products, totalProducts }) {
   const [loading, setLoading] = useState(false);
   const [allProducts, setAllProducts] = useState(products);
   const [isLoadingData, setIsLoadingData] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(products.length < totalProducts);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTimeout, setSearchTimeout] = useState(null);
   const { theme } = useTheme();
@@ -33,9 +33,7 @@ export default function Products({ products, totalProducts }) {
     ) {
       return;
     }
-    if (totalProducts > allProducts.length) {
-      loadMore();
-    }
+    loadMore();
   };
 
   const loadMore = async () => {
@@ -71,7 +69,7 @@ export default function Products({ products, totalProducts }) {
       if (value.trim() === '') {
         setSearchTerm('');
         setAllProducts(products);
-        setHasMore(true);
+        setHasMore(products.length < totalProducts);
         setPage(1);
       } else {
         performSearch(value);
