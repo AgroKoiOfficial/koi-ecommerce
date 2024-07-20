@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { createCsrfMiddleware } from '@edge-csrf/nextjs';
 import { v4 as uuidv4 } from 'uuid';
-import crypto from 'crypto';
 
 const csrfMiddleware = createCsrfMiddleware({
   cookie: {
@@ -15,7 +14,7 @@ export async function middleware(req) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   const pathname = url.pathname;
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const nonce = uuidv4();
 
   const authRoutes = ["/cart", "/checkout", "/payment", "/user", "/transaction-result"];
   const adminRoutes = ["/dashboard"];

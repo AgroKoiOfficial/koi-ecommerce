@@ -2,13 +2,13 @@ import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
 
 class MyDocument extends NextDocument {
   static async getInitialProps(ctx) {
-    const nonce = ctx.res.getHeader("x-nonce");
+    const initialProps = await NextDocument.getInitialProps(ctx);
+    const nonce = ctx.res ? ctx.res.getHeader("x-nonce") : null;
     return {
-      ...(await NextDocument.getInitialProps(ctx)),
+      ...initialProps,
       nonce,
     };
   }
-
 
   render() {
     const { nonce } = this.props;
