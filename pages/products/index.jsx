@@ -8,6 +8,8 @@ import { useTheme } from 'next-themes';
 
 const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
 
+const perPage = 10;
+
 export default function Products({ products, totalProducts }) {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -40,15 +42,14 @@ export default function Products({ products, totalProducts }) {
     setLoading(true);
     const nextPage = page + 1;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}?page=${nextPage}&search=${searchTerm}`
+      `${process.env.NEXT_PUBLIC_API_URL}?page=${nextPage}&limit=${perPage}&search=${searchTerm}`
     );
 
     if (response.ok) {
       const newData = await response.json();
       setAllProducts([...allProducts, ...newData]);
       setPage(nextPage);
-
-      // Determine if there's more data to load
+      
       if (newData.length < perPage) {
         setHasMore(false);
       }
@@ -80,12 +81,12 @@ export default function Products({ products, totalProducts }) {
   };
 
   const performSearch = async (term) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}?search=${term}&page=1`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}?search=${term}&page=1&limit=${perPage}`);
 
     if (response.ok) {
       const searchData = await response.json();
       setAllProducts(searchData);
-      setHasMore(searchData.length === perPage); // Check if there might be more data
+      setHasMore(searchData.length === perPage); // Periksa apakah mungkin masih ada data tambahan
     }
   };
 
@@ -149,14 +150,14 @@ export async function getServerSideProps({ req, res }) {
   );
 
   try {
-    const products = await fetch(`${process.env.NEXT_PUBLIC_API_URL}?page=1`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}?page=1&limit=10`);
     
-    if (!products.ok) {
+    if (!response.ok) {
       throw new Error("Failed to fetch products");
     }
     
-    const productsData = await products.json();
-    const totalProducts = parseInt(products.headers.get("X-Total-Count"), 10);
+    const productsData = await response.json();
+    const totalProducts = parseInt(response.headers.get("X-Total-Count"), 10);
 
     return {
       props: {
