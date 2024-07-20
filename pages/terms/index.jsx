@@ -3,6 +3,11 @@ import Head from "next/head";
 import { FiCheckCircle } from "react-icons/fi";
 import { useTheme } from "next-themes";
 
+const GoogleAnalytics = dynamic(
+  () => import("@next/third-parties/google").then((mod) => mod.GoogleAnalytics),
+  { ssr: false }
+);
+
 export default function Terms({ terms }) {
   const descriptionContent = terms.map((term) => term.content).join(" ");
 
@@ -46,6 +51,7 @@ export default function Terms({ terms }) {
             </p>
           )}
         </div>
+        <GoogleAnalytics gaId="G-BKXLWYCWM3" />
       </main>
     </>
   );

@@ -13,7 +13,7 @@ export default function Products({ products, totalProducts }) {
   const [loading, setLoading] = useState(false);
   const [allProducts, setAllProducts] = useState(products);
   const [isLoadingData, setIsLoadingData] = useState(true);
-  const [hasMore, setHasMore] = useState(products.length < totalProducts);
+  const [hasMore, setHasMore] = useState(totalProducts > products.length);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTimeout, setSearchTimeout] = useState(null);
   const { theme } = useTheme();
@@ -22,7 +22,7 @@ export default function Products({ products, totalProducts }) {
     setIsLoadingData(false);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [allProducts, hasMore]);
 
   const handleScroll = () => {
     if (
@@ -47,7 +47,9 @@ export default function Products({ products, totalProducts }) {
       const newData = await response.json();
       setAllProducts([...allProducts, ...newData]);
       setPage(nextPage);
-      if (newData.length === 0 || newData.length < perPage) {
+
+      // Determine if there's more data to load
+      if (newData.length < perPage) {
         setHasMore(false);
       }
     } else {
@@ -69,7 +71,7 @@ export default function Products({ products, totalProducts }) {
       if (value.trim() === '') {
         setSearchTerm('');
         setAllProducts(products);
-        setHasMore(products.length < totalProducts);
+        setHasMore(totalProducts > products.length);
         setPage(1);
       } else {
         performSearch(value);
@@ -83,7 +85,7 @@ export default function Products({ products, totalProducts }) {
     if (response.ok) {
       const searchData = await response.json();
       setAllProducts(searchData);
-      setHasMore(false);
+      setHasMore(searchData.length === perPage); // Check if there might be more data
     }
   };
 
@@ -105,7 +107,7 @@ export default function Products({ products, totalProducts }) {
           <input
             type="text"
             placeholder="Cari produk..."
-            className={`px-4 py-2 w-1/2  rounded-md ${theme === "dark" ? "bg-gray-700 text-gray-300" : "bg-gray-200 text-gray-800"} shadow-sm focus:border-blue-500 focus:ring-blue-500`}
+            className={`px-4 py-2 w-1/2 rounded-md ${theme === "dark" ? "bg-gray-700 text-gray-300" : "bg-gray-200 text-gray-800"} shadow-sm focus:border-blue-500 focus:ring-blue-500`}
             value={searchTerm}
             onChange={handleSearchChange}
           />
