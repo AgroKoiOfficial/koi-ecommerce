@@ -5,7 +5,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTheme } from 'next-themes';
 import { formatRupiah } from "@/utils/currency";
-import { Input } from "@/components/ui/Input";
+import { Input } from "@/components/ui/Input";import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 
 export async function getServerSideProps() {
   try {
@@ -120,10 +128,10 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredProducts.map((product) => (
                 <Link href={`/products/${product.slug}`} key={product.id}>
-                  <div
+                  <Card
                     key={product.id}
                     className={` p-4 rounded-md shadow-md ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}
-                  >
+                  ><CardHeader>
                     <Image
                       src={product.image}
                       alt={product.name}
@@ -136,14 +144,15 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
                         margin: "0 auto",
                       }}
                     />
-                    <div className="mt-4 flex flex-col items-center space-y-1">
-                      <h3 className="text-lg font-bold">{product.name}</h3>
+                  </CardHeader>
+                    <CardContent className="mt-4 flex flex-col items-center space-y-1">
+                      <CardTitle className="text-lg font-bold">{product.name}</CardTitle>
                       <p className="text-sm font-semibold">
                         Harga: {formatRupiah(product.price)}
                       </p>
                       <p className="text-sm">Stok: {product.stock}</p>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </Link>
               ))}
             </div>
