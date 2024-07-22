@@ -47,12 +47,12 @@ const Carousel = ({ carousels }) => {
                   height={1080}
                   priority={index === 0}
                   loading={index === 0 ? "eager" : "lazy"}
-                  className="w-full object-cover"
+                  className="w-full lg:object-cover object-cover"
                   style={{
                     width: "100%",
                     maxWidth: "100%",
-                    minHeight: "30vh",
-                    maxHeight: "60vh",
+                    minHeight: "25vh",
+                    maxHeight: "65vh",
                     margin: "0 auto",
                   }}
                 />
