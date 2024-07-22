@@ -9,24 +9,24 @@ const GetReview = ({ productId }) => {
     const fetchReviews = async () => {
       try {
         const response = await fetch(`/api/review/productId/${productId}`);
+        const data = await response.json();
+
         if (response.ok) {
-          const data = await response.json();
-          if (data.length === 0) {
+          if (Array.isArray(data) && data.length === 0) {
             setMessage("Tidak ada atau belum ada review");
+          } else if (data.error) {
+            setMessage(data.error);
           } else {
             setReviews(data);
           }
-        } else if (response.status === 404) {
-          setMessage("Tidak ada atau belum ada review");
         } else {
           setMessage("Failed to fetch reviews");
-          console.error("Failed to fetch reviews:", response.status);
         }
-      } catch (error) {
+      } catch {
         setMessage("Error fetching reviews");
-        console.error("Error fetching reviews:", error);
       }
     };
+
     fetchReviews();
   }, [productId]);
 
