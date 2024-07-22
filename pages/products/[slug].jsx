@@ -1,22 +1,30 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
+import Link from "next/link";
+import Image from "next/image";
 import LoadingCard from "@/components/product/LoadingCard";
 import ProductInfo from "@/components/product/ProductInfo";
 import ProductMedia from "@/components/product/ProductMedia";
 import ProductReviews from "@/components/product/ProductReviews";
 import { CTA } from "@/components/CTA";
 import dynamic from "next/dynamic";
+import { formatRupiah } from "@/utils/currency";
 
-const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
+const GoogleAnalytics = dynamic(
+  () => import("@next/third-parties/google").then((mod) => mod.GoogleAnalytics),
+  { ssr: false }
+);
 
 export async function getServerSideProps({ params }) {
   const { slug } = params;
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/slug/${slug}`);
-  
+
     if (!res.ok) {
-      console.error(`Failed to fetch product with slug ${slug}: ${res.statusText}`);
+      console.error(
+        `Failed to fetch product with slug ${slug}: ${res.statusText}`
+      );
       return {
         notFound: true,
       };
@@ -24,9 +32,18 @@ export async function getServerSideProps({ params }) {
 
     const product = await res.json();
 
+    console.log("Fetched Product:", product);
+
+    const relatedRes = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/related-products?productId=${product.id}`
+    );
+    const relatedProducts = relatedRes.ok ? await relatedRes.json() : [];
+    console.log("Fetched Related Products:", relatedProducts);
+
     return {
       props: {
         product,
+        relatedProducts,
       },
     };
   } catch (error) {
@@ -37,7 +54,7 @@ export async function getServerSideProps({ params }) {
   }
 }
 
-function ProductDetail({ product }) {
+function ProductDetail({ product, relatedProducts }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -64,7 +81,10 @@ function ProductDetail({ product }) {
     <>
       <Head>
         <title>{product.name} - Product Detail</title>
-        <meta name="description" content={`Detail of ${product.name} ${product.description}`} />
+        <meta
+          name="description"
+          content={`Detail of ${product.name} ${product.description}`}
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#ffffff" />
         <link rel="icon" href="/logo.png" />
@@ -73,9 +93,49 @@ function ProductDetail({ product }) {
         <div className="container mx-auto px-4 pt-16">
           <div className="flex flex-col lg:flex-row lg:space-x-8">
             <ProductMedia product={product} />
-            <div className="lg:w-1/2 mt-4 lg:mt-0">
+            <div className="lg:w-1/2 mt-4 lg:mt-0 flex flex-col">
               <ProductInfo product={product} />
               <ProductReviews productId={product.id} />
+              <div className="mt-8">
+                <div className="mt-12">
+                  <h2 className="text-2xl font-bold mb-4">Produk Terkait</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {relatedProducts.length > 0 ? (
+                      relatedProducts.map((product) => (
+                        <div key={product.id} className="border p-4 rounded-lg">
+                          <Link href={`/products/${product.slug}`} passHref>
+                            {product.image ? (
+                              <Image
+                                src={product.image}
+                                alt={product.name}
+                                width={300}
+                                height={300}
+                                priority={true}
+                                style={{ objectFit: "contain" }}
+                                className="w-full h-40 mb-4"
+                              />
+                            ) : (
+                              <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-4">
+                                <span className="text-gray-600">
+                                  Gambar Tidak Tersedia
+                                </span>
+                              </div>
+                            )}
+                            <h3 className="text-lg font-semibold">
+                              {product.name}
+                            </h3>
+                            <p className="text-md">
+                              {formatRupiah(product.price)}
+                            </p>
+                          </Link>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-center">Tidak ada produk terkait</p>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -83,7 +143,6 @@ function ProductDetail({ product }) {
       </main>
       <GoogleAnalytics gaId="G-BKXLWYCWM3" />
     </>
-
   );
 }
 
