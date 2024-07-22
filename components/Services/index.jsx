@@ -22,6 +22,7 @@ const Services = () => {
 
   const cardBgClass = theme === "dark" ? "bg-gray-800" : "bg-white";
   const cardTextClass = theme === "dark" ? "text-white" : "text-gray-800";
+  const boxShadowClass = theme === "dark" ? "shadow-gray-800" : "shadow-gray-200";
 
   return (
     <div className={`${cardBgClass} ${cardTextClass} flex flex-col items-center justify-center mt-4 rounded-lg shadow-md p-4`}>
@@ -30,7 +31,7 @@ const Services = () => {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {services.map((service) => (
-          <div key={service.id} className={`w-full rounded-lg shadow-lg p-8 ${cardBgClass} ${cardTextClass}`}>
+          <div key={service.id} className={`w-full rounded-lg shadow-lg ${boxShadowClass} p-8 ${cardBgClass} ${cardTextClass}`}>
             <div className="flex items-center justify-center mb-4">
               <GrServices className="text-xl lg:text-2xl" />
             </div>

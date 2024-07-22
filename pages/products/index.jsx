@@ -5,6 +5,7 @@ import ProductCard from "../../components/product/ProductCard";
 import { CTA } from "@/components/CTA";
 import dynamic from "next/dynamic";
 import { useTheme } from 'next-themes';
+import SearchResults from "@/components/SearchResults";
 
 const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
 
@@ -18,6 +19,8 @@ export default function Products({ products, totalProducts }) {
   const [hasMore, setHasMore] = useState(totalProducts > products.length);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTimeout, setSearchTimeout] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -74,6 +77,8 @@ export default function Products({ products, totalProducts }) {
         setAllProducts(products);
         setHasMore(totalProducts > products.length);
         setPage(1);
+        setSearchResults([]);
+        setIsSearching(false);
       } else {
         performSearch(value);
       }
@@ -81,12 +86,17 @@ export default function Products({ products, totalProducts }) {
   };
 
   const performSearch = async (term) => {
+    setIsSearching(true);
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}?search=${term}&page=1&limit=${perPage}`);
 
     if (response.ok) {
       const searchData = await response.json();
+      setSearchResults(searchData);
+      setIsSearching(false);
       setAllProducts(searchData);
-      setHasMore(searchData.length === perPage); // Periksa apakah mungkin masih ada data tambahan
+      setHasMore(searchData.length === perPage);
+    } else {
+      setIsSearching(false);
     }
   };
 
@@ -104,7 +114,7 @@ export default function Products({ products, totalProducts }) {
         <h1 className={`text-3xl lg:text-4xl font-bold mb-8 text-center my-4 ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>
           Produk
         </h1>
-        <div className="flex justify-center mb-4">
+        <div className="relative flex justify-center mb-4">
           <input
             type="text"
             placeholder="Cari produk..."
@@ -112,6 +122,8 @@ export default function Products({ products, totalProducts }) {
             value={searchTerm}
             onChange={handleSearchChange}
           />
+          {isSearching && <div className="absolute mt-1 w-full bg-white shadow-lg rounded-md z-10 p-2">Loading...</div>}
+          {!isSearching && searchResults.length > 0 && <SearchResults results={searchResults} />}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           {allProducts.map((product, index) => (
