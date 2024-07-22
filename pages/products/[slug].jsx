@@ -26,7 +26,9 @@ export async function getServerSideProps({ params }) {
 
     const product = await res.json();
 
-    const relatedRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/related-products?productId=${product.id}`);
+    const relatedRes = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/related-products?productId=${product.id}`
+    );
     const relatedProducts = relatedRes.ok ? await relatedRes.json() : [];
 
     return { props: { product, relatedProducts } };
@@ -63,7 +65,10 @@ function ProductDetail({ product, relatedProducts }) {
     <>
       <Head>
         <title>{product.name} - Product Detail</title>
-        <meta name="description" content={`Detail of ${product.name} ${product.description}`} />
+        <meta
+          name="description"
+          content={`Detail of ${product.name} ${product.description}`}
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#ffffff" />
         <link rel="icon" href="/logo.png" />
@@ -75,9 +80,9 @@ function ProductDetail({ product, relatedProducts }) {
             <div className="lg:w-1/2 mt-4 lg:mt-0 flex flex-col">
               <ProductInfo product={product} />
               <ProductReviews productId={product.id} />
-              <RelatedProducts relatedProducts={relatedProducts} />
             </div>
           </div>
+          <RelatedProducts relatedProducts={relatedProducts} />
         </div>
         <CTA />
       </main>
