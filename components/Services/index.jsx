@@ -27,7 +27,7 @@ const Services = () => {
   return (
     <div className={`${cardBgClass} ${cardTextClass} flex flex-col items-center justify-center mt-4 rounded-lg shadow-md p-4`}>
       <h1 className="text-2xl lg:text-3xl text-center font-bold mb-4 lg:mb-8">
-        Mengapa harus Koi Toko?
+        Mengapa harus Jual Ikan Koi?
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {services.map((service) => (

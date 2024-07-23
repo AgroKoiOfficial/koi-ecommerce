@@ -5,9 +5,12 @@ import { FaRegUser, FaUser , FaRegAddressCard  } from "react-icons/fa";
 import { MdOutlineRateReview, MdOutlineShoppingCartCheckout  } from "react-icons/md";
 import { Button } from "../../ui/Button";
 import MenuItem from "./MenuItem";
+import { useTheme } from "next-themes";
 
 const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
   const router = useRouter();
+
+  const { theme, setTheme } = useTheme();
 
   const handleBackToHome = () => {
     router.push("/");
@@ -16,18 +19,15 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
     <div
       className={`${
         isSidebar ? "w-64" : "hidden lg:block w-64"
-      } fixed inset-y-0 left-0 z-40 transition-width duration-200 ease-in-out bg-gray-900 text-white shadow-lg`}>
+      } fixed inset-y-0 left-0 z-40 transition-width duration-200 ease-in-out ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'} shadow-lg`}>
       <div className="flex flex-col h-full">
-        {/* Sidebar Header */}
         <div className="flex items-center justify-between px-4 py-4">
-          {/* Logo */}
           <div className="flex items-center">
             <img src="/logo.png" alt="Logo" className="w-8 h-8" />
             <span className="ml-2 text-xl font-bold">Agro Koi</span>
           </div>
-          {/* Close Button */}
           <button
-            className="text-gray-300 hover:text-white focus:outline-none lg:hidden"
+            className={` focus:outline-none lg:hidden ${theme === 'dark' ? 'text-white' : 'text-black'}`}
             onClick={toggleCloseSidebar}>
             <FiX className="h-6 w-6" />
           </button>
@@ -37,32 +37,32 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
         <div className="flex-1 overflow-y-auto">
           <ul className="space-y-2">
             <MenuItem
-              icon={<FiHome className="h-5 w-5 mr-2" />}
+              icon={<FiHome className={`h-5 w-5 mr-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />}
               title="Dashboard"
               href="#"
               submenu={[
                 {
                   title: "Riwayat Review",
                   href: "/user/review",
-                  icon: <MdOutlineRateReview className="h-5 w-5 mr-2" />,
+                  icon: <MdOutlineRateReview className={`h-5 w-5 mr-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />,
                 },
               ]}
             />
             <MenuItem
-              icon={<FiList className="h-5 w-5 mr-2" />}
+              icon={<FiList className={`h-5 w-5 mr-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />}
               title="Pesan"
               href="#"
               submenu={[
-                { title: "Riwayat Belanja", href: "/user/checkout-history", icon: <MdOutlineShoppingCartCheckout className="h-5 w-5 mr-2" /> },
+                { title: "Riwayat Belanja", href: "/user/checkout-history", icon: <MdOutlineShoppingCartCheckout className={`h-5 w-5 mr-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`} /> },
               ]}
             />
             <MenuItem
-            icon={<FaRegUser  className="h-5 w-5 mr-2" />}
+            icon={<FaRegUser  className={`h-5 w-5 mr-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />}
             title={'Managemen Akun'}
             href={'#'}
             submenu={[
-              { title: " Informasi Akun", href: "/user/user-management", icon: <FaUser className="h-5 w-5 mr-2"/> },
-              { title: "Alamat", href: "/user/address", icon: <FaRegAddressCard className="h-5 w-5 mr-2"/> },
+              { title: " Informasi Akun", href: "/user/user-management", icon: <FaUser className={`h-5 w-5 mr-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}/> },
+              { title: "Alamat", href: "/user/address", icon: <FaRegAddressCard className={`h-5 w-5 mr-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}/> },
             ]}
             />
           </ul>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import ProductCard from "../../components/product/ProductCard";
@@ -8,6 +8,8 @@ import { useTheme } from 'next-themes';
 import SearchResults from "@/components/SearchResults";
 
 const GoogleAnalytics = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleAnalytics), { ssr: false });
+
+const GoogleTagManager = dynamic(() => import('@next/third-parties/google').then(mod => mod.GoogleTagManager), { ssr: false });
 
 const perPage = 10;
 
@@ -151,6 +153,7 @@ export default function Products({ products, totalProducts }) {
       </main>
 
       <GoogleAnalytics gaId="G-BKXLWYCWM3" />
+      <GoogleTagManager gtmId="GTM-8280730251" />
     </>
   );
 }

@@ -53,7 +53,7 @@ const Navbar = () => {
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center" aria-label="Home">
                 <Image
-                  src="/logo.ico"
+                  src="/logo_48x48.ico"
                   alt="Company Logo"
                   width={48}
                   height={48}
