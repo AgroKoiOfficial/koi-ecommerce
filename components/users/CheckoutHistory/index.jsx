@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { getSession } from "next-auth/react";
 import { formatRupiah } from "@/utils/currency";
 import { useTheme } from "next-themes";
@@ -50,13 +51,22 @@ const CheckoutHistory = () => {
   const buttonTextColor = resolvedTheme === "dark" ? "text-gray-200" : "text-gray-700";
   const activeButtonBgColor = resolvedTheme === "dark" ? "bg-blue-600" : "bg-blue-500";
 
+  const isExpired = (checkout) => {
+    const creationTime = new Date(checkout.createdAt);
+    const currentTime = new Date();
+    const expirationTime = new Date(creationTime.getTime() + 6 * 60 * 60 * 1000); // 6 hours
+
+    return currentTime > expirationTime;
+  };
+
   return (
     <div className="flex flex-col p-4 space-y-4">
       {currentCheckouts.length > 0 ? (
         currentCheckouts.map((checkout) => (
           <div
             key={checkout.id}
-            className={`flex flex-col md:flex-row justify-between border-b-2 ${borderColor} p-4 rounded-lg shadow-md ${containerBgColor} space-y-4 md:space-y-0 md:space-x-4`}>
+            className={`flex flex-col md:flex-row justify-between border-b-2 ${borderColor} p-4 rounded-lg shadow-md ${containerBgColor} space-y-4 md:space-y-0 md:space-x-4`}
+          >
             <div className="flex flex-col md:flex-row md:w-2/3 space-y-2 md:space-y-0 md:space-x-4">
               <div className="w-full md:w-1/3 flex-shrink-0">
                 <Image
@@ -113,6 +123,22 @@ const CheckoutHistory = () => {
               <div className="flex flex-col items-center md:items-end">
                 <p className={`font-semibold ${textColor}`}>Total Checkout:</p>
                 <p className={statusTextColor}>{formatRupiah(checkout.total)}</p>
+                {checkout.redirectUrl && (
+                  <p className={`mb-2 ${subTextColor}`}>
+                    {isExpired(checkout) ? (
+                      <span className="text-red-500">Link Pembayaran Sudah Kadaluarsa</span>
+                    ) : (
+                      <Link
+                        href={checkout.redirectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
+                      >
+                        Lanjutkan Pembayaran
+                      </Link>
+                    )}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -121,7 +147,6 @@ const CheckoutHistory = () => {
         <p className="text-center text-gray-500">Tidak Ada Checkout.</p>
       )}
 
-      {/* Pagination */}
       <div className="mt-4 flex justify-center">
         <ul className="flex space-x-2">
           {pageNumbers.map((number) => (

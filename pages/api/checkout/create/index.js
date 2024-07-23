@@ -170,6 +170,11 @@ export default async function handler(req, res) {
     try {
       const response = await xenditInvoiceClient.createInvoice({ data });
       redirectPaymentUrl= response.invoiceUrl;
+
+      await prisma.checkout.update({
+        where: { id: newCheckout.id },
+        data: { redirectUrl: redirectPaymentUrl },
+      })
       sendCheckoutEmail(user.email, cart, discount, shippingFee, total);
       sendCheckoutToAdmin(user, address, cart, discount, shippingFee, total);
       return res
