@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FiMenu, FiX, FiUser, FiShoppingCart } from "react-icons/fi";
 import { FaMoon, FaSun } from "react-icons/fa";
@@ -36,6 +36,16 @@ const Navbar = () => {
     (total, item) => total + item.quantity,
     0
   );
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   const iconClass = theme === 'dark' ? styles.darkIcon : styles.lightIcon;
   const hoverIconClass = theme === 'dark' ? styles.hoverDarkIcon : styles.hoverLightIcon;

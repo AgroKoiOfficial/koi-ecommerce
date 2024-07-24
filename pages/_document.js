@@ -1,4 +1,5 @@
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
+import { useTheme } from 'next-themes';
 
 class MyDocument extends NextDocument {
   static async getInitialProps(ctx) {
@@ -15,7 +16,8 @@ class MyDocument extends NextDocument {
     return (
       <Html lang="id">
         <Head nonce={nonce}>
-          <meta name="theme-color" content="#ffffff" />
+          <meta name="theme-color" color='white' media="(prefers-color-scheme: light)" />
+          <meta name="theme-color" color='black' media="(prefers-color-scheme: dark)" />
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <meta name="description" content="Jual Ikan Koi Berbagai Macam Jenis, dan Berkualitas" />
