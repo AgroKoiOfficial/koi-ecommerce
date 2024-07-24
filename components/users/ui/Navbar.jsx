@@ -13,7 +13,7 @@ const Navbar = ({ isNavbar, toggleSidebar, title }) => {
 
   const handleLogout = () => {
     signOut({
-      callbackUrl: process.env.NEXTAUTH_URL || "/login",
+      callbackUrl: `https://${process.env.BASE_URL}/login` || "/login",
     });
   };
 
