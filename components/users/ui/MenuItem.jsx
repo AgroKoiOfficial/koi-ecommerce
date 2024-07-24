@@ -1,27 +1,23 @@
-import React, {useState} from "react";
-import { FiChevronDown, FiChevronRight } from "react-icons/fi";
+import React, { useState } from "react";
 import { useTheme } from "next-themes";
+import { AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
-const MenuItem = ({icon, title, submenu, href }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const MenuItem = ({ icon, title, submenu, href }) => {
+  const { theme } = useTheme();
 
-    const { theme, setTheme } = useTheme();
-
-    const handleClick = () => {
-        setIsOpen(!isOpen);
-    };
-
-    return (
-        <li className={`table-captionpx-4 py-2 transition-colors duration-200 ease-in-out hover:${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
-        <div className="flex items-center justify-between cursor-pointer" onClick={handleClick}>
-          <div className="flex items-center ml-4 pr-4">
-            {icon}
-            <a href={href} className="ml-2">{title}</a>
-          </div>
-          {submenu && (isOpen ? <FiChevronDown className="h-4 w-4 ml-auto" /> : <FiChevronRight className="h-4 w-4 ml-auto" />)}
+  return (
+    <AccordionItem value={title}>
+      <AccordionTrigger
+        className={`flex items-center justify-between px-4 py-2 cursor-pointer transition-colors duration-200 ease-in-out hover:${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}
+      >
+        <div className="flex items-center">
+          {icon}
+          <a href={href} className="ml-2">{title}</a>
         </div>
-        {submenu && isOpen && (
-          <ul className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'} ${theme === 'dark' ? 'text-white' : 'text-black'} rounded p-2`}>
+      </AccordionTrigger>
+      {submenu && (
+        <AccordionContent className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'} ${theme === 'dark' ? 'text-white' : 'text-black'} rounded p-2`}>
+          <ul>
             {submenu.map((item, index) => (
               <li key={index} className="flex items-center px-4 py-2">
                 {item.icon}
@@ -29,9 +25,10 @@ const MenuItem = ({icon, title, submenu, href }) => {
               </li>
             ))}
           </ul>
-        )}
-      </li>
-    )
-}
+        </AccordionContent>
+      )}
+    </AccordionItem>
+  );
+};
 
-export default MenuItem
+export default MenuItem;

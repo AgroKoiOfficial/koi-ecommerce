@@ -14,8 +14,10 @@ const Navbar = ({ isNavbar, toggleSidebar, title }) => {
   return (
     <nav
       className={`${
-        isNavbar ? "bg-white shadow-md" : "bg-white shadow-none"
-      } fixed top-0 left-0 z-30 w-full border-b border-gray-200 px-6 py-4 transition-colors duration-200 ease-in-out`}
+        isNavbar ? "bg-white shadow-md" : "bg-transparent"
+      } fixed top-0 left-0 z-30 w-full border-b border-${
+        isNavbar ? "gray-200" : "transparent"
+      } px-6 py-4 transition-colors duration-200 ease-in-out`}
     >
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
@@ -40,16 +42,11 @@ const Navbar = ({ isNavbar, toggleSidebar, title }) => {
           </button>
 
           <div className="ml-3 lg:pl-64">
-            <div className="text-lg font-semibold">{title}</div>
+            <div className="text-lg font-semibold text-gray-800">{title}</div>
           </div>
         </div>
 
         <div className="flex items-center">
-          {status === "loading" ? (
-            <div className="mr-4">Loading...</div>
-          ) : session && session.user ? (
-            <div className="mr-4">{session.user.name}</div>
-          ) : null}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -58,10 +55,9 @@ const Navbar = ({ isNavbar, toggleSidebar, title }) => {
                 aria-label="Buka menu pengguna"
               >
                 <svg
-                  className="h-5 w-5"
+                  className="h-6 w-6 text-gray-800"
                   fill="none"
                   stroke="currentColor"
-                  viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -73,15 +69,30 @@ const Navbar = ({ isNavbar, toggleSidebar, title }) => {
                 </svg>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-32 flex flex-col items-center">
-              <DropdownMenuItem
-                className="p-2 bg-white hover:bg-gray-100"
-                onClick={() => {
-                  signOut();
-                }}
-              >
-                Logout
-              </DropdownMenuItem>
+            <DropdownMenuContent className="w-32 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              {status === "loading" ? (
+                <DropdownMenuItem className="p-2 text-center text-gray-600">
+                  Loading...
+                </DropdownMenuItem>
+              ) : session && session.user ? (
+                <>
+                  <DropdownMenuItem className="p-2 text-center text-gray-800">
+                    Hi, {session.user.name}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="p-2 text-center text-gray-800 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => {
+                      signOut({ callbackUrl: '/login' });
+                    }}
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <DropdownMenuItem className="p-2 text-center text-gray-800">
+                  Not logged in
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

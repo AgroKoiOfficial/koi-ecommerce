@@ -70,11 +70,11 @@ const LatestProducts = () => {
                     className="w-full h-full"
                   />
                 </div>
-                <CardContent className="p-4 flex flex-col items-center">
+                <CardContent className="p-2 flex flex-col items-center">
                   <CardHeader>
                     <CardTitle className="text-md lg:text-lg font-bold">{product.name}</CardTitle>
                   </CardHeader>
-                  <CardDescription className="text-md">
+                  <CardDescription className="text-md font-semibold">
                     {formatRupiah(product.price)}
                   </CardDescription>
                 </CardContent>

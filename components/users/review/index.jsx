@@ -8,6 +8,7 @@ import { useTheme } from "next-themes";
 
 const Review = () => {
   const [reviews, setReviews] = useState([]);
+  const [message, setMessage] = useState("");
 
   const { theme } = useTheme();
 
@@ -16,7 +17,7 @@ const Review = () => {
       try {
         const session = await getSession();
         if (!session) {
-          console.error("No session found.");
+          setMessage("No session found.");
           return;
         }
 
@@ -35,8 +36,15 @@ const Review = () => {
         }
 
         const data = await response.json();
-        setReviews(data);
+        if (Array.isArray(data) && data.length === 0) {
+          setMessage("Tidak ada atau belum ada review.");
+        } else if (data.error) {
+          setMessage(data.error);
+        } else {
+          setReviews(data);
+        }
       } catch (error) {
+        setMessage("Error fetching reviews.");
         console.error("Error fetching reviews:", error);
       }
     };
@@ -77,9 +85,8 @@ const Review = () => {
   return (
     <div className={`container ${theme === "dark" ? "bg-gray-800" : "bg-white"} mx-auto px-4 py-8`}>
       <h1 className="text-2xl font-bold mb-4">Review</h1>
-      {reviews.length === 0 ? (
-        <p>Tidak ada atau belum ada review.</p>
-      ) : (
+      {message && <p>{message}</p>}
+      {reviews.length > 0 ? (
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           {reviews.map((review) => (
             <li
@@ -125,6 +132,8 @@ const Review = () => {
             </li>
           ))}
         </ul>
+      ) : (
+        <p>Tidak ada atau belum ada review.</p>
       )}
     </div>
   );

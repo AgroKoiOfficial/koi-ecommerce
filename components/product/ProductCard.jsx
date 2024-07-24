@@ -15,7 +15,7 @@ export default function ProductCard({ product, isLoading }) {
   const { theme } = useTheme();
 
   return (
-    <Card className={`rounded-lg shadow-md overflow-hidden py-4 m-4 md:m-0 ${isLoading ? "animate-pulse" : ""}`}>
+    <Card className={`h-[100%] min-w-[50%] relative rounded-lg shadow-md overflow-hidden py-4 m-4 md:m-0 ${isLoading ? "animate-pulse" : ""}`}>
       <div className="relative overflow-hidden h-72 w-full">
         {isLoading ? (
           <div className="bg-gray-200 w-full h-full"></div>
@@ -37,9 +37,9 @@ export default function ProductCard({ product, isLoading }) {
           />
         )}
       </div>
-      <CardContent className="p-4 flex flex-col items-center">
+      <CardContent className="p-1 flex flex-col items-center">
         <CardHeader>
-          <CardTitle className={`text-2xl md:text-xl font-bold mb-2 ${theme === "dark" ? "text-gray-300" : "text-gray-800"} truncate`}>
+          <CardTitle className={`text-2xl md:text-xl font-bold mb-1 ${theme === "dark" ? "text-gray-300" : "text-gray-800"} truncate`}>
             {isLoading ? "Loading..." : product.name}
           </CardTitle>
         </CardHeader>
