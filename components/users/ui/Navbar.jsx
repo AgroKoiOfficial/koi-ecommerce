@@ -11,6 +11,12 @@ import {
 const Navbar = ({ isNavbar, toggleSidebar, title }) => {
   const { data: session, status } = useSession();
 
+  const handleLogout = () => {
+    signOut({
+      callbackUrl: process.env.NEXTAUTH_URL || "/login",
+    });
+  };
+
   return (
     <nav
       className={`${
@@ -81,9 +87,7 @@ const Navbar = ({ isNavbar, toggleSidebar, title }) => {
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="p-2 text-center text-gray-800 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => {
-                      signOut({ callbackUrl: '/login' });
-                    }}
+                    onClick={handleLogout}
                   >
                     Logout
                   </DropdownMenuItem>
