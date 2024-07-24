@@ -111,7 +111,9 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
                 displayedCategories.map((category) => (
                   <div
                     key={category}
-                    className={`category-box p-1 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
+                    className={`category-box p-1 rounded-md cursor-pointer ${
+                      selectedCategory === category ? "border-2 border-red-500" : ""
+                    } ${theme === "dark" ? "shadow-md shadow-gray-700" : "shadow-md shadow-gray-300"}`}
                     onClick={() => handleCategorySelect(category)}
                   >
                     <h4 className="text-sm lg:text-lg text-center">
@@ -136,7 +138,7 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
                 <Link href={`/products/${product.slug}`} key={product.id}>
                   <Card
                     key={product.id}
-                    className={`p-4 rounded-md shadow-md ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}
+                    className={`p-4 rounded-md shadow-md ${theme === "dark" ? "text-gray-300 shadow-gray-700" : "text-gray-800 shadow-gray-300"}`}
                   >
                     <CardHeader>
                       <Image
