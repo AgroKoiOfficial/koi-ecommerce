@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export async function getServerSideProps() {
   try {
@@ -103,22 +104,30 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
-        <div className="categories-scroll mt-4">
-          {displayedCategories.length > 0 ? (
-            displayedCategories.map((category) => (
-              <div
-                key={category}
-                className={`p-1 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
-                onClick={() => handleCategorySelect(category)}
-              >
-                <h4 className="text-sm lg:text-lg text-center">
-                  {category}
-                </h4>
-              </div>
-            ))
-          ) : (
-            <p className={`text-center ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>No categories found.</p>
-          )}
+        <div className="relative mt-4">
+          <div className="categories-scroll">
+            {displayedCategories.length > 0 ? (
+              displayedCategories.map((category) => (
+                <div
+                  key={category}
+                  className={`category-box p-1 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
+                  onClick={() => handleCategorySelect(category)}
+                >
+                  <h4 className="text-sm lg:text-lg text-center">
+                    {category}
+                  </h4>
+                </div>
+              ))
+            ) : (
+              <p className={`text-center ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>No categories found.</p>
+            )}
+          </div>
+          <div className="scroll-indicator left-0">
+            <FaArrowLeft size={16} />
+          </div>
+          <div className="scroll-indicator right-0">
+            <FaArrowRight size={16}/>
+          </div>
         </div>
         {selectedCategory && (
           <div className="mt-8">
@@ -140,18 +149,15 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
                         height={100}
                         priority={true}
                         style={{
-                          width: "auto",
+                          width: "80%",
                           height: "auto",
                           margin: "0 auto",
                         }}
                       />
                     </CardHeader>
                     <CardContent className="mt-4 flex flex-col items-center space-y-1">
-                      <CardTitle className="text-lg font-bold">{product.name}</CardTitle>
-                      <p className="text-sm font-semibold">
-                        Harga: {formatRupiah(product.price)}
-                      </p>
-                      <p className="text-sm">Stok: {product.stock}</p>
+                      <CardTitle className="text-sm md:text-md lg:text-lg font-semibold">{product.name}</CardTitle>
+                      <p className="text-[0.7rem] lg:text-md">Stok: {product.stock}</p>
                     </CardContent>
                   </Card>
                 </Link>
@@ -167,6 +173,7 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
           overflow-x: auto;
           gap: 1rem;
           padding-bottom: 1rem;
+          scroll-behavior: smooth;
         }
 
         .categories-scroll::-webkit-scrollbar {
@@ -176,6 +183,34 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
         .categories-scroll {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+
+        .category-box {
+          flex: 0 0 120px;
+          text-align: center;
+        }
+
+        .scroll-indicator {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 2rem;
+          height: 2rem;
+          background-color: rgba(0, 0, 0, 0.5);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+
+        .scroll-indicator.left-0 {
+          left: -1rem;
+        }
+
+        .scroll-indicator.right-0 {
+          right: -1rem;
         }
       `}</style>
     </>
