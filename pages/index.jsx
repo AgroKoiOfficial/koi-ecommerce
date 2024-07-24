@@ -71,7 +71,7 @@ export default function Home({ carousels }) {
           <LastestProducts />
         </div>
         <div className="mt-4 lg:mt-8 min-h-screen flex flex-col justify-center items-center">
-          <h2 className="text-3xl font-bold mb-4 lg:mb-8">Services</h2>
+          <h2 className="text-3xl font-bold mb-4 lg:mb-8">Layanan Kami</h2>
           {servicesLoaded ? <Services /> : <Skeleton />}
         </div>
         <CTA />

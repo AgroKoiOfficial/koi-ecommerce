@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTheme } from 'next-themes';
 import { formatRupiah } from "@/utils/currency";
-import { Input } from "@/components/ui/Input";import {
+import { Input } from "@/components/ui/Input";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -13,7 +14,6 @@ import { Input } from "@/components/ui/Input";import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 
 export async function getServerSideProps() {
   try {
@@ -103,12 +103,12 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
-        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-8 gap-4 mt-4">
+        <div className="categories-scroll mt-4">
           {displayedCategories.length > 0 ? (
             displayedCategories.map((category) => (
               <div
                 key={category}
-                className={` p-1 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
+                className={`p-1 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
                 onClick={() => handleCategorySelect(category)}
               >
                 <h4 className="text-sm lg:text-lg text-center">
@@ -130,21 +130,22 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
                 <Link href={`/products/${product.slug}`} key={product.id}>
                   <Card
                     key={product.id}
-                    className={` p-4 rounded-md shadow-md ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}
-                  ><CardHeader>
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={100}
-                      height={100}
-                      priority={true}
-                      style={{
-                        width: "auto",
-                        height: "auto",
-                        margin: "0 auto",
-                      }}
-                    />
-                  </CardHeader>
+                    className={`p-4 rounded-md shadow-md ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}
+                  >
+                    <CardHeader>
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={100}
+                        height={100}
+                        priority={true}
+                        style={{
+                          width: "auto",
+                          height: "auto",
+                          margin: "0 auto",
+                        }}
+                      />
+                    </CardHeader>
                     <CardContent className="mt-4 flex flex-col items-center space-y-1">
                       <CardTitle className="text-lg font-bold">{product.name}</CardTitle>
                       <p className="text-sm font-semibold">
@@ -159,6 +160,24 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
           </div>
         )}
       </main>
+
+      <style jsx>{`
+        .categories-scroll {
+          display: flex;
+          overflow-x: auto;
+          gap: 1rem;
+          padding-bottom: 1rem;
+        }
+
+        .categories-scroll::-webkit-scrollbar {
+          display: none;
+        }
+
+        .categories-scroll {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </>
   );
 }

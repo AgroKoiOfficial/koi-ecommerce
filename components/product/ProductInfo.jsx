@@ -6,9 +6,11 @@ import { getSession } from 'next-auth/react';
 import { formatRupiah } from '@/utils/currency';
 import { Button } from '@/components/ui/Button';
 import { useCartStore } from '@/stores/cartStore';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const ProductInfo = ({ product }) => {
   const [loading, setLoading] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
   const router = useRouter();
   const addToCart = useCartStore((state) => state.addToCart);
 
@@ -51,6 +53,10 @@ const ProductInfo = ({ product }) => {
     }
   };
 
+  const toggleDescription = () => {
+    setShowDescription(!showDescription);
+  };
+
   return (
     <div className="mb-4">
       <h1 className="text-3xl lg:text-4xl font-bold mb-4 text-center lg:text-left">
@@ -66,8 +72,11 @@ const ProductInfo = ({ product }) => {
         <span className="font-bold">Stok:</span> {product.stock}
       </p>
       <div className="mb-4">
-        <span className="font-bold">Deskripsi:</span>
-        <p className="mt-2">{product.description}</p>
+        <div className="flex justify-between items-center cursor-pointer" onClick={toggleDescription}>
+          <span className="font-bold">Deskripsi:</span>
+          {showDescription ? <FaChevronUp className='mr-4 lg:mr-10' /> : <FaChevronDown className='mr-4 lg:mr-10'/>}
+        </div>
+        {showDescription && <p className="mt-2">{product.description}</p>}
       </div>
       {product.stock > 0 ? (
         <div className="mb-4 md:w-1/5 lg:w-1/3">
