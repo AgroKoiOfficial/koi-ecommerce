@@ -15,6 +15,7 @@ import {
 
 const ProductInfo = ({ product }) => {
   const [loading, setLoading] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
   const router = useRouter();
   const addToCart = useCartStore((state) => state.addToCart);
 
@@ -79,21 +80,24 @@ const ProductInfo = ({ product }) => {
       <div className="mb-4">
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger className="cursor-pointer   rounded-md">
-              Tampilkan Deskripsi
+            <AccordionTrigger className="cursor-pointer rounded-md" onClick={() => setShowDescription(!showDescription)}>
+              {showDescription ? "Sembunyikan Deskripsi" : "Tampilkan Deskripsi"}
             </AccordionTrigger>
-            <AccordionContent>
-              <p className="text-md mt-2">{product.description}</p>
-            </AccordionContent>
+            {showDescription && (
+              <AccordionContent>
+                <p className="text-md mt-2">{product.description}</p>
+              </AccordionContent>
+            )}
           </AccordionItem>
         </Accordion>
       </div>
       {product.stock > 0 ? (
         <div className="mb-4 md:w-1/5 lg:w-1/3">
           <Button
-            className="bg-blue-500 hover:bg-blue-700 text-white"
+            className="bg-blue-700 hover:bg-blue-900 text-white"
             onClick={handleAddToCart}
-            disabled={loading}>
+            disabled={loading}
+          >
             {loading ? "Menambahkan..." : "Tambah keranjang"}
           </Button>
         </div>
