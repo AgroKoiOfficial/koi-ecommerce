@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export async function getServerSideProps() {
   try {
@@ -105,29 +105,26 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
         />
 
         <div className="relative mt-4">
-          <div className="categories-scroll">
-            {displayedCategories.length > 0 ? (
-              displayedCategories.map((category) => (
-                <div
-                  key={category}
-                  className={`category-box p-1 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
-                  onClick={() => handleCategorySelect(category)}
-                >
-                  <h4 className="text-sm lg:text-lg text-center">
-                    {category}
-                  </h4>
-                </div>
-              ))
-            ) : (
-              <p className={`text-center ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>No categories found.</p>
-            )}
-          </div>
-          <div className="scroll-indicator left-0">
-            <FaArrowLeft size={16} />
-          </div>
-          <div className="scroll-indicator right-0">
-            <FaArrowRight size={16}/>
-          </div>
+          <ScrollArea>
+            <div className="categories-scroll">
+              {displayedCategories.length > 0 ? (
+                displayedCategories.map((category) => (
+                  <div
+                    key={category}
+                    className={`category-box p-1 rounded-md shadow-md cursor-pointer ${selectedCategory === category ? "border-2 border-red-500" : ""}`}
+                    onClick={() => handleCategorySelect(category)}
+                  >
+                    <h4 className="text-sm lg:text-lg text-center">
+                      {category}
+                    </h4>
+                  </div>
+                ))
+              ) : (
+                <p className={`text-center ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>No categories found.</p>
+              )}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </div>
         {selectedCategory && (
           <div className="mt-8">
@@ -149,7 +146,7 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
                         height={100}
                         priority={true}
                         style={{
-                          width: "80%",
+                          width: "auto",
                           height: "auto",
                           margin: "0 auto",
                         }}
@@ -170,47 +167,13 @@ export default function Categories({ productsWithUrl, displayedCategories }) {
       <style jsx>{`
         .categories-scroll {
           display: flex;
-          overflow-x: auto;
           gap: 1rem;
           padding-bottom: 1rem;
-          scroll-behavior: smooth;
-        }
-
-        .categories-scroll::-webkit-scrollbar {
-          display: none;
-        }
-
-        .categories-scroll {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
         }
 
         .category-box {
           flex: 0 0 120px;
           text-align: center;
-        }
-
-        .scroll-indicator {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 2rem;
-          height: 2rem;
-          background-color: rgba(0, 0, 0, 0.5);
-          color: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          cursor: pointer;
-        }
-
-        .scroll-indicator.left-0 {
-          left: -1rem;
-        }
-
-        .scroll-indicator.right-0 {
-          right: -1rem;
         }
       `}</style>
     </>
