@@ -13,14 +13,13 @@ export default async function handler(req, res) {
     return res.status(401).json({ message: "Tidak diizinkan" });
   }
 
-
   /**
    * The external_id, status, and paid_amount fields from the Xendit payment gateway.
    *
    * @type {string}
    */
-  const { external_id, status, paid_amount } = req.body;
 
+  const { external_id, status, paid_amount } = req.body;
 
   if (!external_id) {
     console.error("external_id tidak ditemukan dalam request body.");
@@ -48,6 +47,16 @@ export default async function handler(req, res) {
         break;
       default:
         updatedStatus = "UNPAID";
+    }
+
+    if (status === "EXPIRED") {
+      const cartItems = existingCheckout.cart; 
+      for (const cartItem of cartItems) {
+        await prisma.product.update({
+          where: { id: cartItem.product.id },
+          data: { stock: { increment: cartItem.quantity } },
+        });
+      }
     }
 
     const updatedCheckout = await prisma.checkout.update({
