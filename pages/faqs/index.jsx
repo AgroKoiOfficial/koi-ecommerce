@@ -90,6 +90,7 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
       setFilteredFaqs((prevFaqs) => [...prevFaqs, ...newData]);
       setPage(nextPage);
     } catch (error) {
+      console.error("Error loading more FAQs:", error);
     } finally {
       setLoading(false);
     }
@@ -122,7 +123,7 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/faqs?page=1&search=${encodeURIComponent(value)}&category=${encodeURIComponent(
+        `${process.env.BASE_URL}/api/faqs?page=1&search=${encodeURIComponent(value)}&category=${encodeURIComponent(
           selectedCategory
         )}`
       );
@@ -169,17 +170,19 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
       </Head>
       <main className={`pt-8 min-h-screen ${theme === "dark" ? "bg-gray-800 text-gray-300" : "bg-white text-gray-800"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl lg:text-4xl font-bold mb-8 text-center my-4">
-            FAQs
-          </h1>
-          <div className="flex justify-center mb-6">
-            <Search placeholder="Cari pertanyaanmu" onSearch={handleSearch} />
+          <h1 className="text-3xl lg:text-4xl font-bold mb-8 text-center">FAQs</h1>
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
+            <Search 
+              placeholder="Cari pertanyaanmu" 
+              onSearch={handleSearch} 
+              className="flex-1 mb-4 sm:mb-0"
+            />
             <select
-              className={`ml-4 p-2 border ${theme === "dark" ? "border-gray-600" : "border-gray-300"} rounded`}
+              className={`p-2 border ${theme === "dark" ? "border-gray-600 bg-gray-700 text-gray-300" : "border-gray-300"} rounded focus:outline-none`}
               value={selectedCategory}
               onChange={handleCategoryChange}
             >
-              <option value="">All</option>
+              <option value="">Semua Kategori</option>
               {categories.map((category, index) => (
                 <option key={index} value={category}>
                   {category}
@@ -187,23 +190,15 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
               ))}
             </select>
           </div>
-          {selectedCategory === "" && (
-            <div className="felx flex-col w-full">
-              {filteredFaqs.map((faq, index) => (
+          <div className="flex flex-col w-full">
+            {filteredFaqs.length > 0 ? (
+              filteredFaqs.map((faq, index) => (
                 <FaqCard key={index} faq={faq} />
-              ))}
-            </div>
-          )}
-          {selectedCategory !== "" && (
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold mb-4">{selectedCategory}</h2>
-              <div className="felx flex-col w-full">
-                {filteredFaqs.map((faq, index) => (
-                  <FaqCard key={index} faq={faq} />
-                ))}
-              </div>
-            </div>
-          )}
+              ))
+            ) : (
+              <p className="text-center">Tidak ada FAQ yang ditemukan.</p>
+            )}
+          </div>
           <div className="flex justify-center mt-8">
             <Pagination
               currentPage={page}
