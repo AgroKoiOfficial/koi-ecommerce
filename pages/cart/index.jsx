@@ -68,11 +68,11 @@ function Cart() {
         <meta name="theme-color" content="#ffffff" />
         <meta name="description" content="cart" />
       </Head>
-      <main className={`pt-8 overflow-y-auto mx-auto scrollbar-hide ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}>
+      <main className={`pt-8 overflow-y-auto mx-auto scrollbar-hide `}>
         {cartData.map((item) => (
           <div
             key={item.id}
-            className={`flex flex-col md:flex-row items-center mt-8 mb-4 mx-4 relative ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"} rounded-lg shadow-md p-4`}>
+            className={`flex flex-col md:flex-row items-center mt-8 mb-4 mx-4 relative rounded-lg shadow-md p-4`}>
             <Link
               href={`/products/${item.product.slug}`}
               key={item.id}
