@@ -109,9 +109,7 @@ const CompanyContact = () => {
               {columns.map((column) => (
                 <TableHead
                   key={column.accessorKey}
-                  className={`py-2 px-4 text-left text-sm font-medium ${
-                    theme === "dark" ? "text-white" : "text-gray-600"
-                  }`}
+                  className={`py-2 px-4 text-left text-sm font-medium `}
                 >
                   {column.header}
                 </TableHead>

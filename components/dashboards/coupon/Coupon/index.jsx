@@ -12,6 +12,7 @@ export const Coupon = () => {
   const [editCoupon, setEditCoupon] = useState(null);
   const [showCouponForm, setShowCouponForm] = useState(false);
   const { resolvedTheme } = useTheme();
+  const [theme, setTheme] = useState(resolvedTheme);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -27,6 +28,10 @@ export const Coupon = () => {
     fetchSession();
     fetchCoupons();
   }, []);
+
+  useEffect(() => {
+    setTheme(resolvedTheme);
+  }, [resolvedTheme]);
 
   const handleCreate = async (data) => {
     try {
@@ -63,14 +68,14 @@ export const Coupon = () => {
     setEditCoupon(null);
   };
 
-  const textColor = resolvedTheme === "dark" ? "text-white" : "text-gray-800";
-  const buttonBgColor = resolvedTheme === "dark" ? "bg-gray-700" : "bg-blue-500";
-  const buttonHoverBgColor = resolvedTheme === "dark" ? "bg-gray-600" : "bg-blue-600";
-  const containerBgColor = resolvedTheme === "dark" ? "bg-gray-800" : "bg-white";
+  const textColor = theme === "dark" ? "text-white" : "text-gray-800";
+  const buttonBgColor = theme === "dark" ? "bg-gray-700" : "bg-blue-500";
+  const buttonHoverBgColor = theme === "dark" ? "bg-gray-600" : "bg-blue-600";
+  const containerBgColor = theme === "dark" ? "bg-gray-800" : "bg-white";
 
   return (
-    <div className={`container mx-auto p-8 ${containerBgColor}`}>
-      <h1 className={`text-4xl font-bold text-center mb-6 ${textColor}`}>Manage Coupons</h1>
+    <div className={`container mx-auto p-8`}>
+      <h1 className={`text-4xl font-bold text-center mb-6`}>Manage Coupons</h1>
       {session && session.user.role === 'ADMIN' && (
         <>
           <button

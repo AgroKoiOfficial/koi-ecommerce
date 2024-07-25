@@ -49,23 +49,17 @@ export const CategoryTable = () => {
           <TableHeader>
             <TableRow>
               <TableHead
-                className={`px-4 py-2 text-left text-sm font-medium ${
-                  theme === "dark" ? "text-white" : "text-gray-600"
-                }`}
+                className={`px-4 py-2 text-left text-sm font-medium`}
               >
                 No
               </TableHead>
               <TableHead
-                className={`px-4 py-2 text-left text-sm font-medium ${
-                  theme === "dark" ? "text-white" : "text-gray-600"
-                }`}
+                className={`px-4 py-2 text-left text-sm font-medium`}
               >
                 Name
               </TableHead>
               <TableHead
-                className={`px-4 py-2 text-left text-sm font-medium ${
-                  theme === "dark" ? "text-white" : "text-gray-600"
-                }`}
+                className={`px-4 py-2 text-left text-sm font-medium`}
               >
                 Actions
               </TableHead>

@@ -73,9 +73,7 @@ export const UserTable = () => {
               {columns.map((column) => (
                 <TableHead
                   key={column.accessorKey}
-                  className={`px-4 py-2 text-left text-sm font-medium ${
-                    theme === "dark" ? "text-white" : "text-gray-600"
-                  }`}
+                  className={`px-4 py-2 text-left text-sm font-medium`}
                 >
                   {column.header}
                 </TableHead>

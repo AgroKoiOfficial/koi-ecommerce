@@ -161,9 +161,7 @@ export const ProductTable = () => {
                 {headerGroup.headers.map(column => (
                   <TableHead
                     {...column.getHeaderProps()}
-                    className={`px-4 py-2 text-left text-sm font-medium ${
-                      theme === "dark" ? "text-white" : "text-gray-600"
-                    }`}
+                    className={`px-4 py-2 text-left text-sm font-medium`}
                   >
                     {column.render("Header")}
                   </TableHead>

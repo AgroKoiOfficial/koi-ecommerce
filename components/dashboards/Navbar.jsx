@@ -1,21 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
 import { useTheme } from "next-themes";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const Navbar = ({ isNavbar, toggleSidebar, handleLogout, title }) => {
-  const { data: session } = getSession();
+  const { data: session } = useSession();
   const { resolvedTheme } = useTheme();
+  const [theme, setTheme] = useState(resolvedTheme);
+
+  useEffect(() => {
+    setTheme(resolvedTheme);
+  }, [resolvedTheme]);
 
   const navbarClasses = isNavbar
-    ? resolvedTheme === "dark"
+    ? theme === "dark"
       ? "bg-gray-900 shadow-md"
       : "bg-white shadow-md"
     : "bg-transparent";
 
-  const borderClasses = resolvedTheme === "dark" ? "border-gray-700" : "border-gray-200";
-  const textColor = resolvedTheme === "dark" ? "text-white" : "text-gray-800";
-  const buttonTextColor = resolvedTheme === "dark" ? "text-gray-200" : "text-gray-900";
+  const borderClasses =
+    theme === "dark" ? "border-gray-700" : "border-gray-200";
+  const textColor = theme === "dark" ? "text-white" : "text-gray-800";
+  const buttonTextColor = theme === "dark" ? "text-gray-200" : "text-gray-900";
 
   return (
     <nav
@@ -23,7 +29,7 @@ const Navbar = ({ isNavbar, toggleSidebar, handleLogout, title }) => {
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <button
-            className={`${buttonTextColor} focus:outline-none lg:hidden`}
+            className={` focus:outline-none lg:hidden`}
             onClick={toggleSidebar}>
             <svg
               className="h-6 w-6"
@@ -40,20 +46,16 @@ const Navbar = ({ isNavbar, toggleSidebar, handleLogout, title }) => {
           </button>
 
           <div className="ml-3 lg:pl-64">
-            <div className={`text-lg font-semibold ${textColor}`}>{title}</div>
+            <div className={`text-lg font-semibold`}>{title}</div>
           </div>
         </div>
 
         <div className="flex items-center">
           {session ? (
-            <div className={`${textColor} mr-4`}>{session.user?.name}</div>
+            <div className={`${textColor} mr-4`}>
+              Selamat Datang, {session.user?.name}
+            </div>
           ) : null}
-          <Button
-            onClick={handleLogout}
-            className="focus:outline-none bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
-          >
-            Logout
-          </Button>
         </div>
       </div>
     </nav>
