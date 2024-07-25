@@ -112,7 +112,7 @@ function Cart() {
               </div>
               {timeLeft[item.id] && (
                 <p className="text-red-600 mt-2">
-                  Produk akan dihapus otomatis dalam: {timeLeft[item.id].hours} jam, {timeLeft[item.id].minutes} menit, {timeLeft[item.id].seconds} detik
+                  Produk akan dihapus otomatis dari keranjang dalam: {timeLeft[item.id].hours} jam, {timeLeft[item.id].minutes} menit, {timeLeft[item.id].seconds} detik
                 </p>
               )}
             </div>

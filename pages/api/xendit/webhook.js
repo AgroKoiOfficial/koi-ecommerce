@@ -49,13 +49,22 @@ export default async function handler(req, res) {
         updatedStatus = "UNPAID";
     }
 
+    // Kembalikan stok produk jika statusnya EXPIRED
     if (status === "EXPIRED") {
-      const cartItems = existingCheckout.cart; 
-      for (const cartItem of cartItems) {
-        await prisma.product.update({
-          where: { id: cartItem.product.id },
-          data: { stock: { increment: cartItem.quantity } },
-        });
+      try {
+        const cartItems = JSON.parse(existingCheckout.cart);
+        
+        for (const cartItem of cartItems) {
+          await prisma.product.update({
+            where: { id: cartItem.product.id },
+            data: { stock: { increment: cartItem.quantity } },
+          });
+          console.log(`Stok produk ${cartItem.product.id} ditambahkan sebanyak ${cartItem.quantity}`);
+        }
+       return res.status(200).json({ message: "Webhook diterima" });
+      } catch (error) {
+        console.error("Kesalahan saat mengembalikan stok produk:", error.message);
+        return res.status(500).json({ message: "Gagal mengembalikan stok produk", error: error.message });
       }
     }
 
@@ -80,7 +89,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ message: "Webhook diterima" });
   } catch (error) {
-    console.error("Kesalahan saat memperbarui status pembayaran:", error.message);
     return res.status(500).json({ message: "Gagal memperbarui status pembayaran", error: error.message });
   }
 }
