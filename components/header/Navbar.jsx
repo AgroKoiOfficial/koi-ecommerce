@@ -37,18 +37,14 @@ const Navbar = () => {
     0
   );
 
-  const [mounted, setMounted] = useState(false);
+  const [isThemeLoaded, setIsThemeLoaded] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    setIsThemeLoaded(true);
   }, []);
 
-  if (!mounted) {
-    return null;
-  }
-
-  const iconClass = theme === 'dark' ? styles.darkIcon : styles.lightIcon;
-  const hoverIconClass = theme === 'dark' ? styles.hoverDarkIcon : styles.hoverLightIcon;
+  const iconClass = isThemeLoaded ? (theme === 'dark' ? styles.darkIcon : styles.lightIcon) : '';
+  const hoverIconClass = isThemeLoaded ? (theme === 'dark' ? styles.hoverDarkIcon : styles.hoverLightIcon) : '';
 
   return (
     <nav

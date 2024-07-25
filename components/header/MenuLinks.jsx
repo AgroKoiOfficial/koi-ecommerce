@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
@@ -6,6 +6,13 @@ import { useTheme } from "next-themes";
 const MenuLinks = ({ className, itemClassName, toggleSidebar }) => {
   const router = useRouter();
   const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null; // Prevent rendering until mounted
 
   const textStyles = theme === 'dark' ? 'text-white hover:text-gray-400' : 'text-gray-800 hover:text-red-500';
 
