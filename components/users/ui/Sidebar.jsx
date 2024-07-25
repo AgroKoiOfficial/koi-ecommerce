@@ -16,12 +16,14 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
     router.push("/");
   };
 
+  const isDarkTheme = theme === 'dark';
+
   return (
     <div
       className={`${
         isSidebar ? "w-64" : "hidden lg:block w-64"
       } fixed inset-y-0 left-0 z-40 transition-width duration-200 ease-in-out ${
-        theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'
+        isDarkTheme ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'
       } shadow-lg`}
     >
       <div className="flex flex-col h-full">
@@ -31,9 +33,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
             <span className="ml-2 text-xl font-bold">Agro Koi</span>
           </div>
           <button
-            className={`focus:outline-none lg:hidden ${
-              theme === 'dark' ? 'text-white' : 'text-black'
-            }`}
+            className={`focus:outline-none lg:hidden `}
             onClick={toggleCloseSidebar}
           >
             <FiX className="h-6 w-6" />
@@ -47,9 +47,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
               <MenuItem
                 icon={
                   <FiHome
-                    className={`h-5 w-5 mr-2 ${
-                      theme === 'dark' ? 'text-white' : 'text-black'
-                    }`}
+                    className={`h-5 w-5 mr-2`}
                   />
                 }
                 title="Dashboard"
@@ -60,9 +58,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                     href: "/user/review",
                     icon: (
                       <MdOutlineRateReview
-                        className={`h-5 w-5 mr-2 ${
-                          theme === 'dark' ? 'text-white' : 'text-black'
-                        }`}
+                        className={`h-5 w-5 mr-2 `}
                       />
                     ),
                   },
@@ -71,12 +67,10 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
               <MenuItem
                 icon={
                   <FiList
-                    className={`h-5 w-5 mr-2 ${
-                      theme === 'dark' ? 'text-white' : 'text-black'
-                    }`}
+                    className={`h-5 w-5 mr-2 $`}
                   />
                 }
-                title="Pesan"
+                title="Order"
                 href="#"
                 submenu={[
                   {
@@ -85,7 +79,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                     icon: (
                       <MdOutlineShoppingCartCheckout
                         className={`h-5 w-5 mr-2 ${
-                          theme === 'dark' ? 'text-white' : 'text-black'
+                          isDarkTheme ? 'text-white' : 'text-black'
                         }`}
                       />
                     ),
@@ -95,9 +89,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
               <MenuItem
                 icon={
                   <FaRegUser
-                    className={`h-5 w-5 mr-2 ${
-                      theme === 'dark' ? 'text-white' : 'text-black'
-                    }`}
+                    className={`h-5 w-5 mr-2`}
                   />
                 }
                 title="Managemen Akun"
@@ -109,7 +101,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                     icon: (
                       <FaUser
                         className={`h-5 w-5 mr-2 ${
-                          theme === 'dark' ? 'text-white' : 'text-black'
+                          isDarkTheme ? 'text-white' : 'text-black'
                         }`}
                       />
                     ),
@@ -120,7 +112,7 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
                     icon: (
                       <FaRegAddressCard
                         className={`h-5 w-5 mr-2 ${
-                          theme === 'dark' ? 'text-white' : 'text-black'
+                          isDarkTheme ? 'text-white' : 'text-black'
                         }`}
                       />
                     ),
@@ -132,7 +124,9 @@ const Sidebar = ({ isSidebar, toggleSidebar, toggleCloseSidebar }) => {
         </div>
         <div className="w-[40%] md:w-auto flex flex-1 items-center justify-center bottom-0 fixed m-8">
           <Button
-            className="bg-white hover:bg-gray-100 text-gray-900 font-semibold"
+            className={`${
+              isDarkTheme ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-white text-gray-900 hover:bg-gray-100'
+            } font-semibold`}
             onClick={handleBackToHome}
           >
             Kembali ke Beranda

@@ -39,14 +39,14 @@ export default function ProductCard({ product, isLoading }) {
       </div>
       <CardContent className="p-1 flex flex-col items-center">
         <CardHeader>
-          <CardTitle className={`text-2xl md:text-xl font-bold mb-1 ${theme === "dark" ? "text-gray-300" : "text-gray-800"} truncate`}>
+          <CardTitle className={`text-2xl md:text-xl font-bold mb-1 truncate`}>
             {isLoading ? "Loading..." : product.name}
           </CardTitle>
         </CardHeader>
-        <CardDescription className={`text-base md:text-lg ${theme === "dark" ? "text-gray-400" : "text-gray-700"} mb-2`}>
+        <CardDescription className={`text-base md:text-lg mb-2`}>
           {isLoading ? "Loading..." : formatRupiah(product.price)}
         </CardDescription>
-        <CardDescription className={`text-base md:text-lg ${theme === "dark" ? "text-gray-400" : "text-gray-700"} mb-2`}>
+        <CardDescription className={`text-base md:text-lg mb-2`}>
           Stok: {isLoading ? "Loading..." : product.stock}
         </CardDescription>
       </CardContent>

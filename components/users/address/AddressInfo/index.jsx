@@ -68,7 +68,7 @@ const AddressInfo = () => {
   const handleCreate = () => setIsCreating(true);
 
   return (
-    <div className={`flex flex-col gap-4 p-4 w-full mx-auto ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+    <div className={`flex flex-col gap-4 p-4 w-full mx-auto `}>
       <h1 className="text-3xl font-bold text-center">Informasi Alamat</h1>
       <div className="flex flex-col lg:flex-row gap-4">
         {addresses.length > 0 ? (

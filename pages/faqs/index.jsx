@@ -168,7 +168,7 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
         <meta name="theme-color" content="#ffffff" />
         <link rel="icon" href="/logo.png" />
       </Head>
-      <main className={`pt-8 min-h-screen ${theme === "dark" ? "bg-gray-800 text-gray-300" : "bg-white text-gray-800"}`}>
+      <main className={`pt-8 min-h-screen `}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl lg:text-4xl font-bold mb-8 text-center">FAQs</h1>
           <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
@@ -178,7 +178,7 @@ export default function Faqs({ initialFaqs, totalFaqs, categories }) {
               className="flex-1 mb-4 sm:mb-0"
             />
             <select
-              className={`p-2 border ${theme === "dark" ? "border-gray-600 bg-gray-700 text-gray-300" : "border-gray-300"} rounded focus:outline-none`}
+              className={`p-2 border rounded focus:outline-none`}
               value={selectedCategory}
               onChange={handleCategoryChange}
             >

@@ -21,18 +21,18 @@ export default function Terms({ terms }) {
         <meta name="description" content={descriptionContent} />
       </Head>
       <main
-        className={`flex flex-col items-center justify-start pt-24 min-h-screen bg-${
-          theme === "dark" ? "gray-900" : "white"
-        }`}>
+        className={`flex flex-col items-center justify-start pt-24 min-h-screen`}>
         <h1 className="text-4xl font-bold mb-8">Ketentuan Layanan</h1>
         <div className="w-full max-w-6xl px-4">
           {terms.length > 0 ? (
             terms.map((term) => (
               <article
                 key={term.id}
-                className={`mb-4 p-6 bg-${
-                  theme === "dark" ? "gray-800" : "white"
-                } rounded-lg shadow-md`}>
+                className={`mb-4 p-6 rounded-lg shadow-md ${
+                  theme === "dark"
+                    ? "shadow-md shadow-gray-700"
+                    : "shadow-md shadow-gray-300"
+                }`}>
                 <header className="flex items-center mb-4">
                   <FiCheckCircle className="text-green-500 mr-2" size={24} />
                   <h2 className="text-2xl font-semibold">{term.title}</h2>
