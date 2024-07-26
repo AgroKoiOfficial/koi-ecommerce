@@ -13,12 +13,6 @@ export default async function handler(req, res) {
     return res.status(401).json({ message: "Tidak diizinkan" });
   }
 
-  /**
-   * The external_id, status, and paid_amount fields from the Xendit payment gateway.
-   *
-   * @type {string}
-   */
-
   const { external_id, status, paid_amount } = req.body;
 
   if (!external_id) {
@@ -36,7 +30,6 @@ export default async function handler(req, res) {
       return res.status(404).json({ message: "Checkout record tidak ditemukan" });
     }
 
-    // Update the checkout status
     let updatedStatus;
     switch (status) {
       case "PAID":
@@ -61,7 +54,7 @@ export default async function handler(req, res) {
           });
           console.log(`Stok produk ${cartItem.product.id} ditambahkan sebanyak ${cartItem.quantity}`);
         }
-       return res.status(200).json({ message: "Webhook diterima" });
+        console.log("Stok produk berhasil dikembalikan");
       } catch (error) {
         console.error("Kesalahan saat mengembalikan stok produk:", error.message);
         return res.status(500).json({ message: "Gagal mengembalikan stok produk", error: error.message });
@@ -89,6 +82,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ message: "Webhook diterima" });
   } catch (error) {
+    console.error("Kesalahan saat memperbarui status pembayaran:", error.message);
     return res.status(500).json({ message: "Gagal memperbarui status pembayaran", error: error.message });
   }
 }
