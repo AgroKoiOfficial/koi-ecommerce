@@ -115,7 +115,7 @@ export default async function handler(req, res) {
         couponId: couponId,
         adminWhatsAppNumber: randomAdminWhatsApp,
         status: defaultStatus,
-        cart: JSON.stringify(cart),
+        cart: { create: cart },
       },
     });
 
