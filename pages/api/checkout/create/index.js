@@ -94,9 +94,8 @@ export default async function handler(req, res) {
 
     const defaultStatus = "UNPAID";
 
+    // slahkan menmabahkan nomor cs kesini
     const adminWhatsAppNumbers = [
-      "+6285648741082",
-      "+6281262465409",
       "+6282257511815",
     ];
 
@@ -159,8 +158,8 @@ export default async function handler(req, res) {
         invoiceReminder : ['email', 'whatsapp'],
         invoicePaid : ['email', 'whatsapp'],
       },
-      successRedirectUrl: `${process.env.BASE_URL}/user/checkout-history`,
-      failureRedirectUrl: `${process.env.BASE_URL}/checkout/`,
+      successRedirectUrl: `${process.env.NEXT_PUBLIC_URL}/user/checkout-history`,
+      failureRedirectUrl: `${process.env.NEXT_PUBLIC_URL}/checkout/`,
       metadata: {
         store : "Koi Toko",
       },

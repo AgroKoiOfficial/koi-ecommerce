@@ -89,7 +89,7 @@ export default function Products({ products, totalProducts }) {
 
   const performSearch = async (term) => {
     setIsSearching(true);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}?search=${term}&page=1&limit=${perPage}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/?search=${term}&page=1&limit=${perPage}`);
 
     if (response.ok) {
       const searchData = await response.json();

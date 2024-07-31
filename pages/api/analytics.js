@@ -8,7 +8,7 @@ dotenv.config();
 const analyticsDataClient = new BetaAnalyticsDataClient({
   keyFilename: path.join(
     process.cwd(),
-    "credentials/jual-ikan-koi-427102-de687bce4b93.json"
+    "credentials/sample.json"
   ),
 });
 

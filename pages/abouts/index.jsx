@@ -5,7 +5,7 @@ import CompanyContact from "@/components/CompanyContact";
 import { useTheme } from "next-themes";
 
 export async function getServerSideProps() {
-  const response = await fetch(`${process.env.BASE_URL}/api/abouts`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/abouts`);
   const data = await response.json();
 
   if (!data || data.length === 0) {

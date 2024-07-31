@@ -22,7 +22,7 @@ function debounce(func, wait) {
 
 export async function getServerSideProps() {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/api/faqs`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/faqs`);
     const data = await res.json();
 
     if (!data || !Array.isArray(data)) {

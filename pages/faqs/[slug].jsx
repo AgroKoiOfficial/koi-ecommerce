@@ -18,7 +18,7 @@ export async function getServerSideProps({ params }) {
   const { slug } = params;
 
   try {
-    const res = await fetch(`${process.env.BASE_URL}/api/faqs/${slug}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/faqs/${slug}`);
     const faq = await res.json();
 
     if (!faq || res.status !== 200) {

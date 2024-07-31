@@ -17,7 +17,7 @@ export async function getServerSideProps({ params }) {
   const { slug } = params;
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/slug/${slug}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/slug/${slug}`);
 
     if (!res.ok) {
       // console.error(`Failed to fetch product with slug ${slug}: ${res.statusText}`);
@@ -86,6 +86,7 @@ function ProductDetail({ product, relatedProducts }) {
         </div>
         <CTA />
       </main>
+      {"silahkan Ganti id google analytics"}
       <GoogleAnalytics gaId="G-BKXLWYCWM3" />
     </>
   );

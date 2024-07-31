@@ -59,7 +59,7 @@ export default function Terms({ terms }) {
 }
 
 export async function getServerSideProps() {
-  const res = await fetch(`${process.env.BASE_URL}/api/term_conditions`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/term_conditions`);
   const data = await res.json();
 
   return {

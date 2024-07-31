@@ -19,7 +19,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 export async function getServerSideProps() {
   try {
     const response = await fetch(
-      `${process.env.BASE_URL}/api/products/byCategory`
+      `${process.env.NEXT_PUBLIC_API_URL}/products/byCategory`
     );
     const data = await response.json();
 
