@@ -19,13 +19,13 @@ dilocalhost ada beberapa tools yang harus disiapkan.
 setelah menginstall semua tools di atas dan silahkan jalankan web server, kemudian copy link repository dibawah ini.
 
 ```bash
-https://github.com/agustrio1/koi-ecommerce.git
+https://github.com/AgroKoiOfficial/koi-ecommerce
 ```
 
 masuk ke terminal ketikan seperti dibawah ini
 
 ```
-git clone  https://github.com/agustrio1/koi-ecommerce.git
+git clone  https://github.com/AgroKoiOfficial/koi-ecommerce
 ```
 
 tunggu hingga selesai download. kemudian silahkan ketik
