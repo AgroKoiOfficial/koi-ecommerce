@@ -11,6 +11,13 @@ export default async function handler(req, res) {
         createdAt: "desc",
       },
       take: 8,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        price: true,
+        image: true,
+      },
     });
 
     res.setHeader(

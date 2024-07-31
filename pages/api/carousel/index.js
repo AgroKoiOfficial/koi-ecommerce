@@ -6,7 +6,13 @@ export default async function handler(req, res) {
     }
 
     try {
-        const carousels = await prisma.carousel.findMany();
+        const carousels = await prisma.carousel.findMany({
+            select : {
+                id: true,
+                title: true,
+                image: true
+            }
+        });
         const carouselWithUrl = carousels.map((carousel) => {
             return {
                 ...carousel,

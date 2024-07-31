@@ -7,13 +7,20 @@ export default async function handler(req, res) {
   }
 
   const xenditWebhookSecret = process.env.XENDIT_WEBHOOK_TOKEN;
-  const sig = req.headers['x-callback-token'];
+  const signature = req.headers['x-callback-token'];
 
-  if (sig !== xenditWebhookSecret) {
+  if (signature !== xenditWebhookSecret) {
     return res.status(401).json({ message: "Tidak diizinkan" });
   }
 
+
+  /**
+   * The external_id, status, and paid_amount fields from the Xendit payment gateway.
+   *
+   * @type {string}
+   */
   const { external_id, status, paid_amount } = req.body;
+
 
   if (!external_id) {
     console.error("external_id tidak ditemukan dalam request body.");
@@ -30,6 +37,7 @@ export default async function handler(req, res) {
       return res.status(404).json({ message: "Checkout record tidak ditemukan" });
     }
 
+    // Update the checkout status
     let updatedStatus;
     switch (status) {
       case "PAID":
@@ -40,25 +48,6 @@ export default async function handler(req, res) {
         break;
       default:
         updatedStatus = "UNPAID";
-    }
-
-    // Kembalikan stok produk jika statusnya EXPIRED
-    if (status === "EXPIRED") {
-      try {
-        const cartItems = JSON.parse(existingCheckout.cart);
-        
-        for (const cartItem of cartItems) {
-          await prisma.product.update({
-            where: { id: cartItem.product.id },
-            data: { stock: { increment: cartItem.quantity } },
-          });
-          console.log(`Stok produk ${cartItem.product.id} ditambahkan sebanyak ${cartItem.quantity}`);
-        }
-        console.log("Stok produk berhasil dikembalikan");
-      } catch (error) {
-        console.error("Kesalahan saat mengembalikan stok produk:", error.message);
-        return res.status(500).json({ message: "Gagal mengembalikan stok produk", error: error.message });
-      }
     }
 
     const updatedCheckout = await prisma.checkout.update({

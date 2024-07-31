@@ -6,7 +6,13 @@ export default async function handler(req, res) {
     }
 
     try {
-        const services = await prisma.service.findMany();
+        const services = await prisma.service.findMany({
+            select: {
+                id: true,
+                title: true,
+                content: true
+            }
+        });
         res.setHeader("Cache-Control", "public, s-maxage=10, stale-while-revalidate=59");
         return res.status(200).json(services);
     } catch (error) {
